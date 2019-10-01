@@ -15,13 +15,13 @@ To get started locally, follow these instructions:
 1. Connect mongoDB using the default settings provided.
 
 ### Folder Structure 
-#### > Controllers (Folder)
+#### Controllers (Folder)
  -API Instructions and handles requests
 
-#### > Models (Folder)
+#### Models (Folder)
  -Data semantics / Model Blueprint for JSON Data
  
-#### > Routes (Folder)
+#### Routes (Folder)
  -Server-side routes / API Routing Maps
  
 #### package 
@@ -29,7 +29,3 @@ To get started locally, follow these instructions:
 
 #### Server
  -Contains mongoose connection instance, node express configuration, registered routes and asset imports.
-
-
-
- 
