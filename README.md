@@ -16,7 +16,7 @@ To get started locally, follow these instructions:
 
 ### Folder Structure 
 #### > Controllers (Folder)
-  -API Instructure
+ -API Instructions and handles requests
 
 #### > Models (Folder)
  -Data semantics / Model Blueprint for JSON Data
