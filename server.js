@@ -23,7 +23,7 @@ var express = require('express'),
   // mongoose instance connection url connection
   mongoose.Promise = global.Promise;
   
-  mongoose.connect('mongodb://localhost:27017/PortalDB', { useNewUrlParser: true });
+  mongoose.connect('mongodb://192.168.100.104:27017/PortalDB', { useNewUrlParser: true });
   // mongoose.connect('mongodb://localhost/PortalDB', { useNewUrlParser: true });
 
   app.use(bodyParser.urlencoded({ extended: true }));

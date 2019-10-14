@@ -70,6 +70,9 @@ module.exports = function(app) {
   app.route('/api/projectsFilter')
     .post(project.filter_a_project);
 
+  app.route('/api/projects/page/:pageNo/:perPage')
+    .get(project.page);
+
   // subproject routes
   app.route('/api/subproj')
   .get(subProj.list_all_sub_projs)

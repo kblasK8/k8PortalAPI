@@ -52,3 +52,26 @@ exports.delete_a_project = function(req, res) {
     res.json({message: 'Project successfully deleted.'});
   });
 };
+
+exports.page = function(req, res) {
+  var pageNo = parseInt(req.params.pageNo);
+  var perPage = parseInt(req.params.perPage);
+  Project.find()
+    .limit(perPage)
+    .skip(perPage * pageNo)
+    .sort({
+      name: 'asc'
+    })
+    .exec(function(err, data) {
+      if(err) { res.send(err); }
+      Project.estimatedDocumentCount().exec(function(err, count) {
+        if(err) { res.send(err); }
+        var response = {
+          data: data,
+          page: pageNo,
+          pages: Math.ceil(count / perPage)
+        };
+        res.json(response);
+      })
+    });
+};
