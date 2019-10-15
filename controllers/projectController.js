@@ -58,7 +58,7 @@ exports.page = function(req, res) {
   var perPage = parseInt(req.params.perPage);
   Project.find()
     .limit(perPage)
-    .skip(perPage * pageNo)
+    .skip(perPage * (pageNo - 1))
     .sort({
       name: 'asc'
     })
