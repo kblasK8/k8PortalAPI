@@ -30,15 +30,33 @@ exports.read_a_project = function(req, res) {
 };
 
 exports.filter_a_project = function(req, res) {
-  Project.find(req.body, function(err, project) {
-    if(err)
-      res.send(err);
-    res.json(project);
+  var params = req.body;
+  var pageNo = parseInt(params.pageNo);
+  var perPage = parseInt(params.perPage);
+  delete params.pageNo;
+  delete params.perPage;
+  var query = {};
+  Object.keys(params).forEach(function(key) {
+    var reg = new RegExp(params[key], 'i');
+    query[key] = reg;
   });
+  Project.find(query)
+    .exec(function(err, data) {
+      if(err) { res.send(err); }
+      Project.estimatedDocumentCount().exec(function(err, count) {
+        if(err) { res.send(err); }
+        var response = {
+          data: data,
+          page: pageNo,
+          pages: Math.ceil(count / perPage)
+        };
+        res.json(response);
+      });
+    });
 };
 
 exports.update_a_project = function(req, res) {
-  Project.findOneAndUpdate({_id: req.params.projectId}, req.body, {new: true}, function(err, project){
+  Project.findOneAndUpdate({_id: req.params.projectId}, req.body, {new: true}, function(err, project) {
     if(err)
       res.send(err);
     res.json(project);
@@ -72,6 +90,6 @@ exports.page = function(req, res) {
           pages: Math.ceil(count / perPage)
         };
         res.json(response);
-      })
+      });
     });
 };

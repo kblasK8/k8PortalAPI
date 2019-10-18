@@ -1,6 +1,7 @@
+const constant = require('./config/const');
 var express = require('express'),
   app = express(),
-  port = process.env.PORT || 3000;
+  port = process.env.PORT || constant.port;
   mongoose = require('mongoose');
   Note = require('./models/noteModel');
   Account = require('./models/accountModel');
@@ -22,9 +23,7 @@ var express = require('express'),
 
   // mongoose instance connection url connection
   mongoose.Promise = global.Promise;
-  
-  mongoose.connect('mongodb://192.168.100.104:27017/PortalDB', { useNewUrlParser: true });
-  // mongoose.connect('mongodb://localhost/PortalDB', { useNewUrlParser: true });
+  mongoose.connect(constant.mongodbURL, { useNewUrlParser: true });
 
   app.use(bodyParser.urlencoded({ extended: true }));
   app.use(bodyParser.json());

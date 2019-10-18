@@ -14,8 +14,9 @@ module.exports = function(app) {
   var rac = require('../controllers/resourceAssignCategoryController');
   var rar = require('../controllers/resourceAssignRoleController');
   var ra = require('../controllers/resourceAssignmentController');
+  var profile = require('../controllers/profileController');
 
-  // note routes
+  // Note routes
   app.route('/api/notes')
     .get(note.list_all_notes)
     .post(note.create_a_note);
@@ -25,7 +26,7 @@ module.exports = function(app) {
     .put(note.update_a_note)
     .delete(note.delete_a_note);
 
-  // account route
+  // Account route
   app.route('/api/accounts')
     .get(account.list_all_accounts)
     .post(account.create_a_account);
@@ -47,7 +48,7 @@ module.exports = function(app) {
   app.route('/api/accountFilter')
     .post(account.filter_account);
 
-  // department route
+  // Department route
   app.route('/api/departments')
     .get(department.list_all_departments)
     .post(department.create_a_department);
@@ -57,7 +58,7 @@ module.exports = function(app) {
     .put(department.update_a_department)
     .delete(department.delete_a_department);
 
-  // project route
+  // Project route
   app.route('/api/projects')
     .get(project.list_all_projects)
     .post(project.create_a_project);
@@ -73,13 +74,13 @@ module.exports = function(app) {
   app.route('/api/projects/page/:pageNo/:perPage')
     .get(project.page);
 
-  // subproject routes
+  // Subproject routes
   app.route('/api/subproj')
-  .get(subProj.list_all_sub_projs)
-  .post(subProj.create_a_sub_proj);
+    .get(subProj.list_all_sub_projs)
+    .post(subProj.create_a_sub_proj);
 
   app.route('/api/subproj')
-  .get(subProj.list_all_sub_projs)
+    .get(subProj.list_all_sub_projs)
 
   app.route('/api/subproj/:subProjId')
     .get(subProj.read_a_sub_proj)
@@ -89,7 +90,7 @@ module.exports = function(app) {
   app.route('/api/subprojFilter')
     .post(subProj.filter_sub_proj);
 
-  // task route
+  // Task route
   app.route('/api/tasks')
     .get(task.list_all_tasks)
     .post(task.create_a_task);
@@ -101,7 +102,7 @@ module.exports = function(app) {
   app.route('/api/tasksFilter')
     .post(task.filter_a_project_task)
 
-  // requirements routes
+  // Requirements routes
   app.route('/api/requirements')
     .get(requirement.list_all_requirements)
     .post(requirement.create_a_requirement);
@@ -111,10 +112,10 @@ module.exports = function(app) {
     .put(requirement.update_a_requirement)
     .delete(requirement.delete_a_requirement);
 
-  // wiki routes
+  // Wiki routes
   app.route('/api/wiki')
-  .get(wiki.list_all_wikis)
-  .post(wiki.create_a_wiki);
+    .get(wiki.list_all_wikis)
+    .post(wiki.create_a_wiki);
 
   app.route('/api/wiki/:wikiId')
     // .get(wiki.read_a_wiki)
@@ -125,17 +126,17 @@ module.exports = function(app) {
   app.route('/api/wikiFilter')
     .post(wiki.filter_a_wiki);
 
-  //IDP routes
+  // IDP routes
   app.route('/api/idp')
-  .get(idp.list_all_idps)
-  .post(idp.create_a_idp);
+    .get(idp.list_all_idps)
+    .post(idp.create_a_idp);
 
   app.route('/api/idp/:idpId')
     .get(idp.read_a_idp)
     .put(idp.update_a_idp)
     .delete(idp.delete_a_idp);
 
-  //Leave Request routes
+  // Leave Request routes
   app.route('/api/leave-request')
     // .get(leaveReq.list_all_leaveRequests)
     .post(leaveReq.create_a_leaveRequest);
@@ -157,8 +158,8 @@ module.exports = function(app) {
 
   // Resource Assignment Role routes
   app.route('/api/rar')
-  .get(rar.list_all_rar)
-  .post(rar.create_a_rar);
+    .get(rar.list_all_rar)
+    .post(rar.create_a_rar);
 
   app.route('/api/rar/:rarId')
     .get(rar.read_a_rar)
@@ -177,4 +178,9 @@ module.exports = function(app) {
 
   app.route('/api/raFilter')
     .post(ra.filter_ra);
+
+  // Profile routes
+  app.route('/api/profile')
+    .get(profile.getProfile);
+    .post(profile.setProfile);
 }
