@@ -1,36 +1,35 @@
-const constant = require('./config/const');
-var express = require('express'),
-  app = express(),
-  port = process.env.PORT || constant.port;
-  mongoose = require('mongoose');
-  Note = require('./models/noteModel');
-  Account = require('./models/accountModel');
-  Department = require('./models/departmentModel');
-  Project = require('./models/projectModel');
-  Task = require('./models/taskModel');
-  Requirement = require('./models/requirementsModel');
-  Wiki = require('./models/wikiModel');
-  IDP = require('./models/IDPModel');
-  SubProj = require('./models/subProjectModel');
-  LeaveRequest = require('./models/leaveRequestModel');
-  RecAssignCat = require('./models/resourceAssignmentCategoryModel');
-  RecAssignRole = require('./models/resourceAssignmentRoleModel');
-  ResourceAssignment = require('./models/resourceAssignmentModel');
-  bodyParser = require('body-parser');
+//Imports
+console.log('Initializing dependencies...');
+const config = require('./config/config');
+var express = require('express');
+var app = express();
+var port = process.env.PORT || config.port;
+var bodyParser = require('body-parser');
+var cors = require('cors');
+var mongoose = require('mongoose');
+var routes = require('./routes/webRoutes');
 
-  var cors = require('cors');
-  app.use(cors());
+//Middleware
+app.use(cors());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 
-  // mongoose instance connection url connection
-  mongoose.Promise = global.Promise;
-  mongoose.connect(constant.mongodbURL, { useNewUrlParser: true });
+//Connect to the MongoDB
+console.log('Database connecting...');
+mongoose.Promise = global.Promise;
+mongoose.connect(config.mongodbURL, config.mongoDbOptions);
+mongoose.connection.on('connected', () => {
+	console.log('Connected successfully.');
+	//Setup API routes
+	console.log('Registering routes... ');
+	app.use(routes);
+	//Register Port
+	app.listen(port, () => console.log('Listening on port ' + port));
+	console.log('K8 Portal RESTful API server started...');
+});
 
-  app.use(bodyParser.urlencoded({ extended: true }));
-  app.use(bodyParser.json());
-
-  var routes = require('./routes/webRoutes'); //importing route
-  routes(app); //register the route
-
-app.listen(port);
-
-console.log('BB Portal RESTful API server started on: ' + port);
+//Exit script if cannot connect to the Database
+mongoose.connection.on('error', (err) => {
+  console.log('Connection error. ' + err);
+  process.exit(0);
+});

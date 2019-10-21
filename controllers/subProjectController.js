@@ -1,8 +1,5 @@
-'use strict';
-
 var mongoose = require('mongoose');
-
-SubProj = mongoose.model('SubProject');
+const SubProj = require('../models/subProjectModel');
 
 exports.list_all_sub_projs = function(req, res) {
   SubProj.find({}, function(err, sub_proj) {

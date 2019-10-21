@@ -1,8 +1,5 @@
-'use strict';
-
 var mongoose = require('mongoose');
-
-Task = mongoose.model('Task');
+const Task = require('../models/taskModel');
 
 exports.list_all_tasks = function(req, res) {
   Task.find({}, function(err, task) {

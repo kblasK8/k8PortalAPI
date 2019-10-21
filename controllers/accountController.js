@@ -1,8 +1,5 @@
-'use strict';
-
 var mongoose = require('mongoose');
-
-Account = mongoose.model('Account');
+const Account = require('../models/accountModel');
 
 exports.list_all_accounts = function(req, res) {
   Account.find({}, function(err, account) {

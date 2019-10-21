@@ -3,7 +3,7 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
-var IDPSchema = new Schema({
+var idpSchema = new Schema({
   userId: {
     type: String,
     required: "Kindly enter a user ID."
@@ -71,4 +71,4 @@ var IDPSchema = new Schema({
   },
 });
 
-module.exports = mongoose.model('IDP', IDPSchema);
+module.exports = mongoose.model('idp', idpSchema);

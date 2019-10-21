@@ -1,8 +1,5 @@
-'use strict';
-
 var mongoose = require('mongoose');
-
-Department = mongoose.model('Department');
+const Department = require('../models/departmentModel');
 
 exports.list_all_departments = function(req, res) {
   Department.find({}, function(err, department) {

@@ -1,8 +1,5 @@
-'use strict';
-
 var mongoose = require('mongoose');
-
-RecAssignRole = mongoose.model('ResourceAssignmentRole');
+const RecAssignRole = require('../models/resourceAssignmentRoleModel');
 
 exports.list_all_rar = function(req, res) {
   RecAssignRole.find({}, function(err, rac) {

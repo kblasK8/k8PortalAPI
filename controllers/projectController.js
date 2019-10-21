@@ -1,8 +1,5 @@
-'use strict';
-
 var mongoose = require('mongoose');
-
-Project = mongoose.model('Project');
+const Project = require('../models/projectModel');
 
 exports.list_all_projects = function(req, res) {
   Project.find({}, function(err, project) {
@@ -41,9 +38,14 @@ exports.filter_a_project = function(req, res) {
     query[key] = reg;
   });
   Project.find(query)
+    .limit(perPage)
+    .skip(perPage * (pageNo - 1))
+    .sort({
+      name: 'asc'
+    })
     .exec(function(err, data) {
       if(err) { res.send(err); }
-      Project.estimatedDocumentCount().exec(function(err, count) {
+      Project.estimatedDocumentCount( ).exec(function(err, count) {
         if(err) { res.send(err); }
         var response = {
           data: data,

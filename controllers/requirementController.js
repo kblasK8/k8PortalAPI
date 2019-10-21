@@ -1,8 +1,5 @@
-'use strict';
-
 var mongoose = require('mongoose');
-
-Requirement = mongoose.model('Requirement');
+const Requirement = require('../models/requirementsModel');
 
 exports.list_all_requirements = function(req, res) {
   Requirement.find({}, function(err, requirement) {

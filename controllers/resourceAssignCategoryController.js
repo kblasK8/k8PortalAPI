@@ -1,8 +1,5 @@
-'use strict';
-
 var mongoose = require('mongoose');
-
-RecAssignCat = mongoose.model('ResourceAssignmentCategory');
+const RecAssignCat = require('../models/resourceAssignmentCategoryModel');
 
 exports.list_all_rac = function(req, res) {
   RecAssignCat.find({}, function(err, rac) {

@@ -1,8 +1,5 @@
-'use strict';
-
 var mongoose = require('mongoose');
-
-Wiki = mongoose.model('Wiki');
+const Wiki = require('../models/wikiModel');
 
 exports.list_all_wikis = function(req, res) {
   Wiki.find({parentWiki: '', type: 'parent'}, function(err, wiki) {

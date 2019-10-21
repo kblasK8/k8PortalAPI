@@ -1,8 +1,5 @@
-'use strict';
-
 var mongoose = require('mongoose');
-
-ResourceAssignment = mongoose.model('ResourceAssignment');
+const ResourceAssignment = require('../models/resourceAssignmentModel');
 
 exports.list_all_ra = function(req, res) {
   ResourceAssignment.find({}, function(err, ra) {

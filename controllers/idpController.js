@@ -1,8 +1,5 @@
-'use strict';
-
 var mongoose = require('mongoose');
-
-IDP = mongoose.model('IDP');
+const IDP = require('../models/idpModel');
 
 exports.list_all_idps = function(req, res) {
   IDP.find({}, function(err, idp) {

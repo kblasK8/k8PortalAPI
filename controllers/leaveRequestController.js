@@ -1,16 +1,5 @@
-'use strict';
-
 var mongoose = require('mongoose');
-
-LeaveRequest = mongoose.model('LeaveRequest');
-
-// exports.list_all_leaveRequests = function(req, res) {
-//   LeaveRequest.find({}, function(err, leaveRequest) {
-//     if(err)
-//       res.send(err);
-//     res.json(leaveRequest);
-//   }); 
-// };
+const LeaveRequest = require('../models/leaveRequestModel');
 
 exports.list_all_leaveRequests = function(req, res) {
     LeaveRequest.find({ $or: [ { requestor_id: req.params.leaveRequestId }, { approver_id: req.params.leaveRequestId }]}, 

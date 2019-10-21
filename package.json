@@ -1,12 +1,12 @@
 {
-  "name": "api",
+  "name": "K8 Portal API",
   "version": "1.0.0",
-  "description": "This is a REST API for BB Portal",
+  "description": "REST API for K8 Portal",
   "main": "index.js",
   "scripts": {
     "start": "nodemon server.js"
   },
-  "author": "Marlon Aromin",
+  "Author": "K8 Applied Innovation",
   "license": "ISC",
   "devDependencies": {
     "nodemon": "^1.19.4"
