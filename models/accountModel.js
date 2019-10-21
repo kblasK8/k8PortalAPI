@@ -51,6 +51,9 @@ var AccountSchema = new Schema({
     }],
     default: ['Enabled']
   },
+  profilePhoto: {
+    type: String,
+  },
   created_date: {
     type: Date,
     default: Date.now

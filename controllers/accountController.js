@@ -73,6 +73,7 @@ exports.read_a_account = function(req, res) {
 };
 
 exports.update_a_account = function(req, res) {
+  req.body.profilePhoto = req.file.path;
   Account.findOneAndUpdate({_id: req.params.accountId}, req.body, {new: true}, function(err, account){
     if(err)
       res.send(err);

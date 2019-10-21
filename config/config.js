@@ -18,5 +18,6 @@ module.exports = {
 		pass: null,
 		dbName: "PortalDB"
 	},
-	port: 3000
+	port: 3000,
+	uploadPath: "./uploads/"
 };

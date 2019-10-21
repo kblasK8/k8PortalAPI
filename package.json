@@ -1,6 +1,10 @@
 {
-  "name": "K8 Portal API",
+  "name": "K8-Portal-API",
   "version": "1.0.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kblasK8/k8PortalAPI.git"
+  },
   "description": "REST API for K8 Portal",
   "main": "index.js",
   "scripts": {
@@ -14,13 +18,11 @@
   "dependencies": {
     "body-parser": "^1.18.2",
     "cors": "^2.8.5",
-    "ejs": "^2.5.7",
+    "crypto-js": "^3.1.9-1",
     "express": "^4.17.1",
-    "gridfs-stream": "^1.1.1",
-    "method-override": "^2.3.10",
     "mongoose": "^5.7.5",
     "multer": "^1.3.0",
-    "multer-gridfs-storage": "^3.3.0",
-    "package.json": "^2.0.1"
+    "package.json": "^2.0.1",
+    "update": "^0.7.4"
   }
 }
