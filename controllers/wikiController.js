@@ -35,10 +35,27 @@ exports.filter_a_wiki = function(req, res) {
 };
 
 exports.update_a_wiki = function(req, res) {
-  Wiki.findOneAndUpdate({_id: req.params.wikiId}, req.body, {new: true}, function(err, wiki){
-    if(err)
-      res.send(err);
-    res.json(wiki);
+  Wiki.findById(req.params.wikiId, function(err, wiki) {
+    if(err) res.send(err);
+    console.log(wiki);
+    if(req.files) {
+      if(wiki.images) {
+        var imagesArr = wiki.images;
+        imagesArr = imagesArr.concat(req.files);
+        req.body.images = imagesArr;
+      } else {
+        req.body.images = req.files
+      }
+    }
+    Wiki.findOneAndUpdate(
+      { _id: req.params.wikiId },
+      req.body,
+      { new : true },
+      function(e, wk) {
+        if(e) res.send(e);
+        res.json(wk);
+      }
+    );
   });
 };
 

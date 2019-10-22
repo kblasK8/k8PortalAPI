@@ -13,6 +13,7 @@ var routes = require('./routes/webRoutes');
 app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+app.use('/uploads', express.static(config.uploadPath));
 
 //Connect to the MongoDB
 console.log('Database connecting...');

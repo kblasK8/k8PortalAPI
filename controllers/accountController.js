@@ -1,5 +1,8 @@
 var mongoose = require('mongoose');
 const Account = require('../models/accountModel');
+const fs = require('fs');
+const { promisify } = require('util');
+const unlinkAsync = promisify(fs.unlink);
 
 exports.list_all_accounts = function(req, res) {
   Account.find({}, function(err, account) {
@@ -73,11 +76,20 @@ exports.read_a_account = function(req, res) {
 };
 
 exports.update_a_account = function(req, res) {
-  req.body.profilePhoto = req.file.path;
-  Account.findOneAndUpdate({_id: req.params.accountId}, req.body, {new: true}, function(err, account){
-    if(err)
-      res.send(err);
-    res.json(account);
+  Account.findById(req.params.accountId, function(err, account) {
+    if(err) res.send(err);
+    if(req.file) req.body.profilePhoto = req.file.path;
+    Account.findOneAndUpdate(
+      { _id: req.params.accountId },
+      req.body,
+      { new : true },
+      function(e, acc) {
+        if(e) res.send(e);
+        //Delete old photo
+        if(req.file) unlinkAsync(account.profilePhoto);
+        res.json(acc);
+      }
+    );
   });
 };
 

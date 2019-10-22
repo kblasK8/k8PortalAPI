@@ -35,6 +35,9 @@ var WikiSchema = new Schema({
   tags: {
     type: Array
   },
+  images: {
+    type: Array
+  },
   created_date: {
     type: Date,
     default: Date.now
