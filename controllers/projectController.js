@@ -45,7 +45,7 @@ exports.filter_a_project = function(req, res) {
     })
     .exec(function(err, data) {
       if(err) { res.send(err); }
-      Project.estimatedDocumentCount( ).exec(function(err, count) {
+      Project.estimatedDocumentCount(query).exec(function(err, count) {
         if(err) { res.send(err); }
         var response = {
           data: data,
@@ -58,7 +58,7 @@ exports.filter_a_project = function(req, res) {
 };
 
 exports.update_a_project = function(req, res) {
-  Project.findOneAndUpdate({_id: req.params.projectId}, req.body, {new: true}, function(err, project) {
+  Project.findOneAndUpdate({ _id: req.params.projectId }, req.body, { new: true }, function(err, project) {
     if(err)
       res.send(err);
     res.json(project);
@@ -66,7 +66,7 @@ exports.update_a_project = function(req, res) {
 };
 
 exports.delete_a_project = function(req, res) {
-  Project.remove({ _id: req.params.projectId}, function(err, project) {
+  Project.remove({ _id: req.params.projectId }, function(err, project) {
     if(err)
       res.send(err);
     res.json({message: 'Project successfully deleted.'});
