@@ -37,6 +37,9 @@ var ProjectSchema = new Schema({
   gy_lead: {
     type: String
   },
+  progress: {
+    type: Number
+  },
   start_date: {
     type: Date
   },

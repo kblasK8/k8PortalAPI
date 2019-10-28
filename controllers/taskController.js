@@ -35,17 +35,38 @@ exports.filter_a_project_task = function(req, res) {
 };
 
 exports.update_a_task = function(req, res) {
-  Task.findOneAndUpdate({_id: req.params.taskId}, req.body, {new: true}, function(err, task){
-    if(err)
-      res.send(err);
-    res.json(task);
-  });
+  Task.findOneAndUpdate(
+    { _id: req.params.taskId },
+    req.body,
+    { new: true },
+    function(err, task) {
+      if(err) { res.send(err); }
+      res.json(task);
+    }
+  );
 };
 
 exports.delete_a_task = function(req, res) {
-  Task.remove({ _id: req.params.taskId}, function(err, task) {
+  Task.remove({ _id: req.params.taskId }, function(err, task) {
     if(err)
       res.send(err);
     res.json({message: 'Task successfully deleted.'});
   });
 };
+
+exports.update_project_progress = function(req, res) {
+  Task.aggregate([
+    {
+      $match : { project_id : mongoose.Types.ObjectId(req.params.projectId) }
+    },
+    {
+      $group : {
+        _id: "$status",
+        total: { $sum: 1 }
+      }
+    }
+  ]).exec((err, tasks) => {
+    if(err) { res.send(err); }
+    res.json(tasks);
+  });
+}

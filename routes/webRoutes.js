@@ -132,11 +132,13 @@ router.route('/api/tasks/:taskId')
   .delete(taskController.delete_a_task);
 router.route('/api/tasksFilter')
   .post(taskController.filter_a_project_task);
+router.route('/api/tasks/:projectId')
+  .get(taskController.update_project_progress);
 
 /// WIKI ROUTES ///
 router.route('/api/wiki')
   .get(wikiController.list_all_wikis)
-  .post(wikiController.create_a_wiki);
+  .post(upload.array("files", 5), wikiController.create_a_wiki);
 router.route('/api/wiki/:wikiId')
   .get(wikiController.list_all_sub_wikis)
   .post(upload.array("files", 5), wikiController.update_a_wiki)

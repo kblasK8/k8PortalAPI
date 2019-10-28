@@ -1,4 +1,3 @@
-
 'use strict'
 
 var mongoose = require('mongoose');
@@ -40,7 +39,7 @@ var TaskSchema = new Schema({
   status: {
     type: [{
       type: String,
-      enum: ['Pending', 'On-Going', 'Review', 'Done']
+      enum: ['Pending', 'On-Going', 'Review', 'Done', 'QA', 'UAT', 'Closed']
     }],
     default: ['Pending']
   },
