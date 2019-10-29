@@ -1,5 +1,8 @@
 var mongoose = require('mongoose');
 const Wiki = require('../models/wikiModel');
+const fs = require('fs');
+const { promisify } = require('util');
+const unlinkAsync = promisify(fs.unlink);
 
 exports.list_all_wikis = function(req, res) {
   Wiki.find({parentWiki: '', type: 'parent'}, function(err, wiki) {
@@ -37,7 +40,6 @@ exports.filter_a_wiki = function(req, res) {
 exports.update_a_wiki = function(req, res) {
   Wiki.findById(req.params.wikiId, function(err, wiki) {
     if(err) res.send(err);
-    console.log(wiki);
     if(req.files) {
       if(wiki.images) {
         var imagesArr = wiki.images;
@@ -60,9 +62,15 @@ exports.update_a_wiki = function(req, res) {
 };
 
 exports.delete_a_wiki = function(req, res) {
-  Wiki.remove({ _id: req.params.wikiId}, function(err, wiki) {
-    if(err)
-      res.send(err);
-    res.json({message: 'Wiki successfully deleted.'});
+  Wiki.findById({ _id: req.params.wikiId}, function(err, wiki) {
+    if(err) res.send(err);
+    var wikiImages = wiki.images;
+    wikiImages.forEach((item, index) => {
+      if(item.path) unlinkAsync(item.path);
+    });
+    Wiki.deleteOne({ _id: req.params.wikiId}, function(err, wiki) {
+      if(err) { res.send(err); }
+      res.json({message: 'Wiki successfully deleted.'});
+    });
   });
 };
