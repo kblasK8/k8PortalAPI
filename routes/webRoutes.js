@@ -143,5 +143,7 @@ router.route('/api/wiki/:wikiId')
   .delete(wikiController.delete_a_wiki);
 router.route('/api/wikiFilter')
   .post(wikiController.filter_a_wiki);
+router.route('/api/wiki/:wikiId/:filename')
+  .delete(wikiController.delete_wiki_file);
 
 module.exports = router;
