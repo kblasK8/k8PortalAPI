@@ -45,7 +45,7 @@ exports.update_a_task = function(req, res) {
       var projectId = task.project_id;
       Task.aggregate([
         {
-          $match : { project_id : mongoose.Types.ObjectId(req.params.projectId) }
+          $match : { project_id : mongoose.Types.ObjectId(projectId) }
         },
         {
           $group : {
@@ -60,15 +60,15 @@ exports.update_a_task = function(req, res) {
         tasks.forEach((item, index) => {
           item._id.forEach((i, j) => {
             if(i.toLowerCase() === "done"){
-              tasksDone++;
+              tasksDone += item.total;
             } else {
-              tasksRemaining++;
+              tasksRemaining += item.total;
             }
           });
         });
         var progress = Math.floor((tasksDone / (tasksDone + tasksRemaining)) * 100);
         Project.findOneAndUpdate(
-          { _id: req.params.projectId },
+          { _id: projectId },
           { "progress" : progress },
           { new: true },
           function(err, project) {
