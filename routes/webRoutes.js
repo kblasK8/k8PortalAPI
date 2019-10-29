@@ -132,8 +132,6 @@ router.route('/api/tasks/:taskId')
   .delete(taskController.delete_a_task);
 router.route('/api/tasksFilter')
   .post(taskController.filter_a_project_task);
-router.route('/api/tasks/:projectId')
-  .get(taskController.update_project_progress);
 
 /// WIKI ROUTES ///
 router.route('/api/wiki')
