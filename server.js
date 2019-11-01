@@ -2,6 +2,7 @@
 console.log('Initializing dependencies...');
 const config = require('./config/config');
 var express = require('express');
+var path = require('path');
 var app = express();
 var port = process.env.PORT || config.port;
 var bodyParser = require('body-parser');
@@ -13,7 +14,7 @@ var routes = require('./routes/webRoutes');
 app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-app.use('/uploads', express.static(__dirname + config.uploadPath));
+app.use('/uploads', express.static(path.join(__dirname, config.uploadPath)));
 
 //Connect to the MongoDB
 console.log('Database connecting...');
