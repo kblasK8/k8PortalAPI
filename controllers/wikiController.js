@@ -7,33 +7,29 @@ const unlinkAsync = promisify(fs.unlink);
 
 exports.list_all_wikis = function(req, res) {
   Wiki.find({parentWiki: '', type: 'parent'}, function(err, wiki) {
-    if(err)
-      res.send(err);
+    if(err) { res.send(err); }
     res.json(wiki);
   });
 };
 
 exports.list_all_sub_wikis = function(req, res) {
     Wiki.find({parentWiki: req.params.wikiId, type: 'child'}, function(err, wiki) {
-        if(err)
-        res.send(err);
-        res.json(wiki);
+      if(err) { res.send(err); }
+      res.json(wiki);
     });
 };
 
 exports.create_a_wiki = function(req, res) {
   var new_wiki = new Wiki(req.body);
   new_wiki.save(function(err, wiki) {
-    if(err)
-      res.send(err);
+    if(err) { res.send(err); }
     res.json(wiki);
   });
 };
 
 exports.filter_a_wiki = function(req, res) {
   Wiki.find(req.body, function(err, wiki) {
-    if(err)
-      res.send(err);
+    if(err) { res.send(err); }
     res.json(wiki);
   });
 };
@@ -71,7 +67,7 @@ exports.delete_a_wiki = function(req, res) {
     });
     Wiki.deleteOne({ _id: req.params.wikiId}, function(err, wiki) {
       if(err) { res.send(err); }
-      res.json({message: 'Wiki successfully deleted.'});
+      res.json({ message: 'Wiki successfully deleted.' });
     });
   });
 };
@@ -83,7 +79,7 @@ exports.delete_wiki_file = function(req, res) {
     var wikiImages = wiki.images;
     wikiImages.forEach((item, index) => {
       if(item.filename == req.params.filename) {
-        if (fs.existsSync(item.path)) {
+        if(fs.existsSync(item.path)) {
           unlinkAsync(item.path);
         }
         i = index;

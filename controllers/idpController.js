@@ -1,5 +1,5 @@
 var mongoose = require('mongoose');
-const IDP = require('../models/idpModel');
+const IDP = require('../models/IDPModel');
 
 exports.list_all_idps = function(req, res) {
   IDP.find({}, function(err, idp) {

@@ -13,16 +13,20 @@ var WikiSchema = new Schema({
     required: "Kindly enter a department."
   },
   author: {
-    type: {
-        name: String,
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Account',
+    required: "Provide author Account Id."
+  },
+  contributors: [{
+    account_id: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Account',
+      required: "Provide contributor Account Id."
     },
-  },
-  contributors: {
-    type: [{
-        name: String,
-        created_date: Date,
-    }],
-  },
+    updated_date: {
+      type: Date
+    },
+  }],
   type: {
     type: String
   },
@@ -37,6 +41,9 @@ var WikiSchema = new Schema({
   },
   images: {
     type: Array
+  },
+  updated_date: {
+    type: Date
   },
   created_date: {
     type: Date,
