@@ -1,6 +1,6 @@
 module.exports = {
-	baseUrl: 'http://localhost:3000/',
-	mongodbURL: "mongodb://192.168.100.104:27017/",
+	baseUrl: 'http://portal.boldbusiness.com/',
+	mongodbURL: "mongodb://127.0.0.1:27017/",
 	mongoDbOptions: {
 		useNewUrlParser: true,
 		useCreateIndex: true,
