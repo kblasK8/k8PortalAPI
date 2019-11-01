@@ -1,6 +1,5 @@
-node_modules
 .DS_store
 .sass-cache
+config
+node_modules
 /uploads
-config/config.js
-
