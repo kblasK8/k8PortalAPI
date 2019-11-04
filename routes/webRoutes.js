@@ -14,6 +14,7 @@ var resourceAssignmentController = require('../controllers/resourceAssignmentCon
 var resourceAssignRoleController = require('../controllers/resourceAssignRoleController');
 var subProjectController = require('../controllers/subProjectController');
 var taskController = require('../controllers/taskController');
+var uploadsController = require('../controllers/uploadsController');
 var wikiController = require('../controllers/wikiController');
 
 /// ACCOUNT ROUTES ///
@@ -132,6 +133,10 @@ router.route('/api/tasks/:taskId')
   .delete(taskController.delete_a_task);
 router.route('/api/tasksFilter')
   .post(taskController.filter_a_project_task);
+
+/// UPLOADS ///
+router.route('/api/uploads/:downloadFile')
+  .get(uploadsController.get_file);
 
 /// WIKI ROUTES ///
 router.route('/api/wiki')
