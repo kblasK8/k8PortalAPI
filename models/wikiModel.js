@@ -6,22 +6,18 @@ var Schema = mongoose.Schema;
 var WikiSchema = new Schema({
   title: {
     type: String,
-    required: "Kindly enter a title."
   },
   department: {
     type: String,
-    required: "Kindly enter a department."
   },
   author: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'Account',
-    required: "Provide author Account Id."
+    ref: 'Account'
   },
   contributors: [{
     account_id: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'Account',
-      required: "Provide contributor Account Id."
+      ref: 'Account'
     },
     updated_date: {
       type: Date
