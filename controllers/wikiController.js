@@ -23,6 +23,7 @@ exports.list_all_sub_wikis = function(req, res) {
 exports.create_a_wiki = function(req, res) {
   var new_wiki = new Wiki(req.body);
 
+  /*
   var contributorID = req.body.contributor;
 
   new_wiki.contributors = [
@@ -34,12 +35,13 @@ exports.create_a_wiki = function(req, res) {
 
   console.log(new_wiki);
   res.json(new_wiki);
-  /*
+  */
+
   new_wiki.save(function(err, wiki) {
     if(err) { res.send(err); }
     res.json(wiki);
   });
-  */
+  
 };
 
 exports.filter_a_wiki = function(req, res) {
