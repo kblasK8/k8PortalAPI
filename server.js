@@ -17,7 +17,7 @@ app.use(bodyParser.json());
 app.use('/api/uploads', express.static(path.join(__dirname, config.uploadPath)));
 
 //Connect to the MongoDB
-console.log('Database connecting...');
+console.log('Database connecting to ' + config.mongodbURL + '...');
 mongoose.Promise = global.Promise;
 mongoose.connect(config.mongodbURL, config.mongoDbOptions);
 mongoose.connection.on('connected', () => {
@@ -26,7 +26,11 @@ mongoose.connection.on('connected', () => {
 	console.log('Registering routes... ');
 	app.use(routes);
 	//Register Port
-	app.listen(port, () => console.log('Listening on port ' + port));
+	var server = app.listen(port, () => console.log('Listening on port ' + port));
+	server.on('connection', function(socket) {
+		//75 second timeout.
+		socket.setTimeout(75 * 1000);
+	});
 	console.log('K8 Portal RESTful API server started...');
 });
 
