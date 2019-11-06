@@ -2,7 +2,12 @@ var mongoose = require('mongoose');
 const ResourceAssignment = require('../models/resourceAssignmentModel');
 
 exports.list_all_ra = function(req, res) {
-  ResourceAssignment.find({}, function(err, ra) {
+  ResourceAssignment.find()
+  .populate('project_id')
+  .populate('project_category')
+  .populate('resources.account_id')
+  .populate('resources.role')
+  .exec(function(err, ra) {
     if(err) { res.send(err); }
     res.json(ra);
   });
