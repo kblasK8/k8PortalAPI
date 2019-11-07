@@ -7,7 +7,10 @@ const { promisify } = require('util');
 const unlinkAsync = promisify(fs.unlink);
 
 exports.list_all_wikis = function(req, res) {
-  Wiki.find({parentWiki: '', type: 'parent'}, function(err, wiki) {
+  Wiki.find({ parentWiki: '', type: 'parent' })
+  .populate('author')
+  .populate('contributors.account_id')
+  .exec(function(err, wiki) {
     if(err) { res.send(err); }
     res.json(wiki);
   });
@@ -22,21 +25,6 @@ exports.list_all_sub_wikis = function(req, res) {
 
 exports.create_a_wiki = function(req, res) {
   var new_wiki = new Wiki(req.body);
-
-  /*
-  var contributorID = req.body.contributor;
-
-  new_wiki.contributors = [
-    {
-      "account_id" : contributorID,
-      "updated_date" : new moment().format()
-    }
-  ];
-
-  console.log(new_wiki);
-  res.json(new_wiki);
-  */
-
   new_wiki.save(function(err, wiki) {
     if(err) { res.send(err); }
     res.json(wiki);
@@ -45,7 +33,10 @@ exports.create_a_wiki = function(req, res) {
 };
 
 exports.filter_a_wiki = function(req, res) {
-  Wiki.find(req.body, function(err, wiki) {
+  Wiki.find(req.body)
+  .populate('author')
+  .populate('contributors.account_id')
+  .exec(function(err, wiki) {
     if(err) { res.send(err); }
     res.json(wiki);
   });
@@ -63,6 +54,7 @@ exports.update_a_wiki = function(req, res) {
         req.body.images = req.files
       }
     }
+    req.body.updated_date = new moment().format();
     Wiki.findOneAndUpdate(
       { _id: req.params.wikiId },
       req.body,

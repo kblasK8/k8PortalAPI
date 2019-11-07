@@ -1,4 +1,5 @@
 var mongoose = require('mongoose');
+var moment = require('moment');
 const Task = require('../models/taskModel');
 const Project = require('../models/projectModel');
 
@@ -36,6 +37,7 @@ exports.filter_a_project_task = function(req, res) {
 };
 
 exports.update_a_task = function(req, res) {
+  req.body.updated_date = new moment().format();
   Task.findOneAndUpdate(
     { _id: req.params.taskId },
     req.body,

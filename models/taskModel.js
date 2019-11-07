@@ -75,6 +75,9 @@ var TaskSchema = new Schema({
     }],
     required: "Provide Quarter Scope."
   },
+  updated_date: {
+    type: Date
+  },
   created_date: {
     type: Date,
     default: Date.now

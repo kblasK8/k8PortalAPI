@@ -1,4 +1,5 @@
 var mongoose = require('mongoose');
+var moment = require('moment');
 const ResourceAssignment = require('../models/resourceAssignmentModel');
 
 exports.list_all_ra = function(req, res) {
@@ -24,7 +25,15 @@ exports.create_a_ra = function(req, res) {
   var new_ra = new ResourceAssignment(req.body);
   new_ra.save(function(err, ra) {
     if(err) { res.send(err); }
-    res.json(ra);
+    ResourceAssignment.findById(ra._id)
+    .populate('project_id')
+    .populate('project_category')
+    .populate('resources.account_id')
+    .populate('resources.role')
+    .exec(function(err, ra) {
+      if(err) { res.send(err); }
+      res.json(ra);
+    });
   });
 };
 
@@ -36,6 +45,7 @@ exports.read_a_ra = function(req, res) {
 };
 
 exports.update_a_ra = function(req, res) {
+  req.body.updated_date = new moment().format();
   ResourceAssignment.findOneAndUpdate(
     { _id: req.params.raId },
     req.body,
