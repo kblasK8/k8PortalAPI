@@ -9,11 +9,6 @@ var ResourceAssignmentSchema = new Schema({
     ref: 'Project',
     required: "Provide Project Id."
   },
-  project_category: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'ResourceAssignmentCategory',
-    required: "Provide Resource Assignment Category."
-  },
   resources: [
     {
       account_id: {

@@ -22,6 +22,10 @@ var ProjectSchema = new Schema({
   description: {
     type: String,
   },
+  project_category: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'ResourceAssignmentCategory'
+  },
   client: {
     type: String
   },

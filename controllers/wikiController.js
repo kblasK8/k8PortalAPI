@@ -17,10 +17,13 @@ exports.list_all_wikis = function(req, res) {
 };
 
 exports.list_all_sub_wikis = function(req, res) {
-    Wiki.find({parentWiki: req.params.wikiId, type: 'child'}, function(err, wiki) {
-      if(err) { res.send(err); }
-      res.json(wiki);
-    });
+  Wiki.find({ parentWiki: req.params.wikiId, type: 'child' })
+  .populate('author')
+  .populate('contributors.account_id')
+  .exec(function(err, wiki) {
+    if(err) { res.send(err); }
+    res.json(wiki);
+  });
 };
 
 exports.create_a_wiki = function(req, res) {
@@ -29,7 +32,6 @@ exports.create_a_wiki = function(req, res) {
     if(err) { res.send(err); }
     res.json(wiki);
   });
-  
 };
 
 exports.filter_a_wiki = function(req, res) {
@@ -61,7 +63,13 @@ exports.update_a_wiki = function(req, res) {
       { new : true },
       function(e, wk) {
         if(e) { res.send(e); }
-        res.json(wk);
+        Wiki.findById(wk._id)
+        .populate('author')
+        .populate('contributors.account_id')
+        .exec(function(err, wiki) {
+          if(err) { res.send(err); }
+          res.json(wiki);
+        });
       }
     );
   });

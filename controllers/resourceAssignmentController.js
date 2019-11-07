@@ -5,7 +5,6 @@ const ResourceAssignment = require('../models/resourceAssignmentModel');
 exports.list_all_ra = function(req, res) {
   ResourceAssignment.find()
   .populate('project_id')
-  .populate('project_category')
   .populate('resources.account_id')
   .populate('resources.role')
   .exec(function(err, ra) {
@@ -15,10 +14,14 @@ exports.list_all_ra = function(req, res) {
 };
 
 exports.filter_ra = function(req, res) {
-  ResourceAssignment.find(req.body, function(err, ra) {
-    if(err) { res.send(err); }
-    res.json(ra);
-  });
+  ResourceAssignment.find(req.body)
+    .populate('project_id')
+    .populate('resources.account_id')
+    .populate('resources.role')
+    .exec(function(err, ra) {
+      if(err) { res.send(err); }
+      res.json(ra);
+    });
 };
 
 exports.create_a_ra = function(req, res) {
@@ -27,7 +30,6 @@ exports.create_a_ra = function(req, res) {
     if(err) { res.send(err); }
     ResourceAssignment.findById(ra._id)
     .populate('project_id')
-    .populate('project_category')
     .populate('resources.account_id')
     .populate('resources.role')
     .exec(function(err, ra) {
@@ -38,7 +40,11 @@ exports.create_a_ra = function(req, res) {
 };
 
 exports.read_a_ra = function(req, res) {
-  ResourceAssignment.findById(req.params.raId, function(err, ra) {
+  ResourceAssignment.findById(req.params.raId)
+  .populate('project_id')
+  .populate('resources.account_id')
+  .populate('resources.role')
+  .exec(function(err, ra) {
     if(err) { res.send(err); }
     res.json(ra);
   });
