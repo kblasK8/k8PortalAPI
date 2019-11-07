@@ -7,6 +7,10 @@
   },
   "description": "REST API for K8 Portal",
   "main": "index.js",
+  "nodemonConfig": {
+    "ignore": ["uploads/*"],
+    "delay": "2500"
+  },
   "scripts": {
     "start": "nodemon server.js"
   },
