@@ -56,7 +56,29 @@ exports.update_a_wiki = function(req, res) {
         req.body.images = req.files
       }
     }
-    console.log(req.body);
+    if(req.body.contributor) {
+      var contributor = req.body.contributor;
+      var contributors = wiki.contributors;
+      var index_splice = null;
+      var blnSplice = false;
+      contributors.forEach(function(value, index) {
+        if(value.account_id == contributor) {
+          blnSplice = true;
+          index_splice = index;
+          return;
+        }
+      });
+      if(blnSplice) { contributors.splice(index_splice, 1); }
+      contributors.push({
+        "account_id" : mongoose.Types.ObjectId(contributor),
+        "updated_date" : new moment().format()
+      });
+      if(contributors.length > 5) {
+        contributors.shift();
+      }
+      delete req.body.contributor;
+      req.body.contributors = contributors;
+    }
     req.body.updated_date = new moment().format();
     Wiki.findOneAndUpdate(
       { _id: req.params.wikiId },
@@ -64,13 +86,7 @@ exports.update_a_wiki = function(req, res) {
       { new : true },
       function(e, wk) {
         if(e) { res.send(e); }
-        Wiki.findById(wk._id)
-        .populate('author')
-        .populate('contributors.account_id')
-        .exec(function(err, wiki) {
-          if(err) { res.send(err); }
-          res.json(wiki);
-        });
+        res.json(wk);
       }
     );
   });
