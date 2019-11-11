@@ -33,22 +33,16 @@ var AccountSchema = new Schema({
     required: "Provide Account Password."
   },
   shift: {
-    type: [{
-      type: String,
-      enum: ['GY', 'MID']
-    }],
+    type: [String],
+    enum: ['GY', 'MID']
   },
   type: {
-    type: [{
-      type: String,
-      enum: ['Admin', 'HR', 'Team Lead', 'Manager', 'User']
-    }],
+    type: [String],
+    enum: ['Admin', 'HR', 'Team Lead', 'Manager', 'User']
   },
   status: {
-    type: [{
-      type: String,
-      enum: ['Enabled', 'Disabled']
-    }],
+    type: [String],
+    enum: ['Enabled', 'Disabled'],
     default: ['Enabled']
   },
   profilePhoto: {

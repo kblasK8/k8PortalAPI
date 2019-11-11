@@ -4,9 +4,8 @@ const ResourceAssignment = require('../models/resourceAssignmentModel');
 
 exports.list_all_ra = function(req, res) {
   ResourceAssignment.find()
-  .populate('project_id')
   .populate('resources.account_id')
-  .populate('resources.role')
+  .populate('resources.role', 'name')
   .exec(function(err, ra) {
     if(err) { res.send(err); }
     res.json(ra);
@@ -14,14 +13,58 @@ exports.list_all_ra = function(req, res) {
 };
 
 exports.filter_ra = function(req, res) {
+  var custom_fields = null;
+  var custom_populate = null;
+  if(req.body.custom_fields) {
+    custom_fields = req.body.custom_fields;
+    delete req.body.custom_fields;
+  }
+  if(req.body.custom_populate) {
+    custom_populate = req.body.custom_populate;
+    delete req.body.custom_populate;
+  }
   ResourceAssignment.find(req.body)
-    .populate('project_id')
-    .populate('resources.account_id')
-    .populate('resources.role')
+    .populate('resources.account_id', custom_fields)
+    .populate('resources.role', '-_id name')
     .exec(function(err, ra) {
       if(err) { res.send(err); }
-      res.json(ra);
-    });
+      if(
+        custom_populate !== null &&
+        custom_populate.toLowerCase() === "true"
+      ) {
+        var data_arr = [];
+        var data_val = {};
+        var resources_temp = [];
+        ra.forEach(function(value, index) {
+          data_val._id = value._id;
+          data_val.project_id = value.project_id;
+          var resources = value.resources;
+          var resource_obj = {};
+          if(resources) {
+            resources.forEach(function(v, i) {
+              resource_obj._id = v._id;
+              resource_obj.role = v.role.name;
+              var account_info = {};
+              account_info = JSON.stringify(v.account_id);
+              account_info = JSON.parse(account_info);
+              for(var property in account_info) {
+                if(property == "_id") {
+                  resource_obj.account_id = resource_obj._id;
+                }
+                resource_obj[property] = account_info[property];
+              }
+              resources_temp.push(resource_obj);
+            });
+          }//if
+          data_val.resources = resources_temp;
+          data_arr.push(data_val);
+        });
+        res.json(data_arr);
+      } else {
+        res.json(ra);
+      }
+    }
+  );
 };
 
 exports.create_a_ra = function(req, res) {
@@ -29,9 +72,8 @@ exports.create_a_ra = function(req, res) {
   new_ra.save(function(err, ra) {
     if(err) { res.send(err); }
     ResourceAssignment.findById(ra._id)
-    .populate('project_id')
     .populate('resources.account_id')
-    .populate('resources.role')
+    .populate('resources.role', 'name')
     .exec(function(err, ra) {
       if(err) { res.send(err); }
       res.json(ra);
@@ -41,9 +83,8 @@ exports.create_a_ra = function(req, res) {
 
 exports.read_a_ra = function(req, res) {
   ResourceAssignment.findById(req.params.raId)
-  .populate('project_id')
   .populate('resources.account_id')
-  .populate('resources.role')
+  .populate('resources.role', 'name')
   .exec(function(err, ra) {
     if(err) { res.send(err); }
     res.json(ra);

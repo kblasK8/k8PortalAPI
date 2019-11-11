@@ -56,6 +56,7 @@ exports.update_a_wiki = function(req, res) {
         req.body.images = req.files
       }
     }
+    console.log(req.body);
     req.body.updated_date = new moment().format();
     Wiki.findOneAndUpdate(
       { _id: req.params.wikiId },
