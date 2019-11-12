@@ -26,6 +26,17 @@ exports.list_all_sub_wikis = function(req, res) {
   });
 };
 
+exports.list_all_department_wikis = function(req, res) {
+  Wiki.find({ department: req.params.departmentId, type: 'parent' })
+  .select('-__v')
+  .populate('author', '-__v -password')
+  .populate('contributors.account_id', '-__v -password')
+  .exec(function(err, wiki) {
+    if(err) { res.send(err); }
+    res.json(wiki);
+  });
+};
+
 exports.create_a_wiki = function(req, res) {
   var new_wiki = new Wiki(req.body);
   new_wiki.save(function(err, wiki) {

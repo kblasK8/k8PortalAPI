@@ -146,6 +146,8 @@ router.route('/api/wiki/:wikiId')
   .get(wikiController.list_all_sub_wikis)
   .post(upload.array("files", 5), wikiController.update_a_wiki)
   .delete(wikiController.delete_a_wiki);
+router.route('/api/wiki/department/:departmentId')
+  .get(wikiController.list_all_department_wikis)
 router.route('/api/wikiFilter')
   .post(wikiController.filter_a_wiki);
 router.route('/api/wiki/:wikiId/:filename')

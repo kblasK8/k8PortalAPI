@@ -84,7 +84,7 @@ exports.update_a_account = function(req, res) {
       function(e, acc) {
         if(e) res.send(e);
         //Delete old photo
-        if(req.file) fs.unlinkSync(account.profilePhoto);
+        if(req.file) { unlinkAsync(account.profilePhoto); }
         res.json(acc);
       }
     );
