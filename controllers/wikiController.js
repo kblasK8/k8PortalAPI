@@ -8,8 +8,8 @@ const unlinkAsync = promisify(fs.unlink);
 
 exports.list_all_wikis = function(req, res) {
   Wiki.find({ parentWiki: '', type: 'parent' })
-  .populate('author')
-  .populate('contributors.account_id')
+  .populate('author', '-__v -password')
+  .populate('contributors.account_id', '-__v -password')
   .exec(function(err, wiki) {
     if(err) { res.send(err); }
     res.json(wiki);
@@ -18,8 +18,8 @@ exports.list_all_wikis = function(req, res) {
 
 exports.list_all_sub_wikis = function(req, res) {
   Wiki.find({ parentWiki: req.params.wikiId, type: 'child' })
-  .populate('author')
-  .populate('contributors.account_id')
+  .populate('author', '-__v -password')
+  .populate('contributors.account_id', '-__v -password')
   .exec(function(err, wiki) {
     if(err) { res.send(err); }
     res.json(wiki);
@@ -36,8 +36,8 @@ exports.create_a_wiki = function(req, res) {
 
 exports.filter_a_wiki = function(req, res) {
   Wiki.find(req.body)
-  .populate('author')
-  .populate('contributors.account_id')
+  .populate('author', '-__v -password')
+  .populate('contributors.account_id', '-__v -password')
   .exec(function(err, wiki) {
     if(err) { res.send(err); }
     res.json(wiki);
@@ -73,9 +73,7 @@ exports.update_a_wiki = function(req, res) {
         "account_id" : mongoose.Types.ObjectId(contributor),
         "updated_date" : new moment().format()
       });
-      if(contributors.length > 5) {
-        contributors.shift();
-      }
+      if(contributors.length > 5) { contributors.shift(); }
       delete req.body.contributor;
       req.body.contributors = contributors;
     }
@@ -83,12 +81,17 @@ exports.update_a_wiki = function(req, res) {
     Wiki.findOneAndUpdate(
       { _id: req.params.wikiId },
       req.body,
-      { new : true },
-      function(e, wk) {
-        if(e) { res.send(e); }
-        res.json(wk);
-      }
-    );
+      { 
+        "fields": { "__v": 0 },
+        new : true
+      },
+    )
+    .populate('author', '-__v -password')
+    .populate('contributors.account_id', '-__v -password')
+    .exec(function(e, wk) {
+      if(err) { res.send(err); }
+      res.json(wk);
+    });
   });
 };
 
@@ -97,7 +100,7 @@ exports.delete_a_wiki = function(req, res) {
     if(err) res.send(err);
     var wikiImages = wiki.images;
     wikiImages.forEach((item, index) => {
-      if(item.path) unlinkAsync(item.path);
+      if(item.path) { unlinkAsync(item.path); }
     });
     Wiki.deleteOne({ _id: req.params.wikiId}, function(err, wiki) {
       if(err) { res.send(err); }
@@ -109,25 +112,31 @@ exports.delete_a_wiki = function(req, res) {
 exports.delete_wiki_file = function(req, res) {
   Wiki.findById({ _id: req.params.wikiId }, function(err, wiki) {
     if(err) { res.send(err); }
+    if(!wiki) { res.json({ message: 'Wiki not found.' }); }
     var i = null;
-    var wikiImages = wiki.images;
-    wikiImages.forEach((item, index) => {
-      if(item.filename == req.params.filename) {
-        if(fs.existsSync(item.path)) {
-          unlinkAsync(item.path);
+    if(wiki.images) {
+      var wikiImages = wiki.images;
+      wikiImages.forEach((item, index) => {
+        if(item.filename == req.params.filename) {
+          if(fs.existsSync(item.path)) { unlinkAsync(item.path); }
+          i = index;
         }
-        i = index;
-      }
-    });
-    delete wikiImages[i];
+      });
+      wikiImages.splice(i, 1);
+    }
     Wiki.findOneAndUpdate(
       { _id: req.params.wikiId },
       { "images" : wikiImages },
-      { new : true },
-      function(e, wk) {
-        if(e) { res.send(e); }
-        res.json(wk);
+      { 
+        "fields": { "__v": 0 },
+        new : true
       }
-    );
+    )
+    .populate('author', '-__v -password')
+    .populate('contributors.account_id', '-__v -password')
+    .exec(function(e, wk) {
+      if(err) { res.send(err); }
+      res.json(wk);
+    });
   });
 };
