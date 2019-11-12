@@ -1,6 +1,8 @@
 var mongoose = require('mongoose');
 const Account = require('../models/accountModel');
 const fs = require('fs');
+const { promisify } = require('util');
+const unlinkAsync = promisify(fs.unlink);
 
 exports.list_all_accounts = function(req, res) {
   Account.find({}, function(err, account) {
