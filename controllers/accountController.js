@@ -86,9 +86,7 @@ exports.update_a_account = function(req, res) {
       function(e, acc) {
         if(e) res.send(e);
         if(req.file) {
-          if(fs.existsSync(account.profilePhoto)) {
-            unlinkAsync(account.profilePhoto);
-          }
+          if(fs.existsSync(account.profilePhoto)) { unlinkAsync(account.profilePhoto); }
         }
         res.json(acc);
       }

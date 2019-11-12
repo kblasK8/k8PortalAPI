@@ -8,6 +8,7 @@ const unlinkAsync = promisify(fs.unlink);
 
 exports.list_all_wikis = function(req, res) {
   Wiki.find({ parentWiki: '', type: 'parent' })
+  .select('-__v')
   .populate('author', '-__v -password')
   .populate('contributors.account_id', '-__v -password')
   .exec(function(err, wiki) {
@@ -18,6 +19,7 @@ exports.list_all_wikis = function(req, res) {
 
 exports.list_all_sub_wikis = function(req, res) {
   Wiki.find({ parentWiki: req.params.wikiId, type: 'child' })
+  .select('-__v')
   .populate('author', '-__v -password')
   .populate('contributors.account_id', '-__v -password')
   .exec(function(err, wiki) {
@@ -109,9 +111,12 @@ exports.update_a_wiki = function(req, res) {
 exports.delete_a_wiki = function(req, res) {
   Wiki.findById({ _id: req.params.wikiId}, function(err, wiki) {
     if(err) res.send(err);
+    if(!wiki) { res.json({ message: 'Wiki not found.' }); }
     var wikiImages = wiki.images;
     wikiImages.forEach((item, index) => {
-      if(item.path) { unlinkAsync(item.path); }
+      if(item.path) {
+        if(fs.existsSync(item.path)) { unlinkAsync(item.path); }
+      }
     });
     Wiki.deleteOne({ _id: req.params.wikiId}, function(err, wiki) {
       if(err) { res.send(err); }
