@@ -7,7 +7,7 @@ const { promisify } = require('util');
 const unlinkAsync = promisify(fs.unlink);
 
 exports.list_all_wikis = function(req, res) {
-  Wiki.find({ parentWiki: '', type: 'parent' })
+  Wiki.find()
   .select('-__v')
   .populate('author', '-__v -password')
   .populate('contributors.account_id', '-__v -password')
@@ -49,6 +49,7 @@ exports.create_a_wiki = function(req, res) {
 
 exports.filter_a_wiki = function(req, res) {
   Wiki.find(req.body)
+  .select('-__v')
   .populate('author', '-__v -password')
   .populate('contributors.account_id', '-__v -password')
   .exec(function(err, wiki) {
