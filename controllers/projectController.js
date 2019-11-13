@@ -108,5 +108,6 @@ exports.page = function(req, res) {
         };
         res.json(response);
       });
-    });
+    }
+  );
 };

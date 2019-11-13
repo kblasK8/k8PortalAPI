@@ -7,7 +7,7 @@ const { promisify } = require('util');
 const unlinkAsync = promisify(fs.unlink);
 
 exports.list_all_wikis = function(req, res) {
-  Wiki.find()
+  Wiki.find({ parentWiki: '', type: 'parent' })
   .select('-__v')
   .populate('author', '-__v -password')
   .populate('contributors.account_id', '-__v -password')
@@ -29,14 +29,31 @@ exports.list_all_sub_wikis = function(req, res) {
 };
 
 exports.list_all_department_wikis = function(req, res) {
-  Wiki.find({ department: req.params.departmentId, type: 'parent' })
-  .select('-__v')
-  .populate('author', '-__v -password')
-  .populate('contributors.account_id', '-__v -password')
-  .exec(function(err, wiki) {
-    if(err) { res.send(err); }
-    res.json(wiki);
-  });
+  var pageNo = parseInt(req.params.pageNo);
+  var perPage = parseInt(req.params.perPage);
+  var query = { department: req.params.departmentId, type: 'parent' }
+  Wiki.find(query)
+    .limit(perPage)
+    .skip(perPage * (pageNo - 1))
+    .sort({
+      name: 'asc'
+    })
+    .select('-__v')
+    .populate('author', '-__v -password')
+    .populate('contributors.account_id', '-__v -password')
+    .exec(function(err, data) {
+      if(err) { res.send(err); }
+      Wiki.estimatedDocumentCount(query).exec(function(err, count) {
+        if(err) { res.send(err); }
+        var response = {
+          data: data,
+          page: pageNo,
+          pages: Math.ceil(count / perPage)
+        };
+        res.json(response);
+      });
+    }
+  );
 };
 
 exports.create_a_wiki = function(req, res) {
