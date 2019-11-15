@@ -78,6 +78,10 @@ exports.filter_a_wiki = function(req, res) {
 exports.update_a_wiki = function(req, res) {
   Wiki.findById(req.params.wikiId, function(err, wiki) {
     if(err) { res.send(err); }
+    if(!wiki) {
+      res.json({ message: 'Wiki not found.' });
+      return;
+    }
     if(req.files) {
       if(wiki.images) {
         var imagesArr = wiki.images;
