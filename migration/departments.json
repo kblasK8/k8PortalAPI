@@ -1,0 +1,72 @@
+{ 
+    "_id" : ObjectId("5da4f74b3c112c4620da6b50"), 
+    "name" : "Development", 
+    "date_created" : ISODate("2019-10-14T22:31:39.126+0000"), 
+    "__v" : NumberInt(0)
+}
+{ 
+    "_id" : ObjectId("5da4f74b3c112c4620da6b51"), 
+    "name" : "Quality Assurance", 
+    "date_created" : ISODate("2019-10-14T22:31:39.950+0000"), 
+    "__v" : NumberInt(0)
+}
+{ 
+    "_id" : ObjectId("5da4f74e3c112c4620da6b52"), 
+    "name" : "Graphics", 
+    "date_created" : ISODate("2019-10-14T22:31:42.990+0000"), 
+    "__v" : NumberInt(0)
+}
+{ 
+    "_id" : ObjectId("5da4f7523c112c4620da6b53"), 
+    "name" : "Illustrator", 
+    "date_created" : ISODate("2019-10-14T22:31:46.963+0000"), 
+    "__v" : NumberInt(0)
+}
+{ 
+    "_id" : ObjectId("5da4f7563c112c4620da6b54"), 
+    "name" : "Video", 
+    "date_created" : ISODate("2019-10-14T22:31:50.334+0000"), 
+    "__v" : NumberInt(0)
+}
+{ 
+    "_id" : ObjectId("5da4f75a3c112c4620da6b55"), 
+    "name" : "SEO", 
+    "date_created" : ISODate("2019-10-14T22:31:54.721+0000"), 
+    "__v" : NumberInt(0)
+}
+{ 
+    "_id" : ObjectId("5da4f75d3c112c4620da6b56"), 
+    "name" : "PPC", 
+    "date_created" : ISODate("2019-10-14T22:31:57.678+0000"), 
+    "__v" : NumberInt(0)
+}
+{ 
+    "_id" : ObjectId("5da4f7613c112c4620da6b57"), 
+    "name" : "Social Media", 
+    "date_created" : ISODate("2019-10-14T22:32:01.860+0000"), 
+    "__v" : NumberInt(0)
+}
+{ 
+    "_id" : ObjectId("5da4f7653c112c4620da6b58"), 
+    "name" : "Writers", 
+    "date_created" : ISODate("2019-10-14T22:32:05.020+0000"), 
+    "__v" : NumberInt(0)
+}
+{ 
+    "_id" : ObjectId("5da4f76b3c112c4620da6b59"), 
+    "name" : "Human Resources", 
+    "date_created" : ISODate("2019-10-14T22:32:11.280+0000"), 
+    "__v" : NumberInt(0)
+}
+{ 
+    "_id" : ObjectId("5da4f76f3c112c4620da6b5a"), 
+    "name" : "Recruitment", 
+    "date_created" : ISODate("2019-10-14T22:32:15.148+0000"), 
+    "__v" : NumberInt(0)
+}
+{ 
+    "_id" : ObjectId("5da4f7733c112c4620da6b5b"), 
+    "name" : "Infrastructure", 
+    "date_created" : ISODate("2019-10-14T22:32:19.890+0000"), 
+    "__v" : NumberInt(0)
+}

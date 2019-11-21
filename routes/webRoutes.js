@@ -81,6 +81,10 @@ router.route('/api/requirements/:requirementId')
   .get(requirementController.read_a_requirement)
   .put(requirementController.update_a_requirement)
   .delete(requirementController.delete_a_requirement);
+router.route('/api/requirements/:projectId/:pageNo/:perPage')
+  .get(requirementController.list_all_project_requirements);
+router.route('/api/requirements/:projectId/:type/:pageNo/:perPage')
+  .get(requirementController.list_all_project_requirements_type);
 
 /// RESOURCE ASSIGNMENT ROUTES ///
 router.route('/api/ra')

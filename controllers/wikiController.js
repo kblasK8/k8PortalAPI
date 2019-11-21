@@ -31,7 +31,7 @@ exports.list_all_sub_wikis = function(req, res) {
 exports.list_all_department_wikis = function(req, res) {
   var pageNo = parseInt(req.params.pageNo);
   var perPage = parseInt(req.params.perPage);
-  var query = { department: req.params.departmentId, type: 'parent' }
+  var query = { department: req.params.departmentId, type: 'parent' };
   Wiki.find(query)
     .limit(perPage)
     .skip(perPage * (pageNo - 1))

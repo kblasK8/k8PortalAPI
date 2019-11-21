@@ -9,32 +9,28 @@ var RequirementsSchema = new Schema({
     ref: 'Project',
     required: "Provide Project Id."
   },
-  data: [
-    {
-      description: {
-        type: String,
-        required: "Kindly enter a description."
-      },
-      author: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Account',
-      },
-      type: {
-        type: [{
-          type: String,
-          enum: ['BR', 'GR', 'TR']
-        }],
-        required: "Kindly enter name of Type."
-      },
-      updated_date: {
-        type: Date
-      },
-      created_date: {
-        type: Date,
-        default: Date.now
-      }
-    }
-  ]
+  description: {
+    type: String,
+    required: "Kindly enter a description."
+  },
+  author: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Account',
+  },
+  type: {
+    type: [{
+      type: String,
+      enum: ['BR', 'GR', 'TR']
+    }],
+    required: "Kindly enter name of Type."
+  },
+  updated_date: {
+    type: Date
+  },
+  created_date: {
+    type: Date,
+    default: Date.now
+  }
 });
 
 module.exports = mongoose.model('Requirement', RequirementsSchema);

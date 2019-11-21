@@ -1,3 +1,4 @@
+var SHA256 = require("crypto-js/sha256");
 var mongoose = require('mongoose');
 const Account = require('../models/accountModel');
 const fs = require('fs');
@@ -60,6 +61,7 @@ exports.filter_account = function(req, res) {
 
 exports.create_a_account = function(req, res) {
   var new_account = new Account(req.body);
+  if(req.body.password) { req.body.password = SHA256(req.body.password); }
   new_account.save(function(err, account) {
     if(err)
       res.send(err);
@@ -78,7 +80,8 @@ exports.read_a_account = function(req, res) {
 exports.update_a_account = function(req, res) {
   Account.findById(req.params.accountId, function(err, account) {
     if(err) res.send(err);
-    if(req.file) req.body.profilePhoto = req.file.path;
+    if(req.file) { req.body.profilePhoto = req.file.path; }
+    if(req.body.password) { req.body.password = SHA256(req.body.password); }
     Account.findOneAndUpdate(
       { _id: req.params.accountId },
       req.body,
