@@ -39,9 +39,9 @@ exports.filter_ra = function(req, res) {
           data_val._id = value._id;
           data_val.project_id = value.project_id;
           var resources = value.resources;
-          var resource_obj = {};
           if(resources) {
             resources.forEach(function(v, i) {
+              var resource_obj = {};
               resource_obj._id = v._id;
               resource_obj.role = v.role.name;
               var account_info = {};
@@ -49,9 +49,10 @@ exports.filter_ra = function(req, res) {
               account_info = JSON.parse(account_info);
               for(var property in account_info) {
                 if(property == "_id") {
-                  resource_obj.account_id = resource_obj._id;
+                  resource_obj.account_id = account_info[property];
+                } else {
+                  resource_obj[property] = account_info[property];
                 }
-                resource_obj[property] = account_info[property];
               }
               resources_temp.push(resource_obj);
             });

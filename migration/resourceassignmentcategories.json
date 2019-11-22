@@ -1,12 +1,2 @@
-{ 
-    "_id" : ObjectId("5dc343dd0b95a05a7586b610"), 
-    "name" : "Websites/Systems", 
-    "date_created" : ISODate("2019-11-06T22:06:21.647+0000"), 
-    "__v" : NumberInt(0)
-}
-{ 
-    "_id" : ObjectId("5dc362bdcbe4463d1cb01e6e"), 
-    "name" : "Innovation", 
-    "date_created" : ISODate("2019-11-07T00:18:05.568+0000"), 
-    "__v" : NumberInt(0)
-}
+{ "_id" : ObjectId("5dc343dd0b95a05a7586b610"), "name" : "Websites/Systems", "date_created" : ISODate("2019-11-06T22:06:21.647+0000"), "__v" : NumberInt(0) }
+{ "_id" : ObjectId("5dc362bdcbe4463d1cb01e6e"), "name" : "Innovation", "date_created" : ISODate("2019-11-07T00:18:05.568+0000"), "__v" : NumberInt(0) }

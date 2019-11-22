@@ -1,16 +1,33 @@
 #!/bin/bash
 
-username=""
-password=""
+#Install Brew
+	if [[ $(command -v brew) == "" ]]; then
+	    echo "Installing Hombrew..."
+	    /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+	else
+	    echo "Updating Homebrew..."
+	    brew update
+	fi
 
-mongoimport --db PortalDB --collection departments ^
-          	--authenticationDatabase admin --username $username --password $password ^
-          	--drop --file departments.json
+#Install MongoDB
+	if brew ls --versions mongodb-community > /dev/null; then
+		# The package is installed
+		echo "MongoDB formulae found! Upgrading MongoDB..."
+		brew upgrade mongodb-community
+	else
+		# The package is not installed
+		echo "Installing MongoDB..."
+		brew tap mongodb/brew
+		brew install mongodb-community
+	fi
+	
+	echo "Starting MongoDB service..."
+	brew services stop mongodb-community
+	brew services start mongodb-community
 
-mongoimport --db PortalDB --collection resourceassignmentcategories ^
-          	--authenticationDatabase admin --username $username --password $password ^
-          	--drop --file resourceassignmentcategories.json
-
-mongoimport --db PortalDB --collection resourceassignmentroles ^
-          	--authenticationDatabase admin --username $username --password $password ^
-          	--drop --file resourceassignmentroles.json
+#Importing default data
+	echo "Importing data..."
+	mongoimport --db PortalDB --collection departments --type json --file departments.json --legacy
+	mongoimport --db PortalDB --collection resourceassignmentcategories --type json --file resourceassignmentcategories.json --legacy
+	mongoimport --db PortalDB --collection resourceassignmentroles --type json --file resourceassignmentroles.json --legacy
+	echo "Data imported done."
