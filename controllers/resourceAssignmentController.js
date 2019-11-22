@@ -25,7 +25,7 @@ exports.filter_ra = function(req, res) {
   }
   ResourceAssignment.find(req.body)
     .populate('resources.account_id', custom_fields)
-    .populate('resources.role', '-_id name')
+    .populate('resources.role', '_id name')
     .exec(function(err, ra) {
       if(err) { res.send(err); }
       if(
@@ -43,6 +43,7 @@ exports.filter_ra = function(req, res) {
             resources.forEach(function(v, i) {
               var resource_obj = {};
               resource_obj._id = v._id;
+              resource_obj.role_id = v.role._id;
               resource_obj.role = v.role.name;
               var account_info = {};
               account_info = JSON.stringify(v.account_id);
