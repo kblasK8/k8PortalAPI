@@ -36,8 +36,11 @@ exports.update_a_rar = function(req, res) {
 };
 
 exports.delete_a_rar = function(req, res) {
-  RecAssignRole.remove({ _id: req.params.rarId}, function(err, rac) {
-    if(err) { res.send(err); }
-    res.json({message: 'Resource Assignment Role successfully deleted.'});
-  });
+  RecAssignRole.remove(
+    { _id: req.params.rarId },
+    function(err, rac) {
+      if(err) { res.send(err); }
+      res.json({ message: 'Resource Assignment Role successfully deleted.' });
+    }
+  );
 };

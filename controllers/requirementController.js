@@ -88,7 +88,7 @@ exports.update_a_requirement = function(req, res) {
     { _id: req.params.requirementId },
     req.body,
     {
-      "fields": { "__v": 0 },
+      "fields" : { "__v": 0 },
       new : true
     }
   )

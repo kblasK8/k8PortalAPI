@@ -26,6 +26,23 @@ var ProjectSchema = new Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'ResourceAssignmentCategory'
   },
+  child_projects: [{
+    project_id: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Project'
+    },
+    project_type: {
+      type: [{
+        type: String,
+        enum: ['Enhancement', 'Subproject']
+      }],
+      default: ['Subproject']
+    },
+    date_added: {
+      type: Date,
+      default: Date.now
+    }
+  }],
   client: {
     type: String
   },

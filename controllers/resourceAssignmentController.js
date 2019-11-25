@@ -109,6 +109,6 @@ exports.update_a_ra = function(req, res) {
 exports.delete_a_ra = function(req, res) {
   ResourceAssignment.remove({ _id: req.params.raId}, function(err, ra) {
     if(err) { res.send(err); }
-    res.json({message: 'Resource assignment successfully deleted.'});
+    res.json({ message: 'Resource assignment successfully deleted.' });
   });
 };

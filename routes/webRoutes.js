@@ -12,7 +12,6 @@ var requirementController = require('../controllers/requirementController');
 var resourceAssignCategoryController = require('../controllers/resourceAssignCategoryController');
 var resourceAssignmentController = require('../controllers/resourceAssignmentController');
 var resourceAssignRoleController = require('../controllers/resourceAssignRoleController');
-var subProjectController = require('../controllers/subProjectController');
 var taskController = require('../controllers/taskController');
 var uploadsController = require('../controllers/uploadsController');
 var wikiController = require('../controllers/wikiController');
@@ -72,6 +71,9 @@ router.route('/api/projectsFilter')
   .post(projectController.filter_a_project);
 router.route('/api/projects/page/:pageNo/:perPage')
   .get(projectController.page);
+router.route('/api/projects/child/:projectId')
+  .get(projectController.read_child_projects)
+  .post(projectController.create_child_projects);
 
 /// REQUIREMENT ROUTES ///
 router.route('/api/requirements')
@@ -114,19 +116,6 @@ router.route('/api/rar/:rarId')
   .get(resourceAssignRoleController.read_a_rar)
   .put(resourceAssignRoleController.update_a_rar)
   .delete(resourceAssignRoleController.delete_a_rar);
-
-/// SUBPROJECT ROUTES ///
-router.route('/api/subproj')
-  .get(subProjectController.list_all_sub_projs)
-  .post(subProjectController.create_a_sub_proj);
-router.route('/api/subproj')
-  .get(subProjectController.list_all_sub_projs);
-router.route('/api/subproj/:subProjId')
-  .get(subProjectController.read_a_sub_proj)
-  .put(subProjectController.update_a_sub_proj)
-  .delete(subProjectController.delete_a_sub_proj);
-router.route('/api/subprojFilter')
-  .post(subProjectController.filter_sub_proj);
 
 /// TASK ROUTES ///
 router.route('/api/tasks')
