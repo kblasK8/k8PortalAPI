@@ -32,6 +32,6 @@ mongoose.connection.on('connected', () => {
 
 //Exit script if cannot connect to the Database
 mongoose.connection.on('error', (err) => {
-  console.log('Connection error. ' + err);
-  process.exit(0);
+	console.log('Connection error. ' + err);
+	process.exit(0);
 });

@@ -8,21 +8,21 @@ var AccountSchema = new Schema({
     type: String,
     required: "Provide Account First Name."
   },
+  middle_name: {
+    type: String
+  },
   last_name: {
     type: String,
     required: "Provide Account Last Name."
   },
-  full_name: {
-    type: String,
-    required: "Provide Account Full Name."
+  suffix_name: {
+    type: String
   },
   job_role: {
-    type: String,
-    required: "Provide Job Role."
+    type: String
   },
   department: {
-    type: String,
-    required: "Provide Department Name."
+    type: String
   },
   email: {
     type: String,
