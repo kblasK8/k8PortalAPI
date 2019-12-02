@@ -1,5 +1,6 @@
-var jwt = require('jsonwebtoken');
-const secretKey = "K8PortalAPI";
+const jwt = require('jsonwebtoken');
+const config = require('../config/config');
+const secretKey = config.secretKey;
 
 module.exports = (req, res, next) => {
   // Check all the routes below if token includes in the header //
@@ -17,6 +18,7 @@ module.exports = (req, res, next) => {
           error: true,
           msg: "Forbidden. Invalid token."
         });
+        return;
       } else {
         next();
       }

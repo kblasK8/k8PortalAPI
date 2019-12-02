@@ -1,7 +1,7 @@
 module.exports = {
-	baseUrl: 'http://localhost:3000/',
-	mongodbURL: "mongodb://192.168.100.114:27017/",
-	mongoDbOptions: {
+	baseUrl: 'http://localhost:3000/', // Main API URL
+	mongodbURL: "mongodb://192.168.100.114:27017/", // MongoDB URL connection
+	mongoDbOptions: { // MongoDB configuration options
 		useNewUrlParser: true,
 		useCreateIndex: true,
 		useFindAndModify: false,
@@ -14,10 +14,11 @@ module.exports = {
 		connectTimeoutMS: 10000, // Give up initial connection after 10 seconds
 		socketTimeoutMS: 45000, // Close sockets after 45 seconds of inactivity
 		family: 4, // Use IPv4, skip trying IPv6
-		user: null,
-		pass: null,
-		dbName: "PortalDB"
+		user: null, // MongoDB username
+		pass: null, // MongoDB Password
+		dbName: "PortalDB" // Database name
 	},
-	port: 3000,
-	uploadPath: "./uploads/"
+	port: 3000, // API use port
+	secretKey: "K8PortalAPI", // JWT secret key
+	uploadPath: "./uploads/", // Upload folder path
 };

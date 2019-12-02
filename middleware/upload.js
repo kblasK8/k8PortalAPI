@@ -1,8 +1,8 @@
 const config = require('../config/config');
-var SHA256 = require("crypto-js/sha256");
-var multer = require("multer");
-var path = require('path');
-var storage = multer.diskStorage({
+const SHA256 = require("crypto-js/sha256");
+const multer = require("multer");
+const path = require('path');
+const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, config.uploadPath);
   },
@@ -22,7 +22,7 @@ const fileFilter = (req, file, cb) => {
     cb(null, false);
   }
 }
-var upload = multer({ 
+const upload = multer({ 
   storage: storage,
   // fileFilter: fileFilter, // Uncomment this to restrict image files only
   limits: {

@@ -1,15 +1,15 @@
-var CryptoJS = require("crypto-js");
-var SHA256 = require("crypto-js/sha256");
-var jwt = require('jsonwebtoken');
-var mongoose = require('mongoose');
-// const tokenCheck = require('../middleware/tokenCheck');
+const CryptoJS = require("crypto-js");
+const SHA256 = require("crypto-js/sha256");
+const jwt = require('jsonwebtoken');
+const mongoose = require('mongoose');
 const Account = require('../models/accountModel');
 const fs = require('fs');
 const { promisify } = require('util');
 const unlinkAsync = promisify(fs.unlink);
-const secretKey = "K8PortalAPI";
+const config = require('../config/config');
+const secretKey = config.secretKey;
 
-exports.login_account = function(req, res) {
+exports.login_account = (req, res) => {
   var email = req.body.email;
   var password = SHA256(req.body.password).toString(CryptoJS.enc.Hex);
   Account.findOne(
@@ -18,7 +18,7 @@ exports.login_account = function(req, res) {
       "password" : password
     },
     { "password" : 0, "__v": 0 },
-    function(err, account) {
+    (err, account) => {
       if(err) { res.send(err); }
       if(!account) {
         res
@@ -51,18 +51,18 @@ exports.login_account = function(req, res) {
   );
 }
 
-exports.list_all_accounts = function(req, res) {
+exports.list_all_accounts = (req, res) => {
   Account.find(
     { status: 'Enabled' },
     { "password" : 0, "__v": 0 },
-    function(err, account) {
+    (err, account) => {
       if(err) { res.send(err); }
       res.json(account);
     }
   );
 };
 
-exports.list_all_account_by_department = function(req, res) {
+exports.list_all_account_by_department = (req, res) => {
   var department = req.params.department;
   var query = [];
   if(department && department.indexOf(',') > -1) {
@@ -83,14 +83,14 @@ exports.list_all_account_by_department = function(req, res) {
       ]
     },
     { "password" : 0, "__v": 0 },
-    function(err, account) {
+    (err, account) => {
       if(err) { res.send(err); }
       res.json(account);
     }
   );
 };
 
-exports.list_all_account_by_type = function(req, res) {
+exports.list_all_account_by_type = (req, res) => {
   var type = req.params.type;
   var query = [];
   if(type && type.indexOf(',') > -1) {
@@ -111,80 +111,88 @@ exports.list_all_account_by_type = function(req, res) {
       ]
     },
     { "password" : 0, "__v": 0 },
-    function(err, account) {
+    (err, account) => {
       if(err) { res.send(err); }
       res.json(account);
     }
   );
 } 
 
-exports.filter_account = function(req, res) {
+exports.filter_account = (req, res) => {
   Account.find(
     req.body,
     { "password" : 0, "__v": 0 },
-    function(err, account) {
+    (err, account) => {
       if(err) { res.send(err); }
       res.json(account);
     }
   );
 };
 
-exports.create_a_account = function(req, res) {
+exports.create_a_account = (req, res) => {
   var new_account = new Account(req.body);
   if(req.body.password) {
     req.body.password = SHA256(req.body.password).toString(CryptoJS.enc.Hex);
   }
-  new_account.save(function(err, account) {
-    if(err) { res.send(err); }
-    delete account.password;
-    res.json(account);
-  });
+  new_account.save(
+    (err, account) => {
+      if(err) { res.send(err); }
+      delete account.password;
+      res.json(account);
+    }
+  );
 };
 
-exports.read_a_account = function(req, res) {
+exports.read_a_account = (req, res) => {
   Account.findById(
     req.params.accountId,
     { "password" : 0, "__v": 0 },
-    function(err, account) {
+    (err, account) => {
       if(err) { res.send(err); }
       res.json(account);
     }
   );
 };
 
-exports.update_a_account = function(req, res) {
-  Account.findById(req.params.accountId, function(err, account) {
-    if(err) { res.send(err); }
-    if(req.file) { req.body.profilePhoto = req.file.path; }
-    if(req.body.password) {
-      req.body.password = SHA256(req.body.password).toString(CryptoJS.enc.Hex);
-    }
-    Account.findOneAndUpdate(
-      { _id: req.params.accountId },
-      req.body,
-      {
-        "fields" : {
-          "password" : 0,
-          "__v": 0
-        },
-        new : true
-      },
-      function(e, acc) {
-        if(e) { res.send(e); }
-        if(req.file) {
-          if(fs.existsSync(account.profilePhoto)) {
-            unlinkAsync(account.profilePhoto);
-          }
-        }
-        res.json(acc);
+exports.update_a_account = (req, res) => {
+  Account.findById(
+    req.params.accountId,
+    (err, account) => {
+      if(err) { res.send(err); }
+      if(req.file) { req.body.profilePhoto = req.file.path; }
+      if(req.body.password) {
+        req.body.password = SHA256(req.body.password).toString(CryptoJS.enc.Hex);
       }
-    );
-  });
+      Account.findOneAndUpdate(
+        { _id: req.params.accountId },
+        req.body,
+        {
+          "fields" : {
+            "password" : 0,
+            "__v": 0
+          },
+          new : true
+        },
+        (e, acc) => {
+          if(e) { res.send(e); }
+          if(req.file) {
+            if(fs.existsSync(account.profilePhoto)) {
+              unlinkAsync(account.profilePhoto);
+            }
+          }
+          res.json(acc);
+        }
+      );
+    }
+  );
 };
 
-exports.delete_a_account = function(req, res) {
-  Account.deleteOne({ _id: req.params.accountId}, function(err, account) {
-    if(err) { res.send(err); }
-    res.json({ message: 'Account successfully deleted.' });
-  });
+exports.delete_a_account = (req, res) => {
+  Account.deleteOne(
+    { _id: req.params.accountId},
+    (err, account) => {
+      if(err) { res.send(err); }
+      res.json({ message: 'Account successfully deleted.' });
+    }
+  );
 };

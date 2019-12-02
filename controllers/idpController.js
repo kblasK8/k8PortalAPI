@@ -1,47 +1,52 @@
-var mongoose = require('mongoose');
+const mongoose = require('mongoose');
 const IDP = require('../models/IDPModel');
 
-exports.list_all_idps = function(req, res) {
-  IDP.find({}, function(err, idp) {
-    if(err) { res.send(err); }
-    res.json(idp);
-  });
-};
-
-exports.create_a_idp = function(req, res) {
-  var new_idp = new IDP(req.body);
-  new_idp.save(function(err, idp) {
-    if(err) { res.send(err); }
-    res.json(idp);
-  });
-};
-
-exports.read_a_idp = function(req, res) {
+exports.list_all_idps = (req, res) => {
   IDP.find(
-    { userId: req.params.idpId },
-    function(err, idp) {
+    {},
+    (err, idp) => {
       if(err) { res.send(err); }
       res.json(idp);
     }
   );
 };
 
-exports.update_a_idp = function(req, res) {
+exports.create_a_idp = (req, res) => {
+  var new_idp = new IDP(req.body);
+  new_idp.save(
+    (err, idp) => {
+      if(err) { res.send(err); }
+      res.json(idp);
+    }
+  );
+};
+
+exports.read_a_idp = (req, res) => {
+  IDP.find(
+    { userId: req.params.idpId },
+    (err, idp) => {
+      if(err) { res.send(err); }
+      res.json(idp);
+    }
+  );
+};
+
+exports.update_a_idp = (req, res) => {
   IDP.findOneAndUpdate(
     { userId: req.params.idpId },
     req.body,
     { new : true },
-    function(err, idp) {
+    (err, idp) => {
       if(err) { res.send(err); }
       res.json(idp);
     }
   );
 };
 
-exports.delete_a_idp = function(req, res) {
+exports.delete_a_idp = (req, res) => {
   IDP.remove(
     { userId: req.params.idpId },
-    function(err, idp) {
+    (err, idp) => {
       if(err) { res.send(err); }
       res.json({ message: 'IDP successfully deleted.' });
     }

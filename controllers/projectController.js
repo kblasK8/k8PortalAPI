@@ -1,48 +1,58 @@
-var mongoose = require('mongoose');
+const mongoose = require('mongoose');
 const Project = require('../models/projectModel');
 
-exports.list_all_projects = function(req, res) {
+exports.list_all_projects = (req, res) => {
   Project.find()
   .select('-__v')
   .populate('project_category', '-__v')
-  .exec(function(err, project) {
-    if(err) { res.send(err); }
-    res.json(project);
-  });
-};
-
-exports.create_a_project = function(req, res) {
-  var new_project = new Project(req.body);
-  new_project.save(function(err, project) {
-    if(err) { res.send(err); }
-    Project.findById(project._id)
-    .select('-__v')
-    .populate('project_category', '-__v')
-    .exec(function(err, project) {
+  .exec(
+    (err, project) => {
       if(err) { res.send(err); }
       res.json(project);
-    });
-  });
+    }
+  );
 };
 
-exports.read_a_project = function(req, res) {
-  Project.find({ department: req.params.projectId })
+exports.create_a_project = (req, res) => {
+  var new_project = new Project(req.body);
+  new_project.save(
+    (err, project) => {
+      if(err) { res.send(err); }
+      Project.findById(project._id)
+      .select('-__v')
+      .populate('project_category', '-__v')
+      .exec(
+        (e, proj) => {
+          if(e) { res.send(e); }
+          res.json(proj);
+        }
+      );
+    }
+  );
+};
+
+exports.read_a_project = (req, res) => {
+  Project.find(
+    { department: req.params.projectId }
+  )
   .select('-__v')
   .populate('project_category', '-__v')
-  .exec(function(err, project) {
-    if(err) { res.send(err); }
-    res.json(project);
-  });
+  .exec(
+    (err, project) => {
+      if(err) { res.send(err); }
+      res.json(project);
+    }
+  );
 };
 
-exports.filter_a_project = function(req, res) {
+exports.filter_a_project = (req, res) => {
   var params = req.body;
   var pageNo = parseInt(params.pageNo);
   var perPage = parseInt(params.perPage);
   delete params.pageNo;
   delete params.perPage;
   var query = {};
-  Object.keys(params).forEach(function(key) {
+  Object.keys(params).forEach(key => {
     var reg = new RegExp(params[key], 'i');
     query[key] = reg;
   });
@@ -54,22 +64,26 @@ exports.filter_a_project = function(req, res) {
   })
   .select('-__v')
   .populate('project_category', '-__v')
-  .exec(function(err, data) {
-    if(err) { res.send(err); }
-    Project.estimatedDocumentCount(query)
-    .exec(function(err, count) {
+  .exec(
+    (err, data) => {
       if(err) { res.send(err); }
-      var response = {
-        data: data,
-        page: pageNo,
-        pages: Math.ceil(count / perPage)
-      };
-      res.json(response);
-    });
-  });
+      Project.estimatedDocumentCount(query)
+      .exec(
+        (e, count) => {
+          if(e) { res.send(e); }
+          var response = {
+            data: data,
+            page: pageNo,
+            pages: Math.ceil(count / perPage)
+          };
+          res.json(response);
+        }
+      );
+    }
+  );
 };
 
-exports.update_a_project = function(req, res) {
+exports.update_a_project = (req, res) => {
   Project.findOneAndUpdate(
     { _id: req.params.projectId },
     req.body,
@@ -79,23 +93,25 @@ exports.update_a_project = function(req, res) {
     }
   )
   .populate('project_category', '-__v')
-  .exec(function(err, project) {
-    if(err) { res.send(err); }
-    res.json(project);
-  });
+  .exec(
+    (err, project) => {
+      if(err) { res.send(err); }
+      res.json(project);
+    }
+  );
 };
 
-exports.delete_a_project = function(req, res) {
+exports.delete_a_project = (req, res) => {
   Project.remove(
     { _id: req.params.projectId },
-    function(err, project) {
+    (err, project) => {
       if(err) { res.send(err); }
       res.json({ message: 'Project successfully deleted.' });
     }
   );
 };
 
-exports.page = function(req, res) {
+exports.page = (req, res) => {
   var pageNo = parseInt(req.params.pageNo);
   var perPage = parseInt(req.params.perPage);
   Project.find()
@@ -106,32 +122,38 @@ exports.page = function(req, res) {
   })
   .select('-__v')
   .populate('project_category', '-__v')
-  .exec(function(err, data) {
-    if(err) { res.send(err); }
-    Project.estimatedDocumentCount()
-    .exec(function(err, count) {
+  .exec(
+    (err, data) => {
       if(err) { res.send(err); }
-      var response = {
-        data: data,
-        page: pageNo,
-        pages: Math.ceil(count / perPage)
-      };
-      res.json(response);
-    });
-  });
+      Project.estimatedDocumentCount()
+      .exec(
+        (err, count) => {
+          if(err) { res.send(err); }
+          var response = {
+            data: data,
+            page: pageNo,
+            pages: Math.ceil(count / perPage)
+          };
+          res.json(response);
+        }
+      );
+    }
+  );
 };
 
-exports.read_child_projects = function(req, res) {
+exports.read_child_projects = (req, res) => {
   Project.findOne({ _id: req.params.projectId })
   .select('_id child_projects')
   .populate('child_projects.project_id', 'name status')
-  .exec(function(err, project) {
-    if(err) { res.send(err); }
-    res.json(project);
-  });
+  .exec(
+    (err, project) => {
+      if(err) { res.send(err); }
+      res.json(project);
+    }
+  );
 }
 
-exports.create_child_projects = function(req, res) {
+exports.create_child_projects = (req, res) => {
   Project.findOneAndUpdate(
     { _id: req.params.projectId },
     req.body,
@@ -144,8 +166,10 @@ exports.create_child_projects = function(req, res) {
     }
   )
   .populate('child_projects.project_id', 'name status')
-  .exec(function(err, project) {
-    if(err) { res.send(err); }
-    res.json(project);
-  });
+  .exec(
+    (err, project) => {
+      if(err) { res.send(err); }
+      res.json(project);
+    }
+  );
 }
