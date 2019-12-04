@@ -24,7 +24,8 @@ mongoose.connection.on('connected', () => {
 	console.log('Connected successfully.');
 	//Setup API routes
 	console.log('Registering routes... ');
-	app.use('/api/v1', apiv1);
+	// app.use('/api/v1', apiv1);
+	app.use('/api/', apiv1);
 	//Register Port
 	app.listen(port, () => console.log('Listening on port ' + port)).keepAliveTimeout = 500;
 	console.log('K8 Portal RESTful API server started...');

@@ -130,15 +130,17 @@ exports.filter_account = (req, res) => {
 };
 
 exports.create_a_account = (req, res) => {
-  var new_account = new Account(req.body);
   if(req.body.password) {
     req.body.password = SHA256(req.body.password).toString(CryptoJS.enc.Hex);
   }
+  var new_account = new Account(req.body);
   new_account.save(
     (err, account) => {
       if(err) { res.send(err); }
-      delete account.password;
-      res.json(account);
+      var obj = account.toObject();
+      delete obj.password;
+      delete obj.__v;
+      res.json(obj);
     }
   );
 };
@@ -188,11 +190,12 @@ exports.update_a_account = (req, res) => {
 };
 
 exports.delete_a_account = (req, res) => {
-  Account.deleteOne(
-    { _id: req.params.accountId},
+  Account.findOneAndUpdate(
+    { _id: req.params.accountId },
+    { status : 'Disabled' },
     (err, account) => {
       if(err) { res.send(err); }
-      res.json({ message: 'Account successfully deleted.' });
+      res.json({ message: 'Account successfully disabled.' });
     }
   );
 };
