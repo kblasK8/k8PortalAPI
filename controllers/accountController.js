@@ -54,7 +54,7 @@ exports.login_account = (req, res) => {
 exports.list_all_accounts = (req, res) => {
   Account.find(
     { status: 'Enabled' },
-    { "password" : 0, "__v": 0 },
+    // { "password" : 0, "__v": 0 },
     (err, account) => {
       if(err) { res.send(err); }
       res.json(account);
