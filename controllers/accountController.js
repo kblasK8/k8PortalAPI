@@ -119,8 +119,15 @@ exports.list_all_account_by_type = (req, res) => {
 } 
 
 exports.filter_account = (req, res) => {
+  var obj = req.body;
+  if(
+    Object.entries(obj).length === 0 &&
+    obj.constructor === Object
+  ) {
+    obj.status = 'Enabled';
+  }
   Account.find(
-    req.body,
+    obj,
     { "password" : 0, "__v": 0 },
     (err, account) => {
       if(err) { res.send(err); }
