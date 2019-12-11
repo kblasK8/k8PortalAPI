@@ -14,10 +14,11 @@ exports.login_account = (req, res) => {
   var password = SHA256(req.body.password).toString(CryptoJS.enc.Hex);
   Account.findOne(
     {
-      "email" : email,
-      "password" : password
+      email : email,
+      password : password,
+      status : 'Enabled'
     },
-    { "password" : 0, "__v": 0 },
+    { "password" : 0, "__v" : 0 },
     (err, account) => {
       if(err) { res.send(err); }
       if(!account) {
@@ -40,7 +41,7 @@ exports.login_account = (req, res) => {
         jwt.sign(
           user,
           secretKey,
-          { expiresIn: "7 days" },
+          { expiresIn : "7 days" },
           (err, token) => {
             if(err) { res.send(err); }
             res.json({ token });
@@ -51,10 +52,51 @@ exports.login_account = (req, res) => {
   );
 }
 
+exports.auth_me = (req, res) => {
+  const tokenHeader = req.headers['authorization'];
+  const bearer = tokenHeader.split(' ');
+  const bearerToken = bearer[1];
+  jwt.verify(bearerToken, secretKey, (err, authData) => {
+    if(err) {
+      res
+      .status(403)
+      .json({
+        statusCode: 403,
+        error: true,
+        msg: "Forbidden. Invalid token."
+      });
+      return;
+    } else {
+      Account.findOne(
+        {
+          _id : authData._id,
+          status : 'Enabled'
+        },
+        { "password" : 0, "__v" : 0 },
+        (err, account) => {
+          if(err) { res.send(err); }
+          if(!account) {
+            res
+            .status(401)
+            .json({
+              statusCode: 401,
+              error: true,
+              msg: "Unauthorized account."
+            });
+            return;
+          } else {
+            res.json(account);
+          }
+        }
+      );
+    }
+  });
+}
+
 exports.list_all_accounts = (req, res) => {
   Account.find(
-    { status: 'Enabled' },
-    // { "password" : 0, "__v": 0 },
+    { status : 'Enabled' },
+    { "password" : 0, "__v" : 0 },
     (err, account) => {
       if(err) { res.send(err); }
       res.json(account);
@@ -78,11 +120,11 @@ exports.list_all_account_by_department = (req, res) => {
   Account.find(
     {
       $and : [
-        { status: 'Enabled' },
-        { $or: query }
+        { status : 'Enabled' },
+        { $or : query }
       ]
     },
-    { "password" : 0, "__v": 0 },
+    { "password" : 0, "__v" : 0 },
     (err, account) => {
       if(err) { res.send(err); }
       res.json(account);
@@ -106,11 +148,11 @@ exports.list_all_account_by_type = (req, res) => {
   Account.find(
     {
       $and : [
-        { status: 'Enabled' },
-        { $or: query }
+        { status : 'Enabled' },
+        { $or : query }
       ]
     },
-    { "password" : 0, "__v": 0 },
+    { "password" : 0, "__v" : 0 },
     (err, account) => {
       if(err) { res.send(err); }
       res.json(account);
@@ -128,7 +170,7 @@ exports.filter_account = (req, res) => {
   }
   Account.find(
     obj,
-    { "password" : 0, "__v": 0 },
+    { "password" : 0, "__v" : 0 },
     (err, account) => {
       if(err) { res.send(err); }
       res.json(account);
@@ -155,7 +197,7 @@ exports.create_a_account = (req, res) => {
 exports.read_a_account = (req, res) => {
   Account.findById(
     req.params.accountId,
-    { "password" : 0, "__v": 0 },
+    { "password" : 0, "__v" : 0 },
     (err, account) => {
       if(err) { res.send(err); }
       res.json(account);
@@ -173,12 +215,12 @@ exports.update_a_account = (req, res) => {
         req.body.password = SHA256(req.body.password).toString(CryptoJS.enc.Hex);
       }
       Account.findOneAndUpdate(
-        { _id: req.params.accountId },
+        { _id : req.params.accountId },
         req.body,
         {
           "fields" : {
             "password" : 0,
-            "__v": 0
+            "__v" : 0
           },
           new : true
         },
@@ -198,11 +240,11 @@ exports.update_a_account = (req, res) => {
 
 exports.delete_a_account = (req, res) => {
   Account.findOneAndUpdate(
-    { _id: req.params.accountId },
+    { _id : req.params.accountId },
     { status : 'Disabled' },
     (err, account) => {
       if(err) { res.send(err); }
-      res.json({ message: 'Account successfully disabled.' });
+      res.json({ message : 'Account successfully disabled.' });
     }
   );
 };

@@ -26,6 +26,8 @@ router.route('/login')
 router.route('/accounts')
   .get(tokenCheck, accountController.list_all_accounts)
   .post(tokenCheck, accountController.create_a_account);
+router.route('/accounts/me')
+  .get(tokenCheck, accountController.auth_me);
 router.route('/accounts/:accountId')
   .get(tokenCheck, accountController.read_a_account)
   .post(
@@ -84,6 +86,7 @@ router.route('/projects/child/:projectId')
   .post(tokenCheck, projectController.create_child_projects);
 
 // REQUIREMENT ROUTES //
+
 router.route('/requirements')
   .get(tokenCheck, requirementController.list_all_requirements)
   .post(tokenCheck, requirementController.create_a_requirement);
@@ -95,6 +98,18 @@ router.route('/requirements/:projectId/:pageNo/:perPage')
   .get(tokenCheck, requirementController.list_all_project_requirements);
 router.route('/requirements/:projectId/:type/:pageNo/:perPage')
   .get(tokenCheck, requirementController.list_all_project_requirements_type);
+
+router.route('/requirements/folder')
+  .post(tokenCheck, requirementController.newfolder)
+  // .put(tokenCheck, requirementController.movefolder)
+  // .delete(tokenCheck, requirementController.delfolder);
+// router.route('/requirements/upload')
+//   .post(
+//     tokenCheck,
+//     upload.array("files", 5),
+//     requirementController.upload
+//   )
+//   .delete(tokenCheck, requirementController.delFiles);
 
 // RESOURCE ASSIGNMENT ROUTES //
 router.route('/ra')

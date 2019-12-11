@@ -5,8 +5,6 @@ const secretKey = config.secretKey;
 module.exports = (req, res, next) => {
   // Check all the routes below if token includes in the header //
   // If exist set it as req.token //
-  next();
-  /*
   const tokenHeader = req.headers['authorization'];
   if(typeof tokenHeader !== 'undefined') {
     const bearer = tokenHeader.split(' ');
@@ -35,5 +33,4 @@ module.exports = (req, res, next) => {
     });
     return;
   }
-  */
 }

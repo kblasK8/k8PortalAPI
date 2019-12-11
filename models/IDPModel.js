@@ -17,10 +17,8 @@ var idpSchema = new Schema({
     required: "Kindly enter a date."
   },
   job_summary: {
-    type: {
-        name: String,
-        required: "Kindly enter a job summary."
-    },
+    type: String,
+    required: "Kindly enter a job summary."
   },
   achievement: {
     type: String,

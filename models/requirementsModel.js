@@ -16,6 +16,7 @@ var RequirementsSchema = new Schema({
   author: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Account',
+    required: "Provide Author Id."
   },
   type: {
     type: [{

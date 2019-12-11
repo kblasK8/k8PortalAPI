@@ -8,7 +8,8 @@ exports.list_all_leaveRequests = (req, res) => {
         { requestor_id: req.params.leaveRequestId },
         { approver_id: req.params.leaveRequestId }
       ]
-    }, 
+    },
+    { "__v": 0 },
     (err, leaveRequest) => {
       if(err) { res.send(err); }
       res.json(leaveRequest);
@@ -21,7 +22,9 @@ exports.create_a_leaveRequest = (req, res) => {
   new_leaveRequest.save(
     (err, leaveRequest) => {
       if(err) { res.send(err); }
-      res.json(leaveRequest);
+      var obj = leaveRequest.toObject();
+      delete obj.__v;
+      res.json(obj);
     }
   );
 };
@@ -29,6 +32,7 @@ exports.create_a_leaveRequest = (req, res) => {
 exports.read_a_leaveRequest = (req, res) => {
   LeaveRequest.findById(
     req.params.leaveRequestId,
+    { "__v": 0 },
     (err, leaveRequest) => {
       if(err) { res.send(err); }
       res.json(leaveRequest);
@@ -40,7 +44,12 @@ exports.update_a_leaveRequest = (req, res) => {
   LeaveRequest.findOneAndUpdate(
     { _id: req.params.leaveRequestId },
     req.body,
-    { new : true },
+    {
+      "fields" : {
+        "__v": 0
+      },
+      new : true
+    },
     (err, leaveRequest) => {
       if(err) { res.send(err); }
       res.json(leaveRequest);

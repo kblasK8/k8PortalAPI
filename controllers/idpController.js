@@ -4,6 +4,7 @@ const IDP = require('../models/IDPModel');
 exports.list_all_idps = (req, res) => {
   IDP.find(
     {},
+    { "__v": 0 },
     (err, idp) => {
       if(err) { res.send(err); }
       res.json(idp);
@@ -16,7 +17,9 @@ exports.create_a_idp = (req, res) => {
   new_idp.save(
     (err, idp) => {
       if(err) { res.send(err); }
-      res.json(idp);
+      var obj = idp.toObject();
+      delete obj.__v;
+      res.json(obj);
     }
   );
 };
@@ -24,6 +27,7 @@ exports.create_a_idp = (req, res) => {
 exports.read_a_idp = (req, res) => {
   IDP.find(
     { userId: req.params.idpId },
+    { "__v": 0 },
     (err, idp) => {
       if(err) { res.send(err); }
       res.json(idp);
@@ -35,7 +39,12 @@ exports.update_a_idp = (req, res) => {
   IDP.findOneAndUpdate(
     { userId: req.params.idpId },
     req.body,
-    { new : true },
+    {
+      "fields" : {
+        "__v": 0
+      },
+      new : true
+    },
     (err, idp) => {
       if(err) { res.send(err); }
       res.json(idp);
