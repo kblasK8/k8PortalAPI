@@ -437,7 +437,7 @@ exports.upload_files = (req, res) => {
   });
 }
 
-exports.upload_files = (req, res) => {
+exports.search = (req, res) => {
   var projectID = req.body.projectID;
   var keyword = req.body.keyword;
   if(
@@ -485,6 +485,7 @@ exports.upload_files = (req, res) => {
           //     else console.log(dir + '/')
           //   }
           // );
+          res.json({ message : "Test search." });
         }
       }
     );
