@@ -86,30 +86,22 @@ router.route('/projects/child/:projectId')
   .post(tokenCheck, projectController.create_child_projects);
 
 // REQUIREMENT ROUTES //
-
-router.route('/requirements')
-  .get(tokenCheck, requirementController.list_all_requirements)
-  .post(tokenCheck, requirementController.create_a_requirement);
-router.route('/requirements/:requirementId')
-  .get(tokenCheck, requirementController.read_a_requirement)
-  .put(tokenCheck, requirementController.update_a_requirement)
-  .delete(tokenCheck, requirementController.delete_a_requirement);
-router.route('/requirements/:projectId/:pageNo/:perPage')
-  .get(tokenCheck, requirementController.list_all_project_requirements);
-router.route('/requirements/:projectId/:type/:pageNo/:perPage')
-  .get(tokenCheck, requirementController.list_all_project_requirements_type);
-
+router.route('/requirements/viewfolder')
+  .post(tokenCheck, requirementController.viewFolder)
 router.route('/requirements/folder')
-  .post(tokenCheck, requirementController.newfolder)
-  // .put(tokenCheck, requirementController.movefolder)
-  // .delete(tokenCheck, requirementController.delfolder);
-// router.route('/requirements/upload')
-//   .post(
-//     tokenCheck,
-//     upload.array("files", 5),
-//     requirementController.upload
-//   )
-//   .delete(tokenCheck, requirementController.delFiles);
+  .post(tokenCheck, requirementController.newFolder)
+  .delete(tokenCheck, requirementController.delFolder);
+router.route('/requirements/move')
+  .post(tokenCheck, requirementController.movItem);
+router.route('/requirements/search')
+  .post(tokenCheck, requirementController.search);
+router.route('/requirements/upload')
+  .post(
+    tokenCheck,
+    upload.single("file"),
+    requirementController.upload_files
+  )
+  .delete(tokenCheck, requirementController.delFiles);
 
 // RESOURCE ASSIGNMENT ROUTES //
 router.route('/ra')
