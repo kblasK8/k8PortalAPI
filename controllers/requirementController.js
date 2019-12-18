@@ -4,10 +4,32 @@ const Requirement = require('../models/requirementsModel');
 const ResourceAssignment = require('../models/resourceAssignmentModel');
 const jwt = require('jsonwebtoken');
 const path = require('path');
-const finder = require('findit');
 const config = require('../config/config');
 const secretKey = config.secretKey;
 const fs = require('fs');
+const { resolve } = require('path');
+const { readdir } = require('fs').promises;
+
+const getFileSize = (size) => {
+  var i = Math.floor( Math.log(size) / Math.log(1024) );
+  return (size / Math.pow(1024, i)).toFixed(2) * 1 + ' ' + ['b','kb','mb','gb','tb'][i];
+}
+
+const getStatFileSize = (file) => {
+  return fs.lstatSync(file).size;
+}
+
+const getStatFileCreatedDate = (file) => {
+  return fs.lstatSync(file).ctime;
+}
+
+const removeRootFolder = (rootFolder, pathFolder) => {
+  if(pathFolder == rootFolder) {
+    return pathFolder.replace(rootFolder, "");
+  } else {
+    return pathFolder.replace(rootFolder + '/', "");
+  }
+}
 
 exports.viewFolder = (req, res) => {
   var projectID = req.body.projectID;
@@ -75,17 +97,13 @@ exports.viewFolder = (req, res) => {
                 });
                 return;
               }
-              let getFileSize = (size) => {
-                var i = Math.floor( Math.log(size) / Math.log(1024) );
-                return (size / Math.pow(1024, i)).toFixed(2) * 1 + ' ' + ['b','kb','mb','gb','tb'][i];
-              }
               let isFileDir = (file, cb) => {
                 fs.lstat(
                   path.normalize(folderPath + '/' + file),
                   (err, stats) => {
                     if(err) { res.send(err); }
                     if(stats.isDirectory()) {
-                        obj.folders.push({
+                      obj.folders.push({
                         folder : file,
                         size : getFileSize(stats.size),
                         created_date : stats.ctime
@@ -300,19 +318,50 @@ exports.movItem = (req, res) => {
   var projectID = req.body.projectID;
   var oldPath = req.body.oldPath;
   var newPath = req.body.newPath;
+  var isArrayBln = false;
   if(
-      !projectID ||
-      !oldPath ||
-      !newPath
+    !projectID ||
+    !oldPath ||
+    !newPath
   ) {
     res
     .status(400)
     .json({
       statusCode: 400,
       error: true,
-      msg: "Project ID, Old and New path should not be empty."
+      msg: "Project ID, old and new path should not be empty."
     });
     return;
+  }
+  if(
+    (!Array.isArray(oldPath) && Array.isArray(newPath)) ||
+    (Array.isArray(oldPath) && !Array.isArray(newPath))
+  ) {
+    res
+    .status(400)
+    .json({
+      statusCode: 400,
+      error: true,
+      msg: "If multiple move items, both old and new path should not be array."
+    });
+    return;
+  }
+  if(
+    Array.isArray(oldPath) &&
+    Array.isArray(newPath)
+  ) {
+    if(oldPath.length !== newPath.length) {
+      res
+      .status(400)
+      .json({
+        statusCode: 400,
+        error: true,
+        msg: "New and old path are not same in length."
+      });
+      return;
+    } else {
+      isArrayBln = true;  
+    }
   }
   const tokenHeader = req.headers['authorization'];
   const bearer = tokenHeader.split(' ');
@@ -338,21 +387,48 @@ exports.movItem = (req, res) => {
           });
           return;
         } else {
-          var dirOldPath = projectID + '/' + oldPath;
-          var dirNewPath = projectID + '/' + newPath;
-          var mvPathOld = path.normalize(config.uploadPath + '/' + dirOldPath);
-          var mvPathNew = path.normalize(config.uploadPath + '/' + dirNewPath);
-          if(fs.existsSync(mvPathOld)) {
-            fs.rename(
-              mvPathOld,
-              mvPathNew,
-              (err, cb) => {
-                if(err) { res.send(err); }
-                res.json({ message : "Moved successfully." });
+          if(isArrayBln) {
+            var obj = {
+              moved : [],
+              failed : []
+            };
+            newPath.forEach((newItem, index) => {
+              var dirOldPath = projectID + '/' + oldPath[index];
+              var dirNewPath = projectID + '/' + newItem;
+              var mvPathOld = path.normalize(config.uploadPath + '/' + dirOldPath);
+              var mvPathNew = path.normalize(config.uploadPath + '/' + dirNewPath);
+              if(fs.existsSync(mvPathOld)) {
+                fs.rename(
+                  mvPathOld,
+                  mvPathNew,
+                  (err, cb) => {
+                    if(err) { res.send(err); }
+                    obj.moved.push(oldPath[index]);
+                  }
+                );
+              } else {
+                obj.failed.push(oldPath[index]);
               }
-            );
+            });
+            // res.json(obj);
+            res.json({ message : "Moved successfully." });
           } else {
-            res.json({ message : "Item not exist." });
+            var dirOldPath = projectID + '/' + oldPath;
+            var dirNewPath = projectID + '/' + newPath;
+            var mvPathOld = path.normalize(config.uploadPath + '/' + dirOldPath);
+            var mvPathNew = path.normalize(config.uploadPath + '/' + dirNewPath);
+            if(fs.existsSync(mvPathOld)) {
+              fs.rename(
+                mvPathOld,
+                mvPathNew,
+                (err, cb) => {
+                  if(err) { res.send(err); }
+                  res.json({ message : "Moved successfully." });
+                }
+              );
+            } else {
+              res.json({ message : "Item not exist." });
+            }
           }
         }
       }
@@ -477,15 +553,49 @@ exports.search = (req, res) => {
           });
           return;
         } else {
-          // finder.on(
-          //   'directory',
-          //   (dir, stat, stop) => {
-          //     var base = path.basename(dir);
-          //     if (base === '.git' || base === 'node_modules') stop()
-          //     else console.log(dir + '/')
-          //   }
-          // );
-          res.json({ message : "Test search." });
+          var rootFolder = path.normalize(config.uploadPath + projectID);
+          var obj = {
+            path : '/',
+            folders : [],
+            files : []
+          };
+          if(!fs.existsSync(rootFolder)) {
+            fs.mkdirSync(
+              rootFolder,
+              { recursive : true }
+            );
+          }
+          async function* getFiles(dir) {
+            const items = await readdir(dir, { withFileTypes: true });
+            for (const item of items) {
+              const res = path.normalize(dir + '/' + item.name);
+              if (item.isDirectory()) {
+                if (item.name.includes(keyword)) {
+                  obj.folders.push({
+                    folder : item.name,
+                    path : removeRootFolder(rootFolder, dir),
+                    size : getFileSize(getStatFileSize(res)),
+                    created_date : getStatFileCreatedDate(res)
+                  });
+                }
+                yield* getFiles(res);
+              } else {
+                if (item.name.includes(keyword)) {
+                  obj.files.push({
+                    file : item.name,
+                    path : removeRootFolder(rootFolder, dir),
+                    size : getFileSize(getStatFileSize(res)),
+                    created_date : getStatFileCreatedDate(res)
+                  });
+                }
+                yield res;
+              }
+            }
+          }
+          (async () => {
+            for await (const f of getFiles(rootFolder)) { }
+            res.json(obj);
+          })();
         }
       }
     );
