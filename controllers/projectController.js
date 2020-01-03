@@ -33,7 +33,7 @@ exports.create_a_project = (req, res) => {
 
 exports.read_a_project = (req, res) => {
   Project.find(
-    { department: req.params.projectId }
+    { _id : req.params.projectId }
   )
   .select('-__v')
   .populate('project_category', '-__v')
