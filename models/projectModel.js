@@ -16,8 +16,7 @@ var ProjectSchema = new Schema({
     default: ['Pending']
   },
   department: {
-    type: String,
-    required: "Provide Department Name."
+    type: String
   },
   description: {
     type: String,
