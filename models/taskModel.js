@@ -21,20 +21,16 @@ var TaskSchema = new Schema({
     default: ['Medium']
   },
   plan_start_date: {
-    type: Date,
-    required: "Provide Project Start Date."
+    type: Date
   },
   plan_end_date: {
-    type: Date,
-    required: "Provide Project End Date."
+    type: Date
   },
   actual_start_date: {
-    type: Date,
-    required: "Provide Project Actual Start Date."
+    type: Date
   },
   actual_end_date: {
-    type: Date,
-    required: "Provide Project Actual End Date."
+    type: Date
   },
   status: {
     type: [{

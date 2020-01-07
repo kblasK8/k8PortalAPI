@@ -4,8 +4,9 @@ const Task = require('../models/taskModel');
 const Project = require('../models/projectModel');
 
 exports.list_all_tasks = (req, res) => {
-  Task.find(
-    {},
+  Task.find()
+  .select('-__v')
+  .exec(
     (err, task) => {
       if(err) { res.send(err); }
       res.json(task);
@@ -18,7 +19,9 @@ exports.create_a_task = (req, res) => {
   new_task.save(
     (err, task) => {
       if(err) { res.send(err); }
-      res.json(task);
+      var obj = task.toObject();
+      delete obj.__v;
+      res.json(obj);
     }
   );
 };
@@ -34,8 +37,9 @@ exports.read_a_task = (req, res) => {
 };
 
 exports.filter_a_project_task = (req, res) => {
-  Task.find(
-    req.body,
+  Task.find(req.body)
+  .select('-__v')
+  .exec(
     (err, task) => {
       if(err) { res.send(err); }
       res.json(task);
@@ -48,7 +52,10 @@ exports.update_a_task = (req, res) => {
   Task.findOneAndUpdate(
     { _id: req.params.taskId },
     req.body,
-    { new: true },
+    { 
+      "fields" : { "__v" : 0 },
+      new : true
+    },
     (err, task) => {
       if(err) { res.send(err); }
       var projectId = task.project_id;

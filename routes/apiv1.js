@@ -155,7 +155,7 @@ router.route('/wiki')
     wikiController.create_a_wiki
   );
 router.route('/wiki/:wikiId')
-  .get(tokenCheck, wikiController.list_all_sub_wikis)
+  .get(tokenCheck, wikiController.read_a_wiki)
   .post(
     tokenCheck,
     upload.array("files", 5),

@@ -4,6 +4,7 @@ const ResourceAssignment = require('../models/resourceAssignmentModel');
 
 exports.list_all_ra = (req, res) => {
   ResourceAssignment.find()
+  .select('-__v')
   .populate('resources.account_id')
   .populate('resources.role', 'name')
   .exec(
@@ -26,6 +27,7 @@ exports.filter_ra = (req, res) => {
     delete req.body.custom_populate;
   }
   ResourceAssignment.find(req.body)
+  .select('-__v')
   .populate('resources.account_id', custom_fields)
   .populate('resources.role', '_id name')
   .exec(
@@ -82,6 +84,7 @@ exports.create_a_ra = (req, res) => {
     (err, ra) => {
       if(err) { res.send(err); }
       ResourceAssignment.findById(ra._id)
+      .select('-__v')
       .populate('resources.account_id')
       .populate('resources.role', 'name')
       .exec(
@@ -96,6 +99,7 @@ exports.create_a_ra = (req, res) => {
 
 exports.read_a_ra = (req, res) => {
   ResourceAssignment.findById(req.params.raId)
+  .select('-__v')
   .populate('resources.account_id')
   .populate('resources.role', 'name')
   .exec(
@@ -111,7 +115,10 @@ exports.update_a_ra = (req, res) => {
   ResourceAssignment.findOneAndUpdate(
     { _id: req.params.raId },
     req.body,
-    { new: true },
+    { 
+      "fields" : { "__v" : 0 },
+      new : true
+    },
     (err, ra) => {
       if(err) { res.send(err); }
       res.json(ra);

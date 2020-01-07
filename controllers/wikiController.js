@@ -20,10 +20,8 @@ exports.list_all_wikis = (req, res) => {
   );
 };
 
-exports.list_all_sub_wikis = (req, res) => {
-  Wiki.find(
-    { parentWiki: req.params.wikiId, type: 'child' }
-  )
+exports.read_a_wiki = (req, res) => {
+  Wiki.findById(req.params.wikiId)
   .select('-__v')
   .populate('author', '-__v -password')
   .populate('contributors.account_id', '-__v -password')
@@ -71,7 +69,9 @@ exports.create_a_wiki = (req, res) => {
   new_wiki.save(
     (err, wiki) => {
       if(err) { res.send(err); }
-      res.json(wiki);
+      var obj = wiki.toObject();
+      delete obj.__v;
+      res.json(obj);
     }
   );
 };
