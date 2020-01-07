@@ -42,6 +42,15 @@ var ProjectSchema = new Schema({
       default: Date.now
     }
   }],
+  boards: [{
+    board_name: {
+      type: String,
+    },
+    date_added: {
+      type: Date,
+      default: Date.now
+    }
+  }],
   client: {
     type: String
   },

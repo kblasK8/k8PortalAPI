@@ -20,6 +20,9 @@ var TaskSchema = new Schema({
     }],
     default: ['Medium']
   },
+  board_id: {
+    type: String
+  },
   plan_start_date: {
     type: Date
   },
