@@ -46,6 +46,12 @@ var ProjectSchema = new Schema({
     board_name: {
       type: String,
     },
+    col_number: {
+      type: Number
+    },
+    col_names: {
+      type: Array
+    },
     date_added: {
       type: Date,
       default: Date.now

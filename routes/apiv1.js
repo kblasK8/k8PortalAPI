@@ -6,6 +6,7 @@ const tokenCheck = require('../middleware/tokenCheck');
 
 // Require controller modules
 var accountController = require('../controllers/accountController');
+var assetController = require('../controllers/assetController');
 var departmentController = require('../controllers/departmentController');
 var idpController = require('../controllers/idpController');
 var leaveRequestController = require('../controllers/leaveRequestController');
@@ -42,6 +43,14 @@ router.route('/accounts/type/:type')
   .get(tokenCheck, accountController.list_all_account_by_type);
 router.route('/accounts/search/filter')
   .post(tokenCheck, accountController.filter_account);
+
+// ASSET ROUTES //
+router.route('/assets')
+  .get(tokenCheck, assetController.list_all_assets)
+  .post(tokenCheck, assetController.create_a_asset);
+router.route('/assets/:assetId')
+  .get(tokenCheck, assetController.read_a_asset)
+  .put(tokenCheck, assetController.update_a_asset);
 
 // DEPARTMENT ROUTES //
 router.route('/departments')

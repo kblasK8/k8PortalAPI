@@ -23,6 +23,9 @@ var TaskSchema = new Schema({
   board_id: {
     type: String
   },
+  board_col_index: {
+    type: Number
+  },
   plan_start_date: {
     type: Date
   },
