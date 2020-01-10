@@ -111,6 +111,8 @@ router.route('/requirements/upload')
     requirementController.upload_files
   )
   .delete(tokenCheck, requirementController.delFiles);
+router.route('/requirements/download/:projectID')
+  .post(tokenCheck, requirementController.requirements_download);
 
 // RESOURCE ASSIGNMENT ROUTES //
 router.route('/ra')
@@ -153,7 +155,7 @@ router.route('/tasksFilter')
 
 // UPLOADS //
 router.route('/uploads/:downloadFile')
-  .get(tokenCheck, uploadsController.get_file);
+  .get(uploadsController.get_file);
 
 // WIKI ROUTES //
 router.route('/wiki')

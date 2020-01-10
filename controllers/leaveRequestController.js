@@ -45,9 +45,7 @@ exports.update_a_leaveRequest = (req, res) => {
     { _id: req.params.leaveRequestId },
     req.body,
     {
-      "fields" : {
-        "__v": 0
-      },
+      "fields" : { "__v": 0 },
       new : true
     },
     (err, leaveRequest) => {

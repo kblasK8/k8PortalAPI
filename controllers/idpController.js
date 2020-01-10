@@ -40,9 +40,7 @@ exports.update_a_idp = (req, res) => {
     { userId: req.params.idpId },
     req.body,
     {
-      "fields" : {
-        "__v": 0
-      },
+      "fields" : { "__v": 0 },
       new : true
     },
     (err, idp) => {

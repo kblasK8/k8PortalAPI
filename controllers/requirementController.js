@@ -601,3 +601,53 @@ exports.search = (req, res) => {
     );
   });
 }
+
+exports.requirements_download = (req, res) => {
+  var projectID = req.params.projectID;
+  var reqPath = req.body.path;
+  if(!reqPath) {
+    res
+    .status(400)
+    .json({
+      statusCode: 400,
+      error: true,
+      msg: "Download path should not be empty."
+    });
+    return;
+  }
+  const tokenHeader = req.headers['authorization'];
+  const bearer = tokenHeader.split(' ');
+  const bearerToken = bearer[1];
+  jwt.verify(bearerToken, secretKey, (err, authData) => {
+    ResourceAssignment.countDocuments(
+      {
+        $and : [
+          { project_id : projectID },
+          {
+            "resources.account_id" : authData._id
+          }
+        ]
+      },
+      (err, count) => {
+        if(!count) {
+          res
+          .status(403)
+          .json({
+            statusCode: 403,
+            error: true,
+            msg: "Forbidden to access project folder."
+          });
+          return;
+        } else {
+          var dirPath = projectID + '/' + reqPath;
+          const downloadFile = path.normalize(config.uploadPath + '/' + dirPath);
+          if(fs.existsSync(downloadFile)) {
+            res.download(downloadFile);
+          } else {
+            res.json({ message : "File not exist." });
+          }
+        }
+      }
+    );
+  });
+};

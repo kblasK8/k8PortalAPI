@@ -40,9 +40,7 @@ exports.update_a_department = (req, res) => {
     { _id: req.params.departmentId },
     req.body,
     {
-      "fields" : {
-        "__v": 0
-      },
+      "fields" : { "__v": 0 },
       new : true
     },
     (err, department) => {
