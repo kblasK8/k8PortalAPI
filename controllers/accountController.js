@@ -57,55 +57,61 @@ exports.auth_me = (req, res) => {
   const bearer = tokenHeader.split(' ');
   const bearerToken = bearer[1];
   jwt.verify(bearerToken, secretKey, (err, authData) => {
-    if(err) {
-      res
-      .status(403)
-      .json({
-        statusCode: 403,
-        error: true,
-        msg: "Forbidden. Invalid token."
-      });
-      return;
-    } else {
-      Account.findOne(
-        {
-          _id : authData._id,
-          status : 'Enabled'
-        },
-        { "password" : 0, "__v" : 0 },
-        (err, account) => {
-          if(err) { res.send(err); }
-          if(!account) {
-            res
-            .status(401)
-            .json({
-              statusCode: 401,
-              error: true,
-              msg: "Unauthorized account."
-            });
-            return;
-          } else {
-            res.json(account);
-          }
-        }
-      );
-    }
+    Account.findOne(
+      { _id : authData._id },
+      { "password" : 0, "__v" : 0 },
+      (err, account) => {
+        if(err) { res.send(err); }
+        res.json(account);
+      }
+    );
   });
 }
 
 exports.list_all_accounts = (req, res) => {
-  Account.find(
-    { status : 'Enabled' },
-    { "password" : 0, "__v" : 0 },
-    (err, account) => {
-      if(err) { res.send(err); }
-      res.json(account);
-    }
-  );
+  const tokenHeader = req.headers['authorization'];
+  const bearer = tokenHeader.split(' ');
+  const bearerToken = bearer[1];
+  jwt.verify(bearerToken, secretKey, (err, authData) => {
+    Account.findOne(
+      { _id : authData._id },
+      { "password" : 0, "__v" : 0 },
+      (err, account) => {
+        if(err) { res.send(err); }
+        var status_query = {};
+        // var status_query = { status : 'Enabled' };
+        // if(Array.isArray(account.type)) {
+        //   if(
+        //       account.type.includes("Admin") || 
+        //       account.type.includes("admin")
+        //   ) {
+        //     status_query = {};
+        //   }
+        // } else if(
+        //     typeof account.type === 'string' || 
+        //     account.type instanceof String
+        // ) {
+        //   if(account.type.toLowerCase() == "admin") {
+        //     status_query = {};
+        //   }
+        // }
+        Account.find(
+          status_query,
+          { "password" : 0, "__v" : 0 },
+          (err, account) => {
+            if(err) { res.send(err); }
+            res.json(account);
+          }
+        );
+      }
+    );
+  });
 };
 
 exports.list_all_account_by_department = (req, res) => {
   var department = req.params.department;
+  // var status_query = { status : 'Enabled' };
+  var status_query = {};
   var query = [];
   if(department && department.indexOf(',') > -1) {
     var departmentArr = department.split(',');
@@ -120,7 +126,7 @@ exports.list_all_account_by_department = (req, res) => {
   Account.find(
     {
       $and : [
-        { status : 'Enabled' },
+        status_query,
         { $or : query }
       ]
     },
@@ -135,6 +141,8 @@ exports.list_all_account_by_department = (req, res) => {
 exports.list_all_account_by_type = (req, res) => {
   var type = req.params.type;
   var query = [];
+  // var status_query = { status : 'Enabled' };
+  var status_query = {};
   if(type && type.indexOf(',') > -1) {
     var typeArr = type.split(',');
     typeArr.forEach(element => {
@@ -148,7 +156,7 @@ exports.list_all_account_by_type = (req, res) => {
   Account.find(
     {
       $and : [
-        { status : 'Enabled' },
+        status_query,
         { $or : query }
       ]
     },
@@ -162,12 +170,12 @@ exports.list_all_account_by_type = (req, res) => {
 
 exports.filter_account = (req, res) => {
   var obj = req.body;
-  if(
-    Object.entries(obj).length === 0 &&
-    obj.constructor === Object
-  ) {
-    obj.status = 'Enabled';
-  }
+  // if(
+  //   Object.entries(obj).length === 0 &&
+  //   obj.constructor === Object
+  // ) {
+  //   obj.status = 'Enabled';
+  // }
   Account.find(
     obj,
     { "password" : 0, "__v" : 0 },
