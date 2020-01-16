@@ -6,7 +6,10 @@ var Schema = mongoose.Schema;
 var RacSchema = new Schema({
   name: {
     type: String,
-    required: "Provide Resource Assignment Category Name."
+    required: "Provide Resource Assignment Category Name.",
+    index: true,
+    unique: true,
+    dropDups: true
   },
   date_created: {
     type: Date,

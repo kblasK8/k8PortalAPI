@@ -6,9 +6,9 @@ exports.list_all_assets = (req, res) => {
   .select('-__v')
   .populate('assigned_to', '-__v -password')
   .exec(
-    (err, ast) => {
+    (err, assets) => {
       if(err) { res.send(err); }
-      res.json(ast);
+      res.json(assets);
     }
   );
 };
@@ -16,15 +16,15 @@ exports.list_all_assets = (req, res) => {
 exports.create_a_asset = (req, res) => {
   var new_asset = new Asset(req.body);
   new_asset.save(
-    (err, ast) => {
+    (err, asset) => {
       if(err) { res.send(err); }
-      Asset.findById(ast._id)
+      Asset.findById(asset._id)
       .select('-__v')
       .populate('assigned_to', '-__v -password')
       .exec(
-        (e, as) => {
+        (e, assetPopulated) => {
           if(e) { res.send(e); }
-          res.json(as);
+          res.json(assetPopulated);
         }
       );
     }
@@ -38,9 +38,9 @@ exports.read_a_asset = (req, res) => {
   .select('-__v')
   .populate('assigned_to', '-__v -password')
   .exec(
-    (err, ast) => {
+    (err, asset) => {
       if(err) { res.send(err); }
-      res.json(ast);
+      res.json(asset);
     }
   );
 };
@@ -56,9 +56,9 @@ exports.update_a_asset = (req, res) => {
   )
   .populate('assigned_to', '-__v -password')
   .exec(
-    (err, ast) => {
+    (err, asset) => {
       if(err) { res.send(err); }
-      res.json(ast);
+      res.json(asset);
     }
   );
 };

@@ -7,9 +7,9 @@ exports.list_all_tasks = (req, res) => {
   Task.find()
   .select('-__v')
   .exec(
-    (err, task) => {
+    (err, tasks) => {
       if(err) { res.send(err); }
-      res.json(task);
+      res.json(tasks);
     }
   );
 };
@@ -40,9 +40,9 @@ exports.filter_a_project_task = (req, res) => {
   Task.find(req.body)
   .select('-__v')
   .exec(
-    (err, task) => {
+    (err, tasks) => {
       if(err) { res.send(err); }
-      res.json(task);
+      res.json(tasks);
     }
   );
 };

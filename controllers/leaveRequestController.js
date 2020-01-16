@@ -10,9 +10,9 @@ exports.list_all_leaveRequests = (req, res) => {
       ]
     },
     { "__v": 0 },
-    (err, leaveRequest) => {
+    (err, leaveRequests) => {
       if(err) { res.send(err); }
-      res.json(leaveRequest);
+      res.json(leaveRequests);
     }
   );
 };

@@ -1,13 +1,26 @@
 const mongoose = require('mongoose');
 const RecAssignRole = require('../models/resourceAssignmentRoleModel');
+const ResourceAssignment = require('../models/resourceAssignmentModel');
+var countUseResourceAssignment = (rarId) => {
+  return new Promise((resolve, reject) => {
+    ResourceAssignment.countDocuments(
+      { project_category : racId },
+      { resources: { $elemMatch: { role: rarId } }
+      (err, count) => {
+        if(err) { res.send(err); }
+        resolve(count);
+      }
+    );
+  });
+}
 
 exports.list_all_rar = (req, res) => {
   RecAssignRole.find()
   .select('-__v')
   .exec(
-    (err, rar) => {
+    (err, rars) => {
       if(err) { res.send(err); }
-      res.json(rar);
+      res.json(rars);
     }
   );
 };
@@ -16,7 +29,10 @@ exports.create_a_rar = (req, res) => {
   var new_rar = new RecAssignRole(req.body);
   new_rar.save(
     (err, rar) => {
-      if(err) { res.send(err); }
+      if(err) {
+        res.send(err);
+        return;
+      }
       var obj = rar.toObject();
       delete obj.__v;
       res.json(obj);
@@ -52,11 +68,27 @@ exports.update_a_rar = (req, res) => {
 };
 
 exports.delete_a_rar = (req, res) => {
-  RecAssignRole.remove(
-    { _id: req.params.rarId },
-    (err, rar) => {
-      if(err) { res.send(err); }
-      res.json({ message: 'Resource Assignment Role successfully deleted.' });
+  (async () => {
+    var countResourceAssignment = await countUseResourceAssignment(req.params.rarId);
+    var bln = true;
+    if(countResourceAssignment) { bln = false; }
+    if(bln) {
+      RecAssignRole.remove(
+        { _id: req.params.rarId },
+        (err, rar) => {
+          if(err) { res.send(err); }
+          res.json({ message: 'Resource Assignment Role successfully deleted.' });
+        }
+      );
+    } else {
+      res
+      .status(400)
+      .json({
+        statusCode: 400,
+        error: true,
+        msg: "Resource Assignment Role currently used in Resource Assignment."
+      });
+      return;
     }
-  );
+  })();
 };

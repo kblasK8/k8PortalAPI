@@ -69,26 +69,14 @@ exports.auth_me = (req, res) => {
 }
 
 exports.list_all_accounts = (req, res) => {
-  const tokenHeader = req.headers['authorization'];
-  const bearer = tokenHeader.split(' ');
-  const bearerToken = bearer[1];
-  jwt.verify(bearerToken, secretKey, (err, authData) => {
-    Account.findOne(
-      { _id : authData._id },
-      { "password" : 0, "__v" : 0 },
-      (err, account) => {
-        if(err) { res.send(err); }
-        Account.find(
-          {},
-          { "password" : 0, "__v" : 0 },
-          (err, account) => {
-            if(err) { res.send(err); }
-            res.json(account);
-          }
-        );
-      }
-    );
-  });
+  Account.find(
+    {},
+    { "password" : 0, "__v" : 0 },
+    (err, accounts) => {
+      if(err) { res.send(err); }
+      res.json(accounts);
+    }
+  );
 };
 
 exports.list_all_account_by_department = (req, res) => {
@@ -109,9 +97,9 @@ exports.list_all_account_by_department = (req, res) => {
       $or : query
     },
     { "password" : 0, "__v" : 0 },
-    (err, account) => {
+    (err, accounts) => {
       if(err) { res.send(err); }
-      res.json(account);
+      res.json(accounts);
     }
   );
 };
@@ -134,21 +122,20 @@ exports.list_all_account_by_type = (req, res) => {
       $or : query
     },
     { "password" : 0, "__v" : 0 },
-    (err, account) => {
+    (err, accounts) => {
       if(err) { res.send(err); }
-      res.json(account);
+      res.json(accounts);
     }
   );
 } 
 
 exports.filter_account = (req, res) => {
-  var obj = req.body;
   Account.find(
-    obj,
+    req.body,
     { "password" : 0, "__v" : 0 },
-    (err, account) => {
+    (err, accounts) => {
       if(err) { res.send(err); }
-      res.json(account);
+      res.json(accounts);
     }
   );
 };

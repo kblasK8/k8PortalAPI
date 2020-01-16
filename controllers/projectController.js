@@ -6,9 +6,9 @@ exports.list_all_projects = (req, res) => {
   .select('-__v')
   .populate('project_category', '-__v')
   .exec(
-    (err, project) => {
+    (err, projects) => {
       if(err) { res.send(err); }
-      res.json(project);
+      res.json(projects);
     }
   );
 };

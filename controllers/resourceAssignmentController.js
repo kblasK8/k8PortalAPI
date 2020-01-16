@@ -8,9 +8,9 @@ exports.list_all_ra = (req, res) => {
   .populate('resources.account_id')
   .populate('resources.role', 'name')
   .exec(
-    (err, ra) => {
+    (err, ras) => {
       if(err) { res.send(err); }
-      res.json(ra);
+      res.json(ras);
     }
   );
 };
@@ -31,7 +31,7 @@ exports.filter_ra = (req, res) => {
   .populate('resources.account_id', custom_fields)
   .populate('resources.role', '_id name')
   .exec(
-    (err, ra) => {
+    (err, ras) => {
       if(err) { res.send(err); }
       if(
         custom_populate !== null &&
@@ -40,7 +40,7 @@ exports.filter_ra = (req, res) => {
         var data_arr = [];
         var data_val = {};
         var resources_temp = [];
-        ra.forEach(
+        ras.forEach(
           (value, index) => {
             data_val._id = value._id;
             data_val.project_id = value.project_id;
@@ -72,7 +72,7 @@ exports.filter_ra = (req, res) => {
         );
         res.json(data_arr);
       } else {
-        res.json(ra);
+        res.json(ras);
       }
     }
   );

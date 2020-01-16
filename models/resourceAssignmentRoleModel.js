@@ -6,7 +6,10 @@ var Schema = mongoose.Schema;
 var RarSchema = new Schema({
   name: {
     type: String,
-    required: "Provide Resource Assignment Role Name."
+    required: "Provide Resource Assignment Role Name.",
+    index: true,
+    unique: true,
+    dropDups: true
   },
   date_created: {
     type: Date,

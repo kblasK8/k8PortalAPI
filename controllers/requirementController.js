@@ -26,17 +26,7 @@ const removeRootFolder = (rootFolder, pathFolder) => {
     return pathFolder.replace(rootFolder + '/', "");
   }
 }
-const noAccessRes = (res) => {
-  res
-  .status(403)
-  .json({
-    statusCode: 403,
-    error: true,
-    msg: "Forbidden to access project folder."
-  });
-  return res;
-}
-const reqFieldRes = (res, status, msg) => {
+const errRes = (res, status, msg) => {
   res
   .status(status)
   .json({
@@ -63,7 +53,8 @@ var hasProjectAccess = (req) => {
         },
         (err, count) => {
           resolve(count);
-        });
+        }
+      );
     });
   });
 }
@@ -73,11 +64,11 @@ exports.viewFolder = (req, res) => {
       !req.body.projectID ||
       !req.body.folderPath
   ) {
-    return reqFieldRes(res, 400, "Project ID and folder path should not be empty.");
+    return errRes(res, 400, "Project ID and folder path should not be empty.");
   }
   (async () => {
     if(!await hasProjectAccess(req)) {
-      return noAccessRes(res);
+      return errRes(res, 403, "Forbidden to access project folder.");
     } else {
       var folderPath = config.uploadPath + req.body.projectID + '/' + req.body.folderPath;
       var obj = {
@@ -96,14 +87,7 @@ exports.viewFolder = (req, res) => {
         path.normalize(folderPath),
         (err, files) => {
           if(err) {
-            res
-            .status(400)
-            .json({
-              statusCode: 400,
-              error: true,
-              msg: "Folder path invalid."
-            });
-            return;
+            return errRes(res, 400, "Folder path invalid.");
           }
           let isFileDir = (file, cb) => {
             fs.lstat(
@@ -145,11 +129,11 @@ exports.newFolder = (req, res) => {
     !req.body.path ||
     !req.body.folderName
   ) {
-    return reqFieldRes(res, 400, "Project ID, Path and folder name are required.");
+    return errRes(res, 400, "Project ID, Path and folder name are required.");
   }
   (async () => {
     if(!await hasProjectAccess(req)) {
-      return noAccessRes(res);
+      return errRes(res, 403, "Forbidden to access project folder.");
     } else {
       var dirPath = req.body.projectID + '/' + req.body.path + '/' + req.body.folderName;
       var pathFolder = path.normalize(config.uploadPath + '/' + dirPath);
@@ -163,7 +147,7 @@ exports.newFolder = (req, res) => {
           }
         );
       } else {
-        res.json({ message : "Directory exists." });
+        return errRes(res, 400, "Directory exists.");
       }
     }
   })();
@@ -174,11 +158,11 @@ exports.delFolder = (req, res) => {
     !req.body.projectID ||
     !req.body.path
   ) {
-    return reqFieldRes(res, 400, "Project ID and Path should not be empty.");
+    return errRes(res, 400, "Project ID and Path should not be empty.");
   }
   (async () => {
     if(!await hasProjectAccess(req)) {
-      return noAccessRes(res);
+      return errRes(res, 403, "Forbidden to access project folder.");
     } else {
       var dirPath = req.body.projectID + '/' + req.body.path;
       var pathFolder = path.normalize(config.uploadPath + '/' + dirPath);
@@ -192,7 +176,7 @@ exports.delFolder = (req, res) => {
           }
         );
       } else {
-        res.json({ message : "Directory not exists." });
+        return errRes(res, 400, "Directory not exists.");
       }
     }
   })();
@@ -203,11 +187,11 @@ exports.delFiles = (req, res) => {
     !req.body.projectID ||
     !req.body.path
   ) {
-    return reqFieldRes(res, 400, "Project ID and Path should not be empty.");
+    return errRes(res, 400, "Project ID and Path should not be empty.");
   }
   (async () => {
     if(!await hasProjectAccess(req)) {
-      return noAccessRes(res);
+      return errRes(res, 403, "Forbidden to access project folder.");
     } else {
       var dirPath = req.body.projectID + '/' + req.body.path;
       var pathFile = path.normalize(config.uploadPath + '/' + dirPath);
@@ -220,7 +204,7 @@ exports.delFiles = (req, res) => {
           }
         );
       } else {
-        res.json({ message : "File not exist." });
+        return errRes(res, 400, "File not exist.");
       }
     }
   })();
@@ -235,27 +219,27 @@ exports.movItem = (req, res) => {
     !oldPath ||
     !newPath
   ) {
-    return reqFieldRes(res, 400, "Project ID, old and new path should not be empty.");
+    return errRes(res, 400, "Project ID, old and new path should not be empty.");
   }
   if(
     (!Array.isArray(oldPath) && Array.isArray(newPath)) ||
     (Array.isArray(oldPath) && !Array.isArray(newPath))
   ) {
-    return reqFieldRes(res, 400, "If multiple move items, both old and new path should not be array.");
+    return errRes(res, 400, "If multiple move items, both old and new path should not be array.");
   }
   if(
     Array.isArray(oldPath) &&
     Array.isArray(newPath)
   ) {
     if(oldPath.length !== newPath.length) {
-      return reqFieldRes(res, 400, "New and old path are not same in length.");
+      return errRes(res, 400, "New and old path are not same in length.");
     } else {
       isArrayBln = true;  
     }
   }
   (async () => {
     if(!await hasProjectAccess(req)) {
-      return noAccessRes(res);
+      return errRes(res, 403, "Forbidden to access project folder.");
     } else {
       if(isArrayBln) {
         var obj = {
@@ -280,7 +264,6 @@ exports.movItem = (req, res) => {
             obj.failed.push(oldPath[index]);
           }
         });
-        // res.json(obj);
         res.json({ message : "Moved successfully." });
       } else {
         var dirOldPath = req.body.projectID + '/' + oldPath;
@@ -297,7 +280,7 @@ exports.movItem = (req, res) => {
             }
           );
         } else {
-          res.json({ message : "Item not exist." });
+          return errRes(res, 400, "Item not exist.");
         }
       }
     }
@@ -309,11 +292,11 @@ exports.upload_files = (req, res) => {
     !req.body.projectID ||
     !req.body.path
   ) {
-    return reqFieldRes(res, 400, "Project ID and Path should not be empty.");
+    return errRes(res, 400, "Project ID and Path should not be empty.");
   }
   (async () => {
     if(!await hasProjectAccess(req)) {
-      return noAccessRes(res);
+      return errRes(res, 403, "Forbidden to access project folder.");
     } else {
       var dirOldPath = req.file.path;
       var dirNewPath = "";
@@ -344,7 +327,7 @@ exports.upload_files = (req, res) => {
           );
         }
       } else {
-        res.json({ message : "Temp file does not exist." });
+        return errRes(res, 400, "Temp file does not exist.");
       }
     }
   })();
@@ -355,11 +338,11 @@ exports.search = (req, res) => {
     !req.body.projectID ||
     !req.body.keyword
   ) {
-    return reqFieldRes(res, 400, "Project ID and Keyword should not be empty.");
+    return errRes(res, 400, "Project ID and Keyword should not be empty.");
   }
   (async () => {
     if(!await hasProjectAccess(req)) {
-      return noAccessRes(res);
+      return errRes(res, 403, "Forbidden to access project folder.");
     } else {
       var rootFolder = path.normalize(config.uploadPath + req.body.projectID);
       var obj = {
@@ -410,18 +393,18 @@ exports.search = (req, res) => {
 
 exports.requirements_download = (req, res) => {
   if(!req.body.path) {
-    return reqFieldRes(res, 400, "Download path should not be empty.");
+    return errRes(res, 400, "Download path should not be empty.");
   }
   (async () => {
     if(!await hasProjectAccess(req)) {
-      return noAccessRes(res);
+      return errRes(res, 403, "Forbidden to access project folder.");
     } else {
       var dirPath = req.params.projectID + '/' + req.body.path;
       const downloadFile = path.normalize(config.uploadPath + '/' + dirPath);
       if(fs.existsSync(downloadFile)) {
         res.download(downloadFile);
       } else {
-        res.json({ message : "File not exist." });
+        return errRes(res, 400, "File not exist.");
       }
     }
   })();

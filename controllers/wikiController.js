@@ -13,9 +13,9 @@ exports.list_all_wikis = (req, res) => {
   .populate('author', '-__v -password')
   .populate('contributors.account_id', '-__v -password')
   .exec(
-    (err, wiki) => {
+    (err, wikis) => {
       if(err) { res.send(err); }
-      res.json(wiki);
+      res.json(wikis);
     }
   );
 };
@@ -82,9 +82,9 @@ exports.filter_a_wiki = (req, res) => {
   .populate('author', '-__v -password')
   .populate('contributors.account_id', '-__v -password')
   .exec(
-    (err, wiki) => {
+    (err, wikis) => {
       if(err) { res.send(err); }
-      res.json(wiki);
+      res.json(wikis);
     }
   );
 };

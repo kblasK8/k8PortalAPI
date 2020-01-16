@@ -5,9 +5,9 @@ exports.list_all_idps = (req, res) => {
   IDP.find(
     {},
     { "__v": 0 },
-    (err, idp) => {
+    (err, idps) => {
       if(err) { res.send(err); }
-      res.json(idp);
+      res.json(idps);
     }
   );
 };
