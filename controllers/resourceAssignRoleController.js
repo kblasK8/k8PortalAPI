@@ -4,8 +4,7 @@ const ResourceAssignment = require('../models/resourceAssignmentModel');
 var countUseResourceAssignment = (rarId) => {
   return new Promise((resolve, reject) => {
     ResourceAssignment.countDocuments(
-      { project_category : racId },
-      { resources: { $elemMatch: { role: rarId } }
+      { 'resources.role' : rarId },
       (err, count) => {
         if(err) { res.send(err); }
         resolve(count);
@@ -69,10 +68,7 @@ exports.update_a_rar = (req, res) => {
 
 exports.delete_a_rar = (req, res) => {
   (async () => {
-    var countResourceAssignment = await countUseResourceAssignment(req.params.rarId);
-    var bln = true;
-    if(countResourceAssignment) { bln = false; }
-    if(bln) {
+    if(! await countUseResourceAssignment(req.params.rarId)) {
       RecAssignRole.remove(
         { _id: req.params.rarId },
         (err, rar) => {

@@ -67,10 +67,7 @@ exports.update_a_rac = (req, res) => {
 
 exports.delete_a_rac = (req, res) => {
   (async () => {
-    var countProject = await countUseProject(req.params.racId);
-    var bln = true;
-    if(countProject) { bln = false; }
-    if(bln) {
+    if(! await countUseProject(req.params.racId)) {
       RecAssignCat.remove(
         { _id: req.params.racId },
         (err, rac) => {
