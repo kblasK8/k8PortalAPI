@@ -21,10 +21,12 @@ var TaskSchema = new Schema({
     default: ['Medium']
   },
   board_id: {
-    type: String
+    type: String,
+    required: "Provide Board Id."
   },
   board_col_index: {
-    type: Number
+    type: Number,
+    default: 0
   },
   plan_start_date: {
     type: Date

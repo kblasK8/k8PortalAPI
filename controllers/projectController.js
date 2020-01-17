@@ -173,3 +173,52 @@ exports.create_child_projects = (req, res) => {
     }
   );
 }
+
+exports.create_board = (req, res) => {
+  Project.findOne(
+    { _id : req.params.projectId }
+  )
+  .select('boards')
+  .exec(
+    (err, project) => {
+      if(err) { res.send(err); }
+      var boardData = project.boards;
+      boardData.push(req.body);
+      var obj = {
+        boards : boardData
+      }
+      Project.updateOne(
+        { _id : req.params.projectId },
+        obj,
+        { runValidators: true },
+        (e, proj) => {
+          res.json(obj);
+        }
+      );
+    }
+  );
+}
+
+exports.delete_board = (req, res) => {
+  Project.findOne(
+    { _id : req.params.projectId }
+  )
+  .select('boards')
+  .exec(
+    (err, project) => {
+      if(err) { res.send(err); }
+      var boardData = project.boards;
+      var obj = {
+        boards : boardData.filter(board => board._id != req.params.boardID)
+      }
+      Project.updateOne(
+        { _id : req.params.projectId },
+        obj,
+        { runValidators: true },
+        (e, proj) => {
+          res.json(obj);
+        }
+      );
+    }
+  );
+}

@@ -93,6 +93,10 @@ router.route('/projects/page/:pageNo/:perPage')
 router.route('/projects/child/:projectId')
   .get(tokenCheck, projectController.read_child_projects)
   .post(tokenCheck, projectController.create_child_projects);
+router.route('/projects/boards/:projectId')
+  .post(tokenCheck, projectController.create_board);
+router.route('/projects/boards/:projectId/:boardID')
+  .delete(tokenCheck, projectController.delete_board);
 
 // REQUIREMENT ROUTES //
 router.route('/requirements/viewfolder')

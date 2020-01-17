@@ -22,11 +22,6 @@ mongoose.Promise = global.Promise;
 mongoose.connect(config.mongodbURL, config.mongoDbOptions);
 mongoose.connection.on('connected', () => {
 	console.log('Connected successfully.');
-	//Creating index
-	console.log('Creating database index... ');
-	mongoose.connection.db.collection('departments').createIndex({ name: 1 }, { sparse: true, unique: true });
-	mongoose.connection.db.collection('resourceassignmentroles').createIndex({ name: 1 }, { sparse: true, unique: true });
-	mongoose.connection.db.collection('resourceassignmentcategories').createIndex({ name: 1 }, { sparse: true, unique: true });
 	//Setup API routes
 	console.log('Registering routes... ');
 	app.use('/api/v1', apiv1);
