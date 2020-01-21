@@ -16,32 +16,32 @@ BBPortal is a REST API that receives and sends data to manage Bold Business empl
 To run this API on your local machine you need to install the following tools:
 Choose the following installer based on your operating system.
 
-1. Click URL below to download Postman installer then install.
+1. Click URL below to download Postman installer then install. 
     https://www.getpostman.com/downloads/
 
-2. Click URL below to download GIT installer then install.
+2. Click URL below to download GIT installer then install. 
 	https://git-scm.com/downloads
 
-3. Click URL below to download NodeJS installer then install.
+3. Click URL below to download NodeJS installer then install. 
 	https://nodejs.org/en/download/
 
-4. Click URL below to download MongoDB Community Server then install. For Mac or linux, you can skip this step since installing MongoDB is part of the migration script.
+4. Click URL below to download MongoDB Community Server then install. For Mac or linux, you can skip this step since installing MongoDB is part of the migration script. 
 	https://www.mongodb.com/download-center/community
 
-5. Click URL below to download Robo 3T then install.
+5. Click URL below to download Robo 3T then install. 
 	https://robomongo.org/download
 
-7. Click URL below to download VSCode then install.
+7. Click URL below to download VSCode then install. 
 	https://code.visualstudio.com/download
 
 6. Restart your computer.
 
-### Setup
+### Backend Setup
 
 After installing the programs and tools, we need to setup now the code and run the API.
 1. Open your command prompt (Windows) or terminal (Mac / Linux).
 
-2. The code base repository is in Github. Create an account if you don't have yet. If you have an account, coordinate to `Kenneth Blas` to add your account in the repository. Make sure to add a write permission to be able to contribute to the code base. Below is the guide to add user in repository and how to add push or write permission.
+2. The code base repository is in Github. Create an account if you don't have yet. If you have an account, coordinate to `Kenneth Blas` to add your account in the repository. Make sure to add a write permission to be able to contribute to the code base. Below is the guide to add user in repository and how to add push or write permission. 
 	https://help.github.com/en/github/setting-up-and-managing-organizations-and-teams/adding-outside-collaborators-to-repositories-in-your-organization
 
 3. Go to your desired directory where you will save the code base.
