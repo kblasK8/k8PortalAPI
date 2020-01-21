@@ -5,18 +5,21 @@ Contents:
 2. [Tech stack](#tech-stack)
 3. [Installation](#installation)
 4. [Backend Setup](#backend-setup)
-5. [Deployment](#api-deployment)
+5. [Frontend Setup](#frontend-setup)
+6. [API Deployment](#api-deployment)
+7. [Angular Deployment](#angular-setup)
 
 ## Overview
 BBPortal is a REST API that receives and sends data to manage Bold Business employee transactions in the web portal. The BBPortal API provides functionality to different modules and able to use in different platforms. The design of the API applies the JSON web token authorization for security purposes.
 
 ## Tech stack
-- ExpressJS - NodeJS framework used for routing, receiving and sending data
-- MongoDB - a NoSQL Database
+- Angular - Frontend framework used for user interface where the users interact and interpret data.
+- ExpressJS - NodeJS framework used for routing for HTTP request, receiving, store and send data.
+- MongoDB - a NoSQL Database used to store data.
 - NGINX - HTTP web server to serve a proxy for NodeJS and render the frontend web pages.
-- NodeJS - Runtime backend server for javascript
+- NodeJS - Runtime backend server for javascript.
 - NPM - Node Package Manager
-- PM2 - Daemon process manager for NodeJS
+- PM2 - Daemon process manager for NodeJS.
 
 ## Installation
 
@@ -38,10 +41,16 @@ Choose the following installer based on your operating system.
 5. Click URL below to download Robo 3T then install.<br/>
 	https://robomongo.org/download
 
-7. Click URL below to download VSCode then install.<br/>
+6. Click URL below to download VSCode then install.<br/>
 	https://code.visualstudio.com/download
 
-6. Restart your computer.
+7. Click URL below to install angular cli and follow the steps provided.<br/>
+	https://cli.angular.io/
+
+8. Click URL below to download FileZilla then install.<br/>
+	https://filezilla-project.org/download.php?type=client
+
+9. Restart your computer.
 
 ## Backend Setup
 
@@ -105,6 +114,31 @@ node server.js
 11. For editing the code preferably use the VSCode as your IDE.
 12. For restarting the API service to test the new added or changed code just go to the terminal where you run the `node server.js` then  press `ctrl + c` to stop the API service then yun again via `node server.js`.
 
+## Frontend Setup
+
+1. Open your command prompt (Windows) or terminal (Mac / Linux).
+
+2. The code base repository is in Github. Create an account if you don't have yet. If you have an account, coordinate to `Kenneth Blas` to add your account in the repository
+
+3. Go to your desired directory where you will save the code base.
+```
+cd /path/to/your/target/folder
+```
+
+4. Run the GIT command below to clone the code base from Github. Input your username and password for first time cloning the project after running the command.
+```
+git clone https://github.com/BoldBusiness/k8Portal.git -b k8PortalDevelopment
+```
+
+5. After cloning, go inside to the project folder and install the node modules for project library dependencies by running the command.
+```
+npm install
+```
+
+6. To run the angular application, on your command prompt/terminal set the directory to your angular workspace and use the command `npm run start` (Make sure you installed your node modules before performing this step).
+
+7. After the compilation is successful, go to your browser and type in `http://localhost:4200/` to the address bar to open your angular application
+
 ## API Deployment
 Below are the steps to deploy the new release features and updates to the API.
 
@@ -146,3 +180,13 @@ or
 ```
 pm2 logs
 ```
+
+## Angular Deployment
+Below are the steps to deploy the new release features and updates to the frontend.
+
+1. Open your command prompt (Windows) or terminal (Mac / Linux) and set the directory path to your angular workspace. Use the command `ng build --prod` to compile your angular application for production
+ 
+2. After the compilation is successful, notice a "dist" folder will be generated. Copy everything within the output folder `(dist/<application name> by default)` then transfer to the server via FileZilla. The project directory of the frontend is at `/var/www/html/k8portal/dist/`.<br/>
+**Don't delete the folder** `/var/www/html/k8portal/dist/api`
+
+3. Coordinate with `Malcolm Goodman` if you don't have an SSH account that is needed to transfer frontend codes to the server.
