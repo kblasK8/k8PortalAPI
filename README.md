@@ -72,37 +72,31 @@ cd k8PortalAPI
 npm install
 ```
 
-7. Start MongoDB Community Server.
-
-### For Mac or Linux you can run the migration shell script instead to install MongoDB, import starting data and run the ervice. In your terminal from inside the project folder run the below command.
+7. Start MongoDB Community Server. For Mac or Linux you can run the migration shell script instead to install MongoDB, import starting data and run the ervice. In your terminal from inside the project folder run the below command.
 ```
 sh migration/migrate.sh
 ```
-### For Windows, run this in the command prompt.
+For Windows, run this in the command prompt.
 ```
 C:\Program Files\MongoDB\Server\3.2\bin\mongod.exe
 ```
 
-8. Import data to the MongoDB. If you run the migration script from in Mac or Linux you can skip this step.
-
-### In command prompt, go to migration folder by running the below command.
+8. Import data to the MongoDB. If you run the migration script from in Mac or Linux you can skip this step. In command prompt, go to migration folder by running the below command.
 ```
 cd migration
 ```
-### Then run the following MongoDB import commands
+Then run the following MongoDB import commands
 ```
 mongoimport --db PortalDB --collection departments --type json --file departments.json --legacy
 mongoimport --db PortalDB --collection resourceassignmentcategories --type json --file resourceassignmentcategories.json --legacy
 mongoimport --db PortalDB --collection resourceassignmentroles --type json --file resourceassignmentroles.json --legacy
 ```
 
-9. In your command prompt or terminal, you are now ready to run the API.
-
-### Up to one folder if you are inside the directory of migration. Else skip this step.
+9. In your command prompt or terminal, you are now ready to run the API. Up to one folder if you are inside the directory of migration. Else skip this step.
 ```
 cd ..
 ```
-### Run the API
+Run the API
 ```
 node server.js
 ```
@@ -124,7 +118,7 @@ ssh -i /path/to/you/PEM/key your_username@52.74.172.38
 cd /var/www/html/api/
 ```
 
-3. Pull your changes from GIT. Enter your sudo password after.
+3. Pull your changes from GIT. Enter this sudo password after `Jp@m1tt@n`.
 ```
 sudo git pull
 ```
