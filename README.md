@@ -1,11 +1,11 @@
 # BBPortal API
 
 Contents:
-1. [Overview](#anchor-overview)
-2. [Tech stack](#anchor-techstack)
-3. [Installation](#anchor-installation)
-4. [Backend Setup](#anchor-backend-setup)
-5. [Deployment](#anchor-deployment)
+1. [Overview](#overview)
+2. [Tech stack](#tech-stack)
+3. [Installation](#installation)
+4. [Backend Setup](#backend-setup)
+5. [Deployment](#api-deployment)
 
 ## Overview
 BBPortal is a REST API that receives and sends data to manage Bold Business employee transactions in the web portal. The BBPortal API provides functionality to different modules and able to use in different platforms. The design of the API applies the JSON web token authorization for security purposes.
