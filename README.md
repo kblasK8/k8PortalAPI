@@ -1,5 +1,12 @@
 # BBPortal API
 
+Contents:
+1. [Overview](##anchor-overview)
+2. [Tech stack](##anchor-techstack)
+3. [Installation](##anchor-installation)
+4. [Backend Setup](##anchor-backend-setup)
+5. [Deployment](##anchor-deployment)
+
 ## Overview
 BBPortal is a REST API that receives and sends data to manage Bold Business employee transactions in the web portal. The BBPortal API provides functionality to different modules and able to use in different platforms. The design of the API applies the JSON web token authorization for security purposes.
 
@@ -11,7 +18,7 @@ BBPortal is a REST API that receives and sends data to manage Bold Business empl
 - NPM - Node Package Manager
 - PM2 - Daemon process manager for NodeJS
 
-### Installation
+## Installation
 
 To run this API on your local machine you need to install the following tools:
 Choose the following installer based on your operating system.
@@ -36,7 +43,7 @@ Choose the following installer based on your operating system.
 
 6. Restart your computer.
 
-### Backend Setup
+## Backend Setup
 
 After installing the programs and tools, we need to setup now the code and run the API.
 1. Open your command prompt (Windows) or terminal (Mac / Linux).
@@ -67,22 +74,22 @@ npm install
 
 7. Start MongoDB Community Server.
 
-####For Mac or Linux you can run the migration shell script instead to install MongoDB, import starting data and run the ervice. In your terminal from inside the project folder run the below command.
+### For Mac or Linux you can run the migration shell script instead to install MongoDB, import starting data and run the ervice. In your terminal from inside the project folder run the below command.
 ```
 sh migration/migrate.sh
 ```
-####For Windows, run this in the command prompt.
+### For Windows, run this in the command prompt.
 ```
 C:\Program Files\MongoDB\Server\3.2\bin\mongod.exe
 ```
 
 8. Import data to the MongoDB. If you run the migration script from in Mac or Linux you can skip this step.
 
-####In command prompt, go to migration folder by running the below command.
+### In command prompt, go to migration folder by running the below command.
 ```
 cd migration
 ```
-####Then run the following MongoDB import commands
+### Then run the following MongoDB import commands
 ```
 mongoimport --db PortalDB --collection departments --type json --file departments.json --legacy
 mongoimport --db PortalDB --collection resourceassignmentcategories --type json --file resourceassignmentcategories.json --legacy
@@ -91,11 +98,11 @@ mongoimport --db PortalDB --collection resourceassignmentroles --type json --fil
 
 9. In your command prompt or terminal, you are now ready to run the API.
 
-####Up to one folder if you are inside the directory of migration. Else skip this step.
+### Up to one folder if you are inside the directory of migration. Else skip this step.
 ```
 cd ..
 ```
-####Run the API
+### Run the API
 ```
 node server.js
 ```
@@ -103,3 +110,45 @@ node server.js
 10. You can test the API routes by using `Postman`. Refer to the wiki for the list if APIs.
 11. For editing the code preferably use the VSCode as your IDE.
 12. For restarting the API service to test the new added or changed code just go to the terminal where you run the `node server.js` then  press `ctrl + c` to stop the API service then yun again via `node server.js`.
+
+## API Deployment
+Below are the steps to deploy the new release features and updates to the API.
+
+1. Remote the server in AWS via command below. Enter your passphrase after. Coordinate with `Malcolm Goodman` for your access if you don't have. Below is the IP address of the production server.
+```
+ssh -i /path/to/you/PEM/key your_username@52.74.172.38
+```
+
+2. Go to the API project folder directory.
+```
+cd /var/www/html/api/
+```
+
+3. Pull your changes from GIT. Enter your sudo password after.
+```
+sudo git pull
+```
+
+4. Stop the existing running API service. Then start API service again via PM2 command.
+```
+pm2 stop 1
+pm2 start ecosystem.config.js
+```
+or shorthand, you can restart the service
+```
+pm2 restart 1
+```
+
+5. Check if the API service is running.
+```
+pm2 list
+```
+
+6. Check for errors in the runtime via `pm2` command below. If there are no error logs then you successfully deployed the updates of our API. Else fix and check your code.
+```
+pm2 monit
+```
+or
+```
+pm2 logs
+```
