@@ -1,25 +1,17 @@
 {
-  "name": "K8-Portal-API",
-  "version": "1.0.0",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/kblasK8/k8PortalAPI.git"
+  "name": "BB-Portal-API",
+  "author": {
+    "name": "Jayson Pamittan",
+    "email": "jpamittan@k8appliedinnovation.ph"
   },
-  "description": "REST API for K8 Portal",
-  "main": "index.js",
-  "nodemonConfig": {
-    "ignore": [
-      "uploads/*"
-    ],
-    "delay": "2500"
-  },
-  "scripts": {
-    "start": "nodemon server.js"
-  },
-  "Author": "K8 Applied Innovation",
+  "description": "REST API for BB Portal",
   "license": "ISC",
+  "main": "server.js",
   "devDependencies": {
-    "nodemon": "^1.19.4"
+    "chai": "^4.2.0",
+    "chai-as-promised": "^7.1.1",
+    "mocha": "^7.0.0",
+    "pm2": "^4.2.2",
   },
   "dependencies": {
     "body-parser": "^1.18.2",
@@ -27,11 +19,15 @@
     "crypto-js": "^3.1.9-1",
     "express": "^4.17.1",
     "jsonwebtoken": "^8.5.1",
-    "make-promises-safe": "5.1.0",
     "moment": "^2.24.0",
     "mongoose": "^5.7.5",
     "multer": "^1.3.0",
     "package.json": "^2.0.1",
     "update": "^0.7.4"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kblasK8/k8PortalAPI.git"
+  },
+  "version": "1.0.0"
 }

@@ -95,7 +95,7 @@ router.route('/projects/child/:projectId')
   .post(tokenCheck, projectController.create_child_projects);
 router.route('/projects/boards/:projectId')
   .post(tokenCheck, projectController.create_board);
-router.route('/projects/boards/:projectId/:boardID')
+router.route('/projects/boards/:projectId/:boardId')
   .delete(tokenCheck, projectController.delete_board);
 
 // REQUIREMENT ROUTES //

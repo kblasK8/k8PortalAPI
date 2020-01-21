@@ -209,7 +209,7 @@ exports.delete_board = (req, res) => {
       if(err) { res.send(err); }
       var boardData = project.boards;
       var obj = {
-        boards : boardData.filter(board => board._id != req.params.boardID)
+        boards : boardData.filter(board => board._id != req.params.boardId)
       }
       Project.updateOne(
         { _id : req.params.projectId },
