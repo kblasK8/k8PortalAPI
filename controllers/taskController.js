@@ -12,7 +12,7 @@ exports.list_all_tasks = (req, res) => {
       res.json(tasks);
     }
   );
-};
+}
 
 exports.create_a_task = (req, res) => {
   var new_task = new Task(req.body);
@@ -24,7 +24,7 @@ exports.create_a_task = (req, res) => {
       res.json(obj);
     }
   );
-};
+}
 
 exports.read_a_task = (req, res) => {
   Task.findById(
@@ -34,7 +34,7 @@ exports.read_a_task = (req, res) => {
       res.json(task);
     }
   );
-};
+}
 
 exports.filter_a_project_task = (req, res) => {
   Task.find(req.body)
@@ -45,7 +45,7 @@ exports.filter_a_project_task = (req, res) => {
       res.json(tasks);
     }
   );
-};
+}
 
 exports.update_a_task = (req, res) => {
   req.body.updated_date = new moment().format();
@@ -101,7 +101,7 @@ exports.update_a_task = (req, res) => {
       res.json(task);
     }
   );
-};
+}
 
 exports.delete_a_task = (req, res) => {
   Task.remove(
@@ -111,4 +111,4 @@ exports.delete_a_task = (req, res) => {
       res.json({ message: 'Task successfully deleted.' });
     }
   );
-};
+}

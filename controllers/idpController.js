@@ -10,7 +10,7 @@ exports.list_all_idps = (req, res) => {
       res.json(idps);
     }
   );
-};
+}
 
 exports.create_a_idp = (req, res) => {
   var new_idp = new IDP(req.body);
@@ -22,7 +22,7 @@ exports.create_a_idp = (req, res) => {
       res.json(obj);
     }
   );
-};
+}
 
 exports.read_a_idp = (req, res) => {
   IDP.find(
@@ -33,7 +33,7 @@ exports.read_a_idp = (req, res) => {
       res.json(idp);
     }
   );
-};
+}
 
 exports.update_a_idp = (req, res) => {
   IDP.findOneAndUpdate(
@@ -48,7 +48,7 @@ exports.update_a_idp = (req, res) => {
       res.json(idp);
     }
   );
-};
+}
 
 exports.delete_a_idp = (req, res) => {
   IDP.remove(
@@ -58,4 +58,4 @@ exports.delete_a_idp = (req, res) => {
       res.json({ message: 'IDP successfully deleted.' });
     }
   );
-};
+}

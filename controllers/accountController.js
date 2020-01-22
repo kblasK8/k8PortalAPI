@@ -77,7 +77,7 @@ exports.list_all_accounts = (req, res) => {
       res.json(accounts);
     }
   );
-};
+}
 
 exports.list_all_account_by_department = (req, res) => {
   var department = req.params.department;
@@ -102,7 +102,7 @@ exports.list_all_account_by_department = (req, res) => {
       res.json(accounts);
     }
   );
-};
+}
 
 exports.list_all_account_by_type = (req, res) => {
   var type = req.params.type;
@@ -127,7 +127,7 @@ exports.list_all_account_by_type = (req, res) => {
       res.json(accounts);
     }
   );
-} 
+}
 
 exports.filter_account = (req, res) => {
   Account.find(
@@ -138,7 +138,7 @@ exports.filter_account = (req, res) => {
       res.json(accounts);
     }
   );
-};
+}
 
 exports.create_a_account = (req, res) => {
   if(req.body.password) {
@@ -154,7 +154,7 @@ exports.create_a_account = (req, res) => {
       res.json(obj);
     }
   );
-};
+}
 
 exports.read_a_account = (req, res) => {
   Account.findById(
@@ -165,7 +165,7 @@ exports.read_a_account = (req, res) => {
       res.json(account);
     }
   );
-};
+}
 
 exports.update_a_account = (req, res) => {
   Account.findById(
@@ -198,7 +198,7 @@ exports.update_a_account = (req, res) => {
       );
     }
   );
-};
+}
 
 exports.delete_a_account = (req, res) => {
   Account.findOneAndUpdate(
@@ -209,4 +209,4 @@ exports.delete_a_account = (req, res) => {
       res.json({ message : 'Account successfully disabled.' });
     }
   );
-};
+}

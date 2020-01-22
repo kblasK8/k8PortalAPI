@@ -18,7 +18,7 @@ exports.list_all_wikis = (req, res) => {
       res.json(wikis);
     }
   );
-};
+}
 
 exports.read_a_wiki = (req, res) => {
   Wiki.findById(req.params.wikiId)
@@ -31,12 +31,12 @@ exports.read_a_wiki = (req, res) => {
       res.json(wiki);
     }
   );
-};
+}
 
 exports.list_all_department_wikis = (req, res) => {
   var pageNo = parseInt(req.params.pageNo);
   var perPage = parseInt(req.params.perPage);
-  var query = { department: req.params.departmentId, type: 'parent' };
+  var query = { department: req.params.departmentId, type: 'parent' }
   Wiki.find(query)
   .limit(perPage)
   .skip(perPage * (pageNo - 1))
@@ -56,13 +56,13 @@ exports.list_all_department_wikis = (req, res) => {
             data: data,
             page: pageNo,
             pages: Math.ceil(count / perPage)
-          };
+          }
           res.json(response);
         }
       );
     }
   );
-};
+}
 
 exports.create_a_wiki = (req, res) => {
   var new_wiki = new Wiki(req.body);
@@ -74,7 +74,7 @@ exports.create_a_wiki = (req, res) => {
       res.json(obj);
     }
   );
-};
+}
 
 exports.filter_a_wiki = (req, res) => {
   Wiki.find(req.body)
@@ -87,7 +87,7 @@ exports.filter_a_wiki = (req, res) => {
       res.json(wikis);
     }
   );
-};
+}
 
 exports.update_a_wiki = (req, res) => {
   Wiki.findById(
@@ -149,7 +149,7 @@ exports.update_a_wiki = (req, res) => {
       );
     }
   );
-};
+}
 
 exports.delete_a_wiki = (req, res) => {
   Wiki.findById(
@@ -174,7 +174,7 @@ exports.delete_a_wiki = (req, res) => {
       );
     }
   );
-};
+}
 
 exports.delete_wiki_file = (req, res) => {
   Wiki.findById(
@@ -213,4 +213,4 @@ exports.delete_wiki_file = (req, res) => {
       );
     }
   );
-};
+}

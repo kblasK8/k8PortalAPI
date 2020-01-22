@@ -11,7 +11,7 @@ exports.list_all_projects = (req, res) => {
       res.json(projects);
     }
   );
-};
+}
 
 exports.create_a_project = (req, res) => {
   var new_project = new Project(req.body);
@@ -29,7 +29,7 @@ exports.create_a_project = (req, res) => {
       );
     }
   );
-};
+}
 
 exports.read_a_project = (req, res) => {
   Project.find(
@@ -43,7 +43,7 @@ exports.read_a_project = (req, res) => {
       res.json(project);
     }
   );
-};
+}
 
 exports.filter_a_project = (req, res) => {
   var params = req.body;
@@ -51,7 +51,7 @@ exports.filter_a_project = (req, res) => {
   var perPage = parseInt(params.perPage);
   delete params.pageNo;
   delete params.perPage;
-  var query = {};
+  var query = {}
   Object.keys(params).forEach(key => {
     var reg = new RegExp(params[key], 'i');
     query[key] = reg;
@@ -75,13 +75,13 @@ exports.filter_a_project = (req, res) => {
             data: data,
             page: pageNo,
             pages: Math.ceil(count / perPage)
-          };
+          }
           res.json(response);
         }
       );
     }
   );
-};
+}
 
 exports.update_a_project = (req, res) => {
   Project.findOneAndUpdate(
@@ -99,7 +99,7 @@ exports.update_a_project = (req, res) => {
       res.json(project);
     }
   );
-};
+}
 
 exports.delete_a_project = (req, res) => {
   Project.remove(
@@ -109,7 +109,7 @@ exports.delete_a_project = (req, res) => {
       res.json({ message: 'Project successfully deleted.' });
     }
   );
-};
+}
 
 exports.page = (req, res) => {
   var pageNo = parseInt(req.params.pageNo);
@@ -133,13 +133,13 @@ exports.page = (req, res) => {
             data: data,
             page: pageNo,
             pages: Math.ceil(count / perPage)
-          };
+          }
           res.json(response);
         }
       );
     }
   );
-};
+}
 
 exports.read_child_projects = (req, res) => {
   Project.findOne({ _id: req.params.projectId })

@@ -75,7 +75,7 @@ exports.viewFolder = (req, res) => {
         path : req.body.folderPath,
         folders : [],
         files : []
-      };
+      }
       var rootFolder = path.normalize(config.uploadPath + req.body.projectID);
       if(!fs.existsSync(rootFolder)) {
         fs.mkdirSync(
@@ -151,7 +151,7 @@ exports.newFolder = (req, res) => {
       }
     }
   })();
-};
+}
 
 exports.delFolder = (req, res) => {
   if(
@@ -245,7 +245,7 @@ exports.movItem = (req, res) => {
         var obj = {
           moved : [],
           failed : []
-        };
+        }
         newPath.forEach((newItem, index) => {
           var dirOldPath = req.body.projectID + '/' + oldPath[index];
           var dirNewPath = req.body.projectID + '/' + newItem;
@@ -349,7 +349,7 @@ exports.search = (req, res) => {
         path : '/',
         folders : [],
         files : []
-      };
+      }
       if(!fs.existsSync(rootFolder)) {
         fs.mkdirSync(
           rootFolder,
@@ -408,4 +408,4 @@ exports.requirements_download = (req, res) => {
       }
     }
   })();
-};
+}

@@ -58,7 +58,7 @@ exports.list_all_departments = (req, res) => {
       res.json(departments);
     }
   );
-};
+}
 
 exports.create_a_department = (req, res) => {
   var new_department = new Department(req.body);
@@ -73,7 +73,7 @@ exports.create_a_department = (req, res) => {
       res.json(obj);
     }
   );
-};
+}
 
 exports.read_a_department = (req, res) => {
   Department.findById(
@@ -84,7 +84,7 @@ exports.read_a_department = (req, res) => {
       res.json(department);
     }
   );
-};
+}
 
 exports.update_a_department = (req, res) => {
   Department.findOneAndUpdate(
@@ -99,7 +99,7 @@ exports.update_a_department = (req, res) => {
       res.json(department);
     }
   );
-};
+}
 
 exports.delete_a_department = (req, res) => {
   (async () => {
@@ -140,4 +140,4 @@ exports.delete_a_department = (req, res) => {
       return;
     }
   })();
-};
+}

@@ -15,7 +15,7 @@ exports.list_all_leaveRequests = (req, res) => {
       res.json(leaveRequests);
     }
   );
-};
+}
 
 exports.create_a_leaveRequest = (req, res) => {
   var new_leaveRequest = new LeaveRequest(req.body);
@@ -27,7 +27,7 @@ exports.create_a_leaveRequest = (req, res) => {
       res.json(obj);
     }
   );
-};
+}
 
 exports.read_a_leaveRequest = (req, res) => {
   LeaveRequest.findById(
@@ -38,7 +38,7 @@ exports.read_a_leaveRequest = (req, res) => {
       res.json(leaveRequest);
     }
   );
-};
+}
 
 exports.update_a_leaveRequest = (req, res) => {
   LeaveRequest.findOneAndUpdate(
@@ -53,7 +53,7 @@ exports.update_a_leaveRequest = (req, res) => {
       res.json(leaveRequest);
     }
   );
-};
+}
 
 exports.delete_a_leaveRequest = (req, res) => {
   LeaveRequest.remove(
@@ -63,4 +63,4 @@ exports.delete_a_leaveRequest = (req, res) => {
       res.json({ message: 'Leave Request successfully deleted.' });
     }
   );
-};
+}

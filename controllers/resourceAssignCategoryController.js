@@ -22,7 +22,7 @@ exports.list_all_rac = (req, res) => {
       res.json(racs);
     }
   );
-};
+}
 
 exports.create_a_rac = (req, res) => {
   var new_rac = new RecAssignCat(req.body);
@@ -37,7 +37,7 @@ exports.create_a_rac = (req, res) => {
       res.json(obj);
     }
   );
-};
+}
 
 exports.read_a_rac = (req, res) => {
   RecAssignCat.findById(req.params.racId)
@@ -48,7 +48,7 @@ exports.read_a_rac = (req, res) => {
       res.json(rac);
     }
   );
-};
+}
 
 exports.update_a_rac = (req, res) => {
   RecAssignCat.findOneAndUpdate(
@@ -63,7 +63,7 @@ exports.update_a_rac = (req, res) => {
       res.json(rac);
     }
   );
-};
+}
 
 exports.delete_a_rac = (req, res) => {
   (async () => {
@@ -86,4 +86,4 @@ exports.delete_a_rac = (req, res) => {
       return;
     }
   })();
-};
+}

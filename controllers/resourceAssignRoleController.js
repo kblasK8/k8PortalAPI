@@ -22,7 +22,7 @@ exports.list_all_rar = (req, res) => {
       res.json(rars);
     }
   );
-};
+}
 
 exports.create_a_rar = (req, res) => {
   var new_rar = new RecAssignRole(req.body);
@@ -37,7 +37,7 @@ exports.create_a_rar = (req, res) => {
       res.json(obj);
     }
   );
-};
+}
 
 exports.read_a_rar = (req, res) => {
   RecAssignRole.findById(
@@ -49,7 +49,7 @@ exports.read_a_rar = (req, res) => {
       res.json(obj);
     }
   );
-};
+}
 
 exports.update_a_rar = (req, res) => {
   RecAssignRole.findOneAndUpdate(
@@ -64,7 +64,7 @@ exports.update_a_rar = (req, res) => {
       res.json(rar);
     }
   );
-};
+}
 
 exports.delete_a_rar = (req, res) => {
   (async () => {
@@ -87,4 +87,4 @@ exports.delete_a_rar = (req, res) => {
       return;
     }
   })();
-};
+}

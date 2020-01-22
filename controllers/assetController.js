@@ -11,7 +11,7 @@ exports.list_all_assets = (req, res) => {
       res.json(assets);
     }
   );
-};
+}
 
 exports.create_a_asset = (req, res) => {
   var new_asset = new Asset(req.body);
@@ -29,7 +29,7 @@ exports.create_a_asset = (req, res) => {
       );
     }
   );
-};
+}
 
 exports.read_a_asset = (req, res) => {
   Asset.find(
@@ -43,7 +43,7 @@ exports.read_a_asset = (req, res) => {
       res.json(asset);
     }
   );
-};
+}
 
 exports.update_a_asset = (req, res) => {
   Asset.findOneAndUpdate(
@@ -61,4 +61,4 @@ exports.update_a_asset = (req, res) => {
       res.json(asset);
     }
   );
-};
+}

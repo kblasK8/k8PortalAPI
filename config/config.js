@@ -1,5 +1,4 @@
 module.exports = {
-	baseUrl: 'http://localhost:3000/', // Main API URL
 	mongodbURL: "mongodb://localhost:27017/", // MongoDB URL connection
 	mongoDbOptions: { // MongoDB configuration options
 		useNewUrlParser: true,

@@ -13,7 +13,7 @@ exports.list_all_ra = (req, res) => {
       res.json(ras);
     }
   );
-};
+}
 
 exports.filter_ra = (req, res) => {
   var custom_fields = null;
@@ -38,7 +38,7 @@ exports.filter_ra = (req, res) => {
         custom_populate.toLowerCase() === "true"
       ) {
         var data_arr = [];
-        var data_val = {};
+        var data_val = {}
         var resources_temp = [];
         ras.forEach(
           (value, index) => {
@@ -48,11 +48,11 @@ exports.filter_ra = (req, res) => {
             if(resources) {
               resources.forEach(
                 (v, i) => {
-                  var resource_obj = {};
+                  var resource_obj = {}
                   resource_obj._id = v._id;
                   resource_obj.role_id = v.role._id;
                   resource_obj.role = v.role.name;
-                  var account_info = {};
+                  var account_info = {}
                   account_info = JSON.stringify(v.account_id);
                   account_info = JSON.parse(account_info);
                   for(var property in account_info) {
@@ -76,7 +76,7 @@ exports.filter_ra = (req, res) => {
       }
     }
   );
-};
+}
 
 exports.create_a_ra = (req, res) => {
   var new_ra = new ResourceAssignment(req.body);
@@ -95,7 +95,7 @@ exports.create_a_ra = (req, res) => {
       );
     }
   );
-};
+}
 
 exports.read_a_ra = (req, res) => {
   ResourceAssignment.findById(req.params.raId)
@@ -108,7 +108,7 @@ exports.read_a_ra = (req, res) => {
       res.json(ra);
     }
   );
-};
+}
 
 exports.update_a_ra = (req, res) => {
   req.body.updated_date = new moment().format();
@@ -124,7 +124,7 @@ exports.update_a_ra = (req, res) => {
       res.json(ra);
     }
   );
-};
+}
 
 exports.delete_a_ra = (req, res) => {
   ResourceAssignment.remove(
@@ -134,4 +134,4 @@ exports.delete_a_ra = (req, res) => {
       res.json({ message: 'Resource assignment successfully deleted.' });
     }
   );
-};
+}
