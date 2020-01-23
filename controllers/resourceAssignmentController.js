@@ -46,6 +46,7 @@ exports.filter_ra = (req, res) => {
             data_val.project_id = value.project_id;
             var resources = value.resources;
             if(resources) {
+              console.log(resources);
               resources.forEach(
                 (v, i) => {
                   var resource_obj = {}
