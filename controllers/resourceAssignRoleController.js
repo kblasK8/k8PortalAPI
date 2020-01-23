@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const RecAssignRole = require('../models/resourceAssignmentRoleModel');
 const ResourceAssignment = require('../models/resourceAssignmentModel');
-var countUseResourceAssignment = (rarId) => {
+var countUseResourceAssignment = (rarId, res) => {
   return new Promise((resolve, reject) => {
     ResourceAssignment.countDocuments(
       { 'resources.role' : rarId },
@@ -68,7 +68,7 @@ exports.update_a_rar = (req, res) => {
 
 exports.delete_a_rar = (req, res) => {
   (async () => {
-    if(! await countUseResourceAssignment(req.params.rarId)) {
+    if(! await countUseResourceAssignment(req.params.rarId, res)) {
       RecAssignRole.remove(
         { _id: req.params.rarId },
         (err, rar) => {

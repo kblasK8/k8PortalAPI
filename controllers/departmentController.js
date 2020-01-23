@@ -3,7 +3,7 @@ const Department = require('../models/departmentModel');
 const Account = require('../models/accountModel');
 const Project = require('../models/projectModel');
 const Wiki = require('../models/wikiModel');
-var getDeptName = (departmentId) => {
+var getDeptName = (departmentId, res) => {
   return new Promise((resolve, reject) => {
     Department.findById(
       departmentId,
@@ -15,7 +15,7 @@ var getDeptName = (departmentId) => {
     );
   });
 }
-var countUseAccount = (deptName) => {
+var countUseAccount = (deptName, res) => {
   return new Promise((resolve, reject) => {
     Account.countDocuments(
       { department : deptName },
@@ -26,7 +26,7 @@ var countUseAccount = (deptName) => {
     );
   });
 }
-var countUseProject = (deptName) => {
+var countUseProject = (deptName, res) => {
   return new Promise((resolve, reject) => {
     Project.countDocuments(
       { department : deptName },
@@ -37,7 +37,7 @@ var countUseProject = (deptName) => {
     );
   });
 }
-var countUseWiki = (deptName) => {
+var countUseWiki = (deptName, res) => {
   return new Promise((resolve, reject) => {
     Wiki.countDocuments(
       { department : deptName },
@@ -103,10 +103,10 @@ exports.update_a_department = (req, res) => {
 
 exports.delete_a_department = (req, res) => {
   (async () => {
-    var deptName = await getDeptName(req.params.departmentId);
-    var countAccount = await countUseAccount(deptName);
-    var countProject = await countUseProject(deptName);
-    var countWiki = await countUseWiki(deptName);
+    var deptName = await getDeptName(req.params.departmentId, res);
+    var countAccount = await countUseAccount(deptName, res);
+    var countProject = await countUseProject(deptName, res);
+    var countWiki = await countUseWiki(deptName, res);
     var usedIn = "";
     var bln = true;
     if(countAccount) {

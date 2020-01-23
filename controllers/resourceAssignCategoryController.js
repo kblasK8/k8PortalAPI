@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const RecAssignCat = require('../models/resourceAssignmentCategoryModel');
 const Project = require('../models/projectModel');
-var countUseProject = (racId) => {
+var countUseProject = (racId, res) => {
   return new Promise((resolve, reject) => {
     Project.countDocuments(
       { project_category : racId },
@@ -67,7 +67,7 @@ exports.update_a_rac = (req, res) => {
 
 exports.delete_a_rac = (req, res) => {
   (async () => {
-    if(! await countUseProject(req.params.racId)) {
+    if(! await countUseProject(req.params.racId, res)) {
       RecAssignCat.remove(
         { _id: req.params.racId },
         (err, rac) => {
