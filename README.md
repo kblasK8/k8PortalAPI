@@ -152,7 +152,7 @@ ssh -i /path/to/you/PEM/key your_username@52.74.172.38
 cd /var/www/html/api/
 ```
 
-3. Pull your changes from GIT. Enter this sudo password after `Jp@m1tt@n`.
+3. Pull your changes from GIT. Enter sudo password base on your `jumpcloud` account.
 ```
 sudo git pull
 ```
