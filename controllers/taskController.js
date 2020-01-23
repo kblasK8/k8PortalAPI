@@ -77,7 +77,7 @@ exports.update_a_task = (req, res) => {
             var tasksRemaining = 0;
             tasks.forEach(
               (item, index) => {
-                var status = item.status
+                var status = item._id;
                 if(status.toLowerCase() === "done"){
                   tasksDone += item.total;
                 } else {
