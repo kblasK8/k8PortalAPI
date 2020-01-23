@@ -50,7 +50,7 @@ exports.filter_ra = (req, res) => {
                 (v, i) => {
                   var resource_obj = {}
                   resource_obj._id = v._id;
-                  if(v.role._id) {
+                  if(v.role) {
                     resource_obj.role_id = v.role._id;
                   }
                   resource_obj.role = v.role.name;
