@@ -77,15 +77,12 @@ exports.update_a_task = (req, res) => {
             var tasksRemaining = 0;
             tasks.forEach(
               (item, index) => {
-                item._id.forEach(
-                  (i, j) => {
-                    if(i.toLowerCase() === "done"){
-                      tasksDone += item.total;
-                    } else {
-                      tasksRemaining += item.total;
-                    }
-                  }
-                );
+                var status = item.status
+                if(status.toLowerCase() === "done"){
+                  tasksDone += item.total;
+                } else {
+                  tasksRemaining += item.total;
+                }
               }
             );
             var progress = Math.floor((tasksDone / (tasksDone + tasksRemaining)) * 100);
