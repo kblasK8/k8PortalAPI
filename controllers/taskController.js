@@ -58,46 +58,51 @@ exports.update_a_task = (req, res) => {
     },
     (err, task) => {
       if(err) { res.send(err); }
-      var projectId = task.project_id;
-      Task.aggregate([
-        {
-          $match : { project_id : mongoose.Types.ObjectId(projectId) }
-        },
-        {
-          $group : {
-            _id: "$status",
-            total: { $sum: 1 }
+      try {
+        var projectId = task.project_id;
+        Task.aggregate([
+          {
+            $match : { project_id : mongoose.Types.ObjectId(projectId) }
+          },
+          {
+            $group : {
+              _id: "$status",
+              total: { $sum: 1 }
+            }
           }
-        }
-      ]).exec(
-        (err, tasks) => {
-          if(err) { res.send(err); }
-          var tasksDone = 0;
-          var tasksRemaining = 0;
-          tasks.forEach(
-            (item, index) => {
-              item._id.forEach(
-                (i, j) => {
-                  if(i.toLowerCase() === "done"){
-                    tasksDone += item.total;
-                  } else {
-                    tasksRemaining += item.total;
+        ]).exec(
+          (err, tasks) => {
+            if(err) { res.send(err); }
+            var tasksDone = 0;
+            var tasksRemaining = 0;
+            tasks.forEach(
+              (item, index) => {
+                item._id.forEach(
+                  (i, j) => {
+                    if(i.toLowerCase() === "done"){
+                      tasksDone += item.total;
+                    } else {
+                      tasksRemaining += item.total;
+                    }
                   }
-                }
-              );
-            }
-          );
-          var progress = Math.floor((tasksDone / (tasksDone + tasksRemaining)) * 100);
-          Project.findOneAndUpdate(
-            { _id: projectId },
-            { "progress" : progress },
-            { new: true },
-            (err, project) => {
-              if(err) { res.send(err); }
-            }
-          );
-        }
-      );
+                );
+              }
+            );
+            var progress = Math.floor((tasksDone / (tasksDone + tasksRemaining)) * 100);
+            Project.findOneAndUpdate(
+              { _id: projectId },
+              { "progress" : progress },
+              { new: true },
+              (err, project) => {
+                if(err) { res.send(err); }
+              }
+            );
+          }
+        );
+      }
+      catch (e) {
+        console.log(e);
+      }
       res.json(task);
     }
   );

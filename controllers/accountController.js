@@ -88,7 +88,7 @@ exports.list_all_account_by_department = (req, res) => {
       query.push({ "department" : element });
     });
   } else {
-    query = [ 
+    query = [
       { "department" : department }
     ];
   }
