@@ -46,12 +46,13 @@ exports.filter_ra = (req, res) => {
             data_val.project_id = value.project_id;
             var resources = value.resources;
             if(resources) {
-              console.log(resources);
               resources.forEach(
                 (v, i) => {
                   var resource_obj = {}
                   resource_obj._id = v._id;
-                  resource_obj.role_id = v.role._id;
+                  if(v.role._id) {
+                    resource_obj.role_id = v.role._id;
+                  }
                   resource_obj.role = v.role.name;
                   var account_info = {}
                   account_info = JSON.stringify(v.account_id);
