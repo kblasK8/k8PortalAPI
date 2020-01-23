@@ -52,8 +52,8 @@ exports.filter_ra = (req, res) => {
                   resource_obj._id = v._id;
                   if(v.role) {
                     resource_obj.role_id = v.role._id;
+                    resource_obj.role = v.role.name;
                   }
-                  resource_obj.role = v.role.name;
                   var account_info = {}
                   account_info = JSON.stringify(v.account_id);
                   account_info = JSON.parse(account_info);
