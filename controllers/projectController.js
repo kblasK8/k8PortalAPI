@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const Project = require('../models/projectModel');
+const ResourceAssignment = require('../models/resourceAssignmentModel');
 
 exports.list_all_projects = (req, res) => {
   Project.find()
@@ -125,18 +126,96 @@ exports.page = (req, res) => {
   .exec(
     (err, data) => {
       if(err) { res.send(err); }
-      Project.estimatedDocumentCount()
-      .exec(
-        (err, count) => {
-          if(err) { res.send(err); }
-          var response = {
-            data: data,
-            page: pageNo,
-            pages: Math.ceil(count / perPage)
+      var resourcesArr = [];
+      var getResources = (project_id) => {
+        return new Promise((resolve, reject) => {
+          ResourceAssignment.find({ project_id : project_id })
+          .populate('resources.account_id', 'first_name middle_name last_name')
+          .populate('resources.role', '_id name')
+          .exec(
+            (err, ras) => {
+              resolve(ras);
+            }
+          );
+        });
+      }
+      var mapNames = (resPerProj, rObj) => {
+        return new Promise((resolve, reject) => {
+          for (var i = 0; i < resPerProj.length; i++) {
+            if(resPerProj[i].resources) {
+              var resDetails = resPerProj[i].resources;
+              for (var i = 0; i < resDetails.length; i++) {
+                if(resDetails[i].role) {
+                  if(resDetails[i].role.name.toLowerCase() == "primary") {
+                    rObj.primary.push(
+                      (
+                        resDetails[i].account_id.first_name + 
+                        " " + 
+                        resDetails[i].account_id.middle_name +
+                        " " +
+                        resDetails[i].account_id.last_name
+                      ).replace(/ undefined+/g, '')
+                    );
+                  }
+                  if(resDetails[i].role.name.toLowerCase() == "secondary") {
+                    rObj.secondary.push(
+                      (
+                        resDetails[i].account_id.first_name + 
+                        " " + 
+                        resDetails[i].account_id.middle_name +
+                        " " +
+                        resDetails[i].account_id.last_name
+                      ).replace(/ undefined+/g, '')
+                    );
+                  }
+                }//if has role
+              }//for
+            }
           }
-          res.json(response);
-        }
-      );
+          resolve(rObj);
+        });
+      }
+      var mapProjIDResources = (data, resourcesArr) => {
+        return new Promise((resolve, reject) => {
+          var mapData = data.map(item => {
+            var container = {};
+            for (var i = 0; i < resourcesArr.length; i++) {
+              if(item._id == resourcesArr[i].project_id) {
+                container = Object.assign({}, item._doc);
+                container.primary = resourcesArr[i].primary;
+                container.secondary = resourcesArr[i].secondary;
+                break;
+              }
+            }
+            return container;
+          });
+          resolve(mapData);
+        });
+      }
+      (async () => {
+        for (var i = 0; i < data.length; i++) {
+          var rObj = {
+            project_id : data[i]._id,
+            primary : [],
+            secondary :[]
+          }
+          var rPer = await getResources(data[i]._id);
+          rPer.length ? resourcesArr.push(await mapNames(rPer, rObj)) : resourcesArr.push(rObj);
+        }//for
+        data = await mapProjIDResources(data, resourcesArr);
+        Project.estimatedDocumentCount()
+        .exec(
+          (err, count) => {
+            if(err) { res.send(err); }
+            var response = {
+              data: data,
+              page: pageNo,
+              pages: Math.ceil(count / perPage)
+            }
+            res.json(response);
+          }
+        );
+      })();
     }
   );
 }

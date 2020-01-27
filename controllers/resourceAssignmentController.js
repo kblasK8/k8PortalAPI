@@ -38,7 +38,7 @@ exports.filter_ra = (req, res) => {
         custom_populate.toLowerCase() === "true"
       ) {
         var data_arr = [];
-        var data_val = {}
+        var data_val = {};
         var resources_temp = [];
         ras.forEach(
           (value, index) => {
