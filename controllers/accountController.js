@@ -8,6 +8,21 @@ const { promisify } = require('util');
 const unlinkAsync = promisify(fs.unlink);
 const config = require('../config/config');
 const secretKey = config.secretKey;
+var concatNamesJob = (item) => {
+  var acc = Object.assign({}, item._doc);
+  acc.fullname = (
+    acc.first_name + " " + 
+    acc.middle_name + " " + 
+    acc.last_name
+  ).replace(/ undefined+/g, '');
+  acc.fullnamePos = (
+    acc.first_name + " " + 
+    acc.middle_name + " " + 
+    acc.last_name + " : " + 
+    acc.job_role
+  ).replace(/ undefined+/g, '');
+  return acc;
+}
 
 exports.login_account = (req, res) => {
   var email = req.body.email;
@@ -62,7 +77,7 @@ exports.auth_me = (req, res) => {
       { "password" : 0, "__v" : 0 },
       (err, account) => {
         if(err) { res.send(err); }
-        res.json(account);
+        res.json(concatNamesJob(account));
       }
     );
   });
@@ -74,7 +89,10 @@ exports.list_all_accounts = (req, res) => {
     { "password" : 0, "__v" : 0 },
     (err, accounts) => {
       if(err) { res.send(err); }
-      res.json(accounts);
+      var acctsWithNamesPos = accounts.map(item => {
+        return concatNamesJob(item);
+      });
+      res.json(acctsWithNamesPos);
     }
   );
 }
