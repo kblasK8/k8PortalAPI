@@ -145,6 +145,7 @@ exports.page = (req, res) => {
         return new Promise((resolve, reject) => {
           for (var i = 0; i < resPerProj.length; i++) {
             var resDetails = resPerProj[i].resources;
+            console.log(resDetails);
             for (var i = 0; i < resDetails.length; i++) {
               if(resDetails[i].role.name.toLowerCase() == "primary") {
                 rObj.primary.push(
