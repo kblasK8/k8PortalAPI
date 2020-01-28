@@ -204,9 +204,15 @@ exports.page = (req, res) => {
             secondary :[]
           }
           var rPer = await getResources(data[i]._id);
-          console.log("Pushing data...");
-          rPer.length ? resourcesArr.push(await mapNames(rPer, rObj)) : resourcesArr.push(rObj);
+          if(rPer.length) {
+            console.log("Resources found...");
+            resourcesArr.push(await mapNames(rPer, rObj))
+          } else {
+            console.log("No resources...");
+            resourcesArr.push(rObj);
+          }
         }//for
+        console.log("Consolidating Project and data...");
         data = await mapProjIDResources(data, resourcesArr);
         Project.estimatedDocumentCount()
         .exec(
