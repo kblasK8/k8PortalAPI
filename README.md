@@ -103,6 +103,7 @@ mongoimport --db PortalDB --collection resourceassignmentroles --type json --fil
 
 After that, got to mongo shell by typing `mongo` to your terminal / command prompt then run the below commands to add unique keys.
 ```
+use PortalDB;
 db.getCollection('departments').createIndex({ name: 1 }, { sparse: true, unique: true });
 db.getCollection('resourceassignmentroles').createIndex({ name: 1 }, { sparse: true, unique: true });
 db.getCollection('resourceassignmentcategories').createIndex({ name: 1 }, { sparse: true, unique: true });

@@ -126,6 +126,7 @@ exports.page = (req, res) => {
   .exec(
     (err, data) => {
       if(err) { res.send(err); }
+      console.log("Projects Data queried...");
       var resourcesArr = [];
       var getResources = (project_id) => {
         return new Promise((resolve, reject) => {
@@ -134,6 +135,7 @@ exports.page = (req, res) => {
           .populate('resources.role', '_id name')
           .exec(
             (err, ras) => {
+              console.log("Returning resources...");
               resolve(ras);
             }
           );
@@ -172,6 +174,7 @@ exports.page = (req, res) => {
               }//for
             }
           }
+          console.log("Returning map names...");
           resolve(rObj);
         });
       }
@@ -189,6 +192,7 @@ exports.page = (req, res) => {
             }
             return container;
           });
+          console.log("Returning projects with map names...");
           resolve(mapData);
         });
       }
@@ -200,6 +204,7 @@ exports.page = (req, res) => {
             secondary :[]
           }
           var rPer = await getResources(data[i]._id);
+          console.log("Pushing data...");
           rPer.length ? resourcesArr.push(await mapNames(rPer, rObj)) : resourcesArr.push(rObj);
         }//for
         data = await mapProjIDResources(data, resourcesArr);
@@ -212,6 +217,7 @@ exports.page = (req, res) => {
               page: pageNo,
               pages: Math.ceil(count / perPage)
             }
+            console.log("Returning response...");
             res.json(response);
           }
         );
