@@ -101,6 +101,13 @@ mongoimport --db PortalDB --collection resourceassignmentcategories --type json 
 mongoimport --db PortalDB --collection resourceassignmentroles --type json --file resourceassignmentroles.json --legacy
 ```
 
+After that, got to mongo shell by typing `mongo` to your terminal / command prompt then run the below commands to add unique keys.
+```
+db.getCollection('departments').createIndex({ name: 1 }, { sparse: true, unique: true });
+db.getCollection('resourceassignmentroles').createIndex({ name: 1 }, { sparse: true, unique: true });
+db.getCollection('resourceassignmentcategories').createIndex({ name: 1 }, { sparse: true, unique: true });
+```
+
 9. In your command prompt or terminal, you are now ready to run the API. Up to one folder if you are inside the directory of migration. Else skip this step.
 ```
 cd ..
