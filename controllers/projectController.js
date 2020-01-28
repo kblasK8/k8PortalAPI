@@ -145,27 +145,27 @@ exports.page = (req, res) => {
         return new Promise((resolve, reject) => {
           for (var i = 0; i < resPerProj.length; i++) {
             var resDetails = resPerProj[i].resources;
-            console.log(resDetails);
-            for (var i = 0; i < resDetails.length; i++) {
-              if(resDetails[i].role.name.toLowerCase() == "primary") {
+            for (var k = 0; k < resDetails.length; k++) {
+              console.log(resDetails[k]);
+              if(resDetails[k].role.name.toLowerCase() == "primary") {
                 rObj.primary.push(
                   (
-                    resDetails[i].account_id.first_name + 
+                    resDetails[k].account_id.first_name + 
                     " " + 
-                    resDetails[i].account_id.middle_name +
+                    resDetails[k].account_id.middle_name +
                     " " +
-                    resDetails[i].account_id.last_name
+                    resDetails[k].account_id.last_name
                   ).replace(/ undefined+/g, '')
                 );
               }
-              if(resDetails[i].role.name.toLowerCase() == "secondary") {
+              if(resDetails[k].role.name.toLowerCase() == "secondary") {
                 rObj.secondary.push(
                   (
-                    resDetails[i].account_id.first_name + 
+                    resDetails[k].account_id.first_name + 
                     " " + 
-                    resDetails[i].account_id.middle_name +
+                    resDetails[k].account_id.middle_name +
                     " " +
-                    resDetails[i].account_id.last_name
+                    resDetails[k].account_id.last_name
                   ).replace(/ undefined+/g, '')
                 );
               }
