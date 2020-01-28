@@ -126,7 +126,6 @@ exports.page = (req, res) => {
   .exec(
     (err, data) => {
       if(err) { res.send(err); }
-      console.log("Projects Data queried...");
       var resourcesArr = [];
       var getResources = (project_id) => {
         return new Promise((resolve, reject) => {
@@ -135,7 +134,6 @@ exports.page = (req, res) => {
           .populate('resources.role', '_id name')
           .exec(
             (err, ras) => {
-              console.log("Returning resources...");
               resolve(ras);
             }
           );
@@ -146,7 +144,6 @@ exports.page = (req, res) => {
           for (var i = 0; i < resPerProj.length; i++) {
             var resDetails = resPerProj[i].resources;
             for (var k = 0; k < resDetails.length; k++) {
-              console.log(resDetails[k]);
               if(resDetails[k].role.name.toLowerCase() == "primary") {
                 rObj.primary.push(
                   (
@@ -171,7 +168,6 @@ exports.page = (req, res) => {
               }
             }//for
           }
-          console.log("Returning map names...");
           resolve(rObj);
         });
       }
@@ -189,7 +185,6 @@ exports.page = (req, res) => {
             }
             return container;
           });
-          console.log("Returning projects with map names...");
           resolve(Promise.all(mapData));
         });
       }
@@ -202,14 +197,11 @@ exports.page = (req, res) => {
           }
           var rPer = await getResources(data[i]._id);
           if(rPer.length) {
-            console.log("Resources found...");
             resourcesArr.push(await mapNames(rPer, rObj))
           } else {
-            console.log("No resources...");
             resourcesArr.push(rObj);
           }
         }//for
-        console.log("Consolidating Project and data...");
         data = await mapProjIDResources(data, resourcesArr);
         Project.estimatedDocumentCount()
         .exec(
@@ -220,7 +212,6 @@ exports.page = (req, res) => {
               page: pageNo,
               pages: Math.ceil(count / perPage)
             }
-            console.log("Returning response...");
             res.json(response);
           }
         );
