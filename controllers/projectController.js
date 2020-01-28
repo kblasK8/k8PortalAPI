@@ -144,35 +144,31 @@ exports.page = (req, res) => {
       var mapNames = (resPerProj, rObj) => {
         return new Promise((resolve, reject) => {
           for (var i = 0; i < resPerProj.length; i++) {
-            if(resPerProj[i].resources) {
-              var resDetails = resPerProj[i].resources;
-              for (var i = 0; i < resDetails.length; i++) {
-                if(resDetails[i].role) {
-                  if(resDetails[i].role.name.toLowerCase() == "primary") {
-                    rObj.primary.push(
-                      (
-                        resDetails[i].account_id.first_name + 
-                        " " + 
-                        resDetails[i].account_id.middle_name +
-                        " " +
-                        resDetails[i].account_id.last_name
-                      ).replace(/ undefined+/g, '')
-                    );
-                  }
-                  if(resDetails[i].role.name.toLowerCase() == "secondary") {
-                    rObj.secondary.push(
-                      (
-                        resDetails[i].account_id.first_name + 
-                        " " + 
-                        resDetails[i].account_id.middle_name +
-                        " " +
-                        resDetails[i].account_id.last_name
-                      ).replace(/ undefined+/g, '')
-                    );
-                  }
-                }//if has role
-              }//for
-            }
+            var resDetails = resPerProj[i].resources;
+            for (var i = 0; i < resDetails.length; i++) {
+              if(resDetails[i].role.name.toLowerCase() == "primary") {
+                rObj.primary.push(
+                  (
+                    resDetails[i].account_id.first_name + 
+                    " " + 
+                    resDetails[i].account_id.middle_name +
+                    " " +
+                    resDetails[i].account_id.last_name
+                  ).replace(/ undefined+/g, '')
+                );
+              }
+              if(resDetails[i].role.name.toLowerCase() == "secondary") {
+                rObj.secondary.push(
+                  (
+                    resDetails[i].account_id.first_name + 
+                    " " + 
+                    resDetails[i].account_id.middle_name +
+                    " " +
+                    resDetails[i].account_id.last_name
+                  ).replace(/ undefined+/g, '')
+                );
+              }
+            }//for
           }
           console.log("Returning map names...");
           resolve(rObj);
@@ -193,7 +189,7 @@ exports.page = (req, res) => {
             return container;
           });
           console.log("Returning projects with map names...");
-          resolve(mapData);
+          resolve(Promise.all(mapData));
         });
       }
       (async () => {
