@@ -48,6 +48,10 @@ var AccountSchema = new Schema({
   profilePhoto: {
     type: String,
   },
+  manager: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Account'
+  },
   created_date: {
     type: Date,
     default: Date.now

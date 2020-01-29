@@ -8,7 +8,7 @@ const { promisify } = require('util');
 const unlinkAsync = promisify(fs.unlink);
 const config = require('../config/config');
 const secretKey = config.secretKey;
-var concatNamesJob = (item) => {
+var concatNamesJobManager = (item) => {
   var acc = Object.assign({}, item._doc);
   acc.fullname = (
     acc.first_name + " " + 
@@ -21,6 +21,13 @@ var concatNamesJob = (item) => {
     acc.last_name + " : " + 
     acc.job_role
   ).replace(/ undefined+/g, '');
+  if(acc.manager) {
+    acc.manager = (
+      acc.manager.first_name + " " + 
+      acc.manager.middle_name + " " + 
+      acc.manager.last_name
+    ).replace(/ undefined+/g, '');
+  }
   return acc;
 }
 
@@ -77,20 +84,21 @@ exports.auth_me = (req, res) => {
       { "password" : 0, "__v" : 0 },
       (err, account) => {
         if(err) { res.send(err); }
-        res.json(concatNamesJob(account));
+        res.json(concatNamesJobManager(account));
       }
     );
   });
 }
 
 exports.list_all_accounts = (req, res) => {
-  Account.find(
-    {},
-    { "password" : 0, "__v" : 0 },
+  Account.find()
+  .select('-password -__v')
+  .populate('manager', 'first_name middle_name last_name')
+  .exec(
     (err, accounts) => {
       if(err) { res.send(err); }
       var acctsWithNamesPos = accounts.map(item => {
-        return concatNamesJob(item);
+        return concatNamesJobManager(item);
       });
       res.json(acctsWithNamesPos);
     }
