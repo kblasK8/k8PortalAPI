@@ -69,6 +69,7 @@ cd /path/to/your/target/folder
 ```
 git clone https://github.com/kblasK8/k8PortalAPI.git
 git branch dev origin/dev
+git checkout dev
 ```
 
 5. After cloning, go inside to the project folder.
@@ -79,6 +80,7 @@ cd k8PortalAPI
 6. Install node modules for project library dependecies.
 ```
 npm install
+npm install pm2 -g
 ```
 
 7. Start MongoDB Community Server. For Mac or Linux you can run the migration shell script instead to install MongoDB, import starting data and run the ervice. In your terminal from inside the project folder run the below command.
