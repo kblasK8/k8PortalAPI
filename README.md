@@ -83,7 +83,7 @@ npm install
 npm install pm2 -g
 ```
 
-7. Start MongoDB Community Server. For Mac or Linux you can run the migration shell script instead to install MongoDB, import starting data and run the ervice. In your terminal from inside the project folder run the below command.
+7. Start MongoDB Community Server. For Mac or Linux you can run the migration shell script instead to install MongoDB, import initial data and run the service. In your terminal from inside the project folder run the below command.
 ```
 sh migration/migrate.sh
 ```
