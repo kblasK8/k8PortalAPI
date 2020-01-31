@@ -98,6 +98,7 @@ cd migration
 ```
 Then run the following MongoDB import commands
 ```
+mongoimport --db PortalDB --collection accounts --type json --file accounts.json --legacy
 mongoimport --db PortalDB --collection departments --type json --file departments.json --legacy
 mongoimport --db PortalDB --collection resourceassignmentcategories --type json --file resourceassignmentcategories.json --legacy
 mongoimport --db PortalDB --collection resourceassignmentroles --type json --file resourceassignmentroles.json --legacy

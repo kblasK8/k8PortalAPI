@@ -22,11 +22,16 @@ var concatNamesJobManager = (item) => {
     acc.job_role
   ).replace(/ undefined+/g, '');
   if(acc.manager) {
-    acc.manager = (
-      acc.manager.first_name + " " + 
-      acc.manager.middle_name + " " + 
-      acc.manager.last_name
-    ).replace(/ undefined+/g, '');
+    acc.manager_id = acc.manager._id;
+    if(acc.manager.first_name) {
+      acc.manager = (
+        acc.manager.first_name + " " + 
+        acc.manager.middle_name + " " + 
+        acc.manager.last_name
+      ).replace(/ undefined+/g, '');
+    } else {
+      delete acc.manager;
+    }
   }
   return acc;
 }
@@ -93,7 +98,7 @@ exports.auth_me = (req, res) => {
 exports.list_all_accounts = (req, res) => {
   Account.find()
   .select('-password -__v')
-  .populate('manager', 'first_name middle_name last_name')
+  .populate('manager', '_id first_name middle_name last_name')
   .exec(
     (err, accounts) => {
       if(err) { res.send(err); }
