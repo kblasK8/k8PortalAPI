@@ -8,6 +8,7 @@ const tokenCheck = require('../middleware/tokenCheck');
 var accountController = require('../controllers/accountController');
 var assetController = require('../controllers/assetController');
 var departmentController = require('../controllers/departmentController');
+var holidayController = require('../controllers/holidayController');
 var idpController = require('../controllers/idpController');
 var leaveRequestController = require('../controllers/leaveRequestController');
 var projectController = require('../controllers/projectController');
@@ -60,6 +61,17 @@ router.route('/departments/:departmentId')
   .get(tokenCheck, departmentController.read_a_department)
   .put(tokenCheck, departmentController.update_a_department)
   .delete(tokenCheck, departmentController.delete_a_department);
+
+// HOLIDAY ROUTES //
+router.route('/holiday')
+  .get(tokenCheck, holidayController.list_all_holidays)
+  .post(tokenCheck, holidayController.create_holiday);
+router.route('/holiday/:holidayId')
+  .get(tokenCheck, holidayController.read_holiday)
+  .put(tokenCheck, holidayController.update_holiday)
+  .delete(tokenCheck, holidayController.delete_holiday);
+router.route('/holidayFilter')
+  .post(tokenCheck, holidayController.filter_holiday);
 
 // IDP ROUTES //
 router.route('/idp')

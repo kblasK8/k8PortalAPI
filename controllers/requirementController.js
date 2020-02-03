@@ -1,6 +1,5 @@
 const moment = require('moment');
 const mongoose = require('mongoose');
-const Requirement = require('../models/requirementsModel');
 const ResourceAssignment = require('../models/resourceAssignmentModel');
 const jwt = require('jsonwebtoken');
 const path = require('path');

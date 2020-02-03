@@ -30,20 +30,14 @@ var LeaveRequestSchema = new Schema({
     type: String,
     required: "Kindly enter a remarks."
   },
-  approver: {
-    type: Object,
-    required: "Kindly enter an approver."
-  },
   approver_id: {
-    type: String,
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Account',
     required: "Kindly enter an approver id."
   },
-  requestor: {
-    type: String,
-    required: "Kindly enter a requestor."
-  },
   requestor_id: {
-    type: String,
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Account',
     required: "Kindly enter a requestor id."
   },
   status: {
@@ -53,7 +47,7 @@ var LeaveRequestSchema = new Schema({
   created_date: {
     type: Date,
     default: Date.now
-  },
+  }
 });
 
 module.exports = mongoose.model('LeaveRequest', LeaveRequestSchema);
