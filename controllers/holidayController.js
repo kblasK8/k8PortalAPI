@@ -25,6 +25,9 @@ exports.filter_holiday = (req, res) => {
 }
 
 exports.create_holiday = (req, res) => {
+  if(!req.body.year) {
+    req.body.year = String(moment(req.body.holiday_date,"YYYY/MM/DD").year());
+  }
   var new_holiday = new Holiday(req.body);
   new_holiday.save(
     (err, holidays) => {
