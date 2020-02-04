@@ -4,6 +4,7 @@ const Holiday = require('../models/holidayModel');
 
 exports.list_all_holidays = (req, res) => {
   Holiday.find()
+  .select('-__v')
   .exec(
     (err, holidays) => {
       if(err) { res.send(err); }
@@ -15,6 +16,7 @@ exports.list_all_holidays = (req, res) => {
 exports.filter_holiday = (req, res) => {
   Holiday.find(
     req.body,
+    { "__v" : 0 },
     (err, holidays) => {
       if(err) { res.send(err); }
       res.json(holidays);
@@ -37,6 +39,7 @@ exports.create_holiday = (req, res) => {
 exports.read_holiday = (req, res) => {
   Holiday.findById(
     req.params.holidayId,
+    { "__v" : 0 },
     (err, holiday) => {
       if(err) { res.send(err); }
       res.json(holiday);
