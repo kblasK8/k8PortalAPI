@@ -175,6 +175,9 @@ exports.create_a_account = (req, res) => {
   if(req.body.password) {
     req.body.password = SHA256(req.body.password).toString(CryptoJS.enc.Hex);
   }
+  if(!req.body.manager) {
+    delete req.body.manager;
+  }
   var new_account = new Account(req.body);
   new_account.save(
     (err, account) => {
