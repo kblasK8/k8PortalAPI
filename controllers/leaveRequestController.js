@@ -3,12 +3,7 @@ const LeaveRequest = require('../models/leaveRequestModel');
 
 exports.list_all_leaveRequests = (req, res) => {
   LeaveRequest.find(
-    {
-      $or: [
-        { requestor_id: req.params.leaveRequestId },
-        { approver_id: req.params.leaveRequestId }
-      ]
-    },
+    {},
     { "__v": 0 },
     (err, leaveRequests) => {
       if(err) { res.send(err); }
@@ -18,6 +13,10 @@ exports.list_all_leaveRequests = (req, res) => {
 }
 
 exports.create_a_leaveRequest = (req, res) => {
+  //count leaves to be used
+  
+  //if remaining leaves based on type is less than or equal
+  //to the remaining then save the request
   var new_leaveRequest = new LeaveRequest(req.body);
   new_leaveRequest.save(
     (err, leaveRequest) => {
@@ -27,6 +26,8 @@ exports.create_a_leaveRequest = (req, res) => {
       res.json(obj);
     }
   );
+  //else return an error that request leaves total count
+  //is more than the remaining
 }
 
 exports.read_a_leaveRequest = (req, res) => {

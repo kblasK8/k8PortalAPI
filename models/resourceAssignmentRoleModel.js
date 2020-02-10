@@ -11,7 +11,7 @@ var RarSchema = new Schema({
     unique: true,
     dropDups: true
   },
-  date_created: {
+  created_date: {
     type: Date,
     default: Date.now
   }

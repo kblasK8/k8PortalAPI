@@ -4,27 +4,21 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 var LeaveRequestSchema = new Schema({
-  type: {
-    type: String,
-    required: "Kindly enter a type."
+  leave_type_id: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'LeaveType',
+    required: "Kindly enter a leave type."
+  },
+  total_count: {
+    type: Number
   },
   start_date: {
-    type: {
-        name: Date,
-    },
+    type: Date,
     required: "Kindly enter start date."
   },
   end_date: {
-    type: {
-        name: Date,
-    },
+    type: Date,
     required: "Kindly enter end date."
-  },
-  time_off: {
-    type: {
-        name: String,
-    },
-    required: "Kindly enter a time off."
   },
   remarks: {
     type: String,
@@ -42,11 +36,16 @@ var LeaveRequestSchema = new Schema({
   },
   status: {
     type: String,
-    required: "Kindly enter a status."
+    required: "Kindly enter a status.",
+    enum: ['Pending', 'Approved', 'Rejected'],
+    default: ['Pending']
   },
   created_date: {
     type: Date,
     default: Date.now
+  },
+  updated_date: {
+    type: Date
   }
 });
 

@@ -57,7 +57,6 @@ exports.update_holiday = (req, res) => {
     req.body,
     {
       "fields" : {
-        "password" : 0,
         "__v" : 0
       },
       new : true

@@ -1,12 +1,12 @@
-'use strict'
+'use strict';
 
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
-var RacSchema = new Schema({
+var LeaveTypeSchema = new Schema({
   name: {
     type: String,
-    required: "Provide Resource Assignment Category Name.",
+    required: "Kindly enter a leave type name.",
     index: true,
     unique: true,
     dropDups: true
@@ -17,4 +17,4 @@ var RacSchema = new Schema({
   }
 });
 
-module.exports = mongoose.model('ResourceAssignmentCategory', RacSchema);
+module.exports = mongoose.model('LeaveType', LeaveTypeSchema);

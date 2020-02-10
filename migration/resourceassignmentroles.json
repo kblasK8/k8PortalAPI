@@ -1,2 +1,2 @@
-{ "_id" : ObjectId("5dc4855f0df12763081abc15"), "name" : "Primary", "date_created" : ISODate("2019-11-07T20:58:07.095+0000"), "__v" : NumberInt(0) }
-{ "_id" : ObjectId("5dc485620df12763081abc16"), "name" : "Secondary", "date_created" : ISODate("2019-11-07T20:58:10.590+0000"), "__v" : NumberInt(0) }
+{ "_id" : ObjectId("5dc4855f0df12763081abc15"), "name" : "Primary", "created_date" : ISODate("2019-11-07T20:58:07.095+0000"), "__v" : NumberInt(0) }
+{ "_id" : ObjectId("5dc485620df12763081abc16"), "name" : "Secondary", "created_date" : ISODate("2019-11-07T20:58:10.590+0000"), "__v" : NumberInt(0) }

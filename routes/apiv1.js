@@ -11,6 +11,7 @@ var departmentController = require('../controllers/departmentController');
 var holidayController = require('../controllers/holidayController');
 var idpController = require('../controllers/idpController');
 var leaveRequestController = require('../controllers/leaveRequestController');
+var leaveTypeController = require('../controllers/leaveTypeController');
 var projectController = require('../controllers/projectController');
 var requirementController = require('../controllers/requirementController');
 var resourceAssignCategoryController = require('../controllers/resourceAssignCategoryController');
@@ -83,12 +84,22 @@ router.route('/idp/:idpId')
   .delete(tokenCheck, idpController.delete_a_idp);
 
 // LEAVE REQUEST ROUTES //
-router.route('/leave-request')
-  .post(tokenCheck, leaveRequestController.create_a_leaveRequest);
-router.route('/leave-request/:leaveRequestId')
+router.route('/leaveRequest')
   .get(tokenCheck, leaveRequestController.list_all_leaveRequests)
+  .post(tokenCheck, leaveRequestController.create_a_leaveRequest);
+router.route('/leaveRequest/:leaveRequestId')
+  .get(tokenCheck, leaveRequestController.read_a_leaveRequest)
   .put(tokenCheck, leaveRequestController.update_a_leaveRequest)
   .delete(tokenCheck, leaveRequestController.delete_a_leaveRequest);
+
+// LEAVE TYPES ROUTES //
+router.route('/leaveTypes')
+  .get(tokenCheck, leaveTypeController.list_all_leave_types)
+  .post(tokenCheck, leaveTypeController.create_a_leave_type);
+router.route('/leaveTypes/:leaveTypeID')
+  .get(tokenCheck, leaveTypeController.read_a_leave_type)
+  .put(tokenCheck, leaveTypeController.update_a_leave_type)
+  .delete(tokenCheck, leaveTypeController.delete_a_leave_type);
 
 // PROJECT ROUTES //
 router.route('/projects')
@@ -147,7 +158,7 @@ router.route('/rac')
   .post(tokenCheck, resourceAssignCategoryController.create_a_rac);
 router.route('/rac/:racId')
   .get(tokenCheck, resourceAssignCategoryController.read_a_rac)
-  .put(tokenCheck, tokenCheck, resourceAssignCategoryController.update_a_rac)
+  .put(tokenCheck, resourceAssignCategoryController.update_a_rac)
   .delete(tokenCheck, resourceAssignCategoryController.delete_a_rac);
 
 // RESOURCE ASSIGNMENT ROLE ROUTES //

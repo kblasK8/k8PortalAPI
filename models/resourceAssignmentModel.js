@@ -23,10 +23,10 @@ var ResourceAssignmentSchema = new Schema({
       }
     }
   ],
-  date_updated: {
+  updated_date: {
     type: Date
   },
-  date_created: {
+  created_date: {
     type: Date,
     default: Date.now
   }
