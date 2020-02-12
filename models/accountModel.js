@@ -32,9 +32,10 @@ var AccountSchema = new Schema({
     type: String,
     required: "Provide Account Password."
   },
-  shift: {
-    type: [String],
-    enum: ['GY', 'MID']
+  shift_id: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Shift',
+    required: "Provide a Shift ID."
   },
   type: {
     type: [String],

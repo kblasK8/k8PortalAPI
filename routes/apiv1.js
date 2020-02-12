@@ -17,6 +17,7 @@ var requirementController = require('../controllers/requirementController');
 var resourceAssignCategoryController = require('../controllers/resourceAssignCategoryController');
 var resourceAssignmentController = require('../controllers/resourceAssignmentController');
 var resourceAssignRoleController = require('../controllers/resourceAssignRoleController');
+var shiftController = require('../controllers/shiftController');
 var taskController = require('../controllers/taskController');
 var uploadsController = require('../controllers/uploadsController');
 var wikiController = require('../controllers/wikiController');
@@ -169,6 +170,15 @@ router.route('/rar/:rarId')
   .get(tokenCheck, resourceAssignRoleController.read_a_rar)
   .put(tokenCheck, resourceAssignRoleController.update_a_rar)
   .delete(tokenCheck, resourceAssignRoleController.delete_a_rar);
+
+// SHIFT ROUTES //
+router.route('/shift')
+  .get(tokenCheck, shiftController.list_all_shifts)
+  .post(tokenCheck, shiftController.create_shift);
+router.route('/shift/:shiftId')
+  .get(tokenCheck, shiftController.read_shift)
+  .put(tokenCheck, shiftController.update_shift)
+  .delete(tokenCheck, shiftController.delete_shift);
 
 // TASK ROUTES //
 router.route('/tasks')

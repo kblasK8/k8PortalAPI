@@ -14,7 +14,7 @@ exports.list_all_leaveRequests = (req, res) => {
 
 exports.create_a_leaveRequest = (req, res) => {
   //count leaves to be used
-  
+
   //if remaining leaves based on type is less than or equal
   //to the remaining then save the request
   var new_leaveRequest = new LeaveRequest(req.body);
@@ -26,6 +26,7 @@ exports.create_a_leaveRequest = (req, res) => {
       res.json(obj);
     }
   );
+
   //else return an error that request leaves total count
   //is more than the remaining
 }
