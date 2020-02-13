@@ -4,9 +4,12 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 var ShiftSchema = new Schema({
-  shift_name: {
+  name: {
     type: String,
-    required: "Provide Shift name."
+    required: "Provide Shift name.",
+    index: true,
+    unique: true,
+    dropDups: true
   },
   start_time: {
     type: String,
