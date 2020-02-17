@@ -7,6 +7,24 @@ const Holiday = require('../models/holidayModel');
 const Account = require('../models/accountModel');
 const config = require('../config/config');
 const secretKey = config.secretKey;
+var cleanLeaveRequest = (item) => {
+  var leave = Object.assign({}, item._doc);
+  leave.requestor_fullname = (
+    leave.requestor_id.first_name + " " + 
+    leave.requestor_id.middle_name + " " + 
+    leave.requestor_id.last_name
+  ).replace(/ undefined+/g, '');
+  leave.approver_fullname = (
+    leave.approver_id.first_name + " " + 
+    leave.approver_id.middle_name + " " + 
+    leave.approver_id.last_name
+  ).replace(/ undefined+/g, '');
+  leave.leave_type_name = leave.leave_type_id.name
+  delete leave.requestor_id;
+  delete leave.approver_id;
+  delete leave.leave_type_id;
+  return leave;
+}
 var getDayOffs = (req, res) => {
   return new Promise((resolve, reject) => {
     const tokenHeader = req.headers['authorization'];
@@ -52,23 +70,26 @@ var removeDayOffsAndHolidays = (start_date, end_date, dayOffs, res) => {
 }
 
 exports.list_all_leaveRequests = (req, res) => {
-  LeaveRequest.find(
-    {},
-    { "__v": 0 },
+  LeaveRequest.find()
+  .select('-__v')
+  .populate('leave_type_id', 'name')
+  .populate('approver_id', 'first_name middle_name last_name')
+  .populate('requestor_id', 'first_name middle_name last_name')
+  .exec(
     (err, leaveRequests) => {
       if(err) { res.send(err); }
-      res.json(leaveRequests);
+      var cleanLeaveRequests = leaveRequests.map(item => {
+        return cleanLeaveRequest(item);
+      });
+      res.json(cleanLeaveRequests);
     }
   );
 }
 
 exports.create_a_leaveRequest = (req, res) => {
-  //count leaves to be used
-
   //if remaining leaves based on type is less than or equal
   //to the remaining then save the request
 
-  //count leaves in total
   (async () => {
     var dayOffs = await getDayOffs(req, res);
     req.body.total_count = await removeDayOffsAndHolidays(
@@ -93,12 +114,15 @@ exports.create_a_leaveRequest = (req, res) => {
 }
 
 exports.read_a_leaveRequest = (req, res) => {
-  LeaveRequest.findById(
-    req.params.leaveRequestId,
-    { "__v": 0 },
+  LeaveRequest.findById(req.params.leaveRequestId)
+  .select('-__v')
+  .populate('leave_type_id', 'name')
+  .populate('approver_id', 'first_name middle_name last_name')
+  .populate('requestor_id', 'first_name middle_name last_name')
+  .exec(
     (err, leaveRequest) => {
       if(err) { res.send(err); }
-      res.json(leaveRequest);
+      res.json(cleanLeaveRequest(leaveRequest));
     }
   );
 }
@@ -108,19 +132,27 @@ exports.update_a_leaveRequest = (req, res) => {
     { _id: req.params.leaveRequestId },
     req.body,
     {
-      "fields" : { "__v": 0 },
+      "fields" : { "__v" : 0 },
       new : true
-    },
+    }
+  )
+  .populate('leave_type_id', 'name')
+  .populate('approver_id', 'first_name middle_name last_name')
+  .populate('requestor_id', 'first_name middle_name last_name')
+  .exec(
     (err, leaveRequest) => {
       if(err) { res.send(err); }
-      res.json(leaveRequest);
+      res.json(cleanLeaveRequest(leaveRequest));
     }
   );
 }
 
 exports.delete_a_leaveRequest = (req, res) => {
   LeaveRequest.remove(
-    { _id: req.params.leaveRequestId },
+    {
+      _id: req.params.leaveRequestId,
+      status: ['Pending']
+    },
     (err, leaveRequest) => {
       if(err) { res.send(err); }
       res.json({ message: 'Leave Request successfully deleted.' });
