@@ -1,27 +1,50 @@
 const mongoose = require('mongoose');
 const moment = require('moment');
+const momentbd = require('moment-business-days');
+const jwt = require('jsonwebtoken');
 const LeaveRequest = require('../models/leaveRequestModel');
 const Holiday = require('../models/holidayModel');
 const Account = require('../models/accountModel');
-var removeHoliday = (start_date, end_date, res) => {
+const config = require('../config/config');
+const secretKey = config.secretKey;
+var getDayOffs = (req, res) => {
+  return new Promise((resolve, reject) => {
+    const tokenHeader = req.headers['authorization'];
+    const bearer = tokenHeader.split(' ');
+    const bearerToken = bearer[1];
+    jwt.verify(bearerToken, secretKey, (err, authData) => {
+      Account.findById(authData._id)
+      .select('-_id shift_id.day_offs')
+      .populate('shift_id', 'day_offs -_id')
+      .exec(
+        (err, account) => {
+          if(err) { res.send(err); }
+          resolve(account);
+        }
+      );
+    });
+  });
+}
+var removeDayOffsAndHolidays = (start_date, end_date, dayOffs, res) => {
   return new Promise((resolve, reject) => {
     Holiday.find()
-    .select('-__v')
+    .select('-_id holiday_date')
     .exec(
       (err, holidays) => {
         if(err) { res.send(err); }
-        var mStart = moment(start_date, "YYYY-MM-DD");
-        var mEnd = moment(end_date, "YYYY-MM-DD");
-        var daysLength = Math.abs(mStart.diff(mEnd, 'days')) + 1;
-        var flagDates = [];
+        var holidayDates = [];
         holidays.forEach((item, index) => {
-          if(!flagDates.includes(item.holiday_date)) {
-            if(moment(item.holiday_date).isBetween(mStart, mEnd, null, '[]')) {
-              flagDates.push(item.holiday_date);
-              --daysLength;
-            }
-          }
+          holidayDates.push(item.holiday_date);
         });
+        var workingDays = [0, 1, 2, 3, 4, 5, 6].filter(
+          x => !dayOffs.includes(x)
+        );
+        momentbd.updateLocale('ph', {
+          workingWeekdays: workingDays,
+          holidays: holidayDates,
+          holidayFormat: 'YYYY-MM-DD'
+        });
+        var daysLength = momentbd(start_date, "YYYY-MM-DD").businessDiff(momentbd(end_date, "YYYY-MM-DD"));
         resolve(daysLength);
       }
     );
@@ -47,9 +70,13 @@ exports.create_a_leaveRequest = (req, res) => {
 
   //count leaves in total
   (async () => {
-    var start_date = req.body.start_date;
-    var end_date = req.body.end_date;
-    req.body.total_count = await removeHoliday(start_date, end_date, res);
+    var dayOffs = await getDayOffs(req, res);
+    req.body.total_count = await removeDayOffsAndHolidays(
+      req.body.start_date,
+      req.body.end_date,
+      dayOffs.shift_id.day_offs,
+      res
+    );
     var new_leaveRequest = new LeaveRequest(req.body);
     new_leaveRequest.save(
       (err, leaveRequest) => {

@@ -35,7 +35,7 @@ var LeaveRequestSchema = new Schema({
     required: "Kindly enter a requestor id."
   },
   status: {
-    type: String,
+    type: [String],
     required: "Kindly enter a status.",
     enum: ['Pending', 'Approved', 'Rejected'],
     default: ['Pending']
