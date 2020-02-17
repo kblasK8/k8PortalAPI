@@ -148,14 +148,35 @@ exports.update_a_leaveRequest = (req, res) => {
 }
 
 exports.delete_a_leaveRequest = (req, res) => {
-  LeaveRequest.remove(
+  LeaveRequest.countDocuments(
     {
       _id: req.params.leaveRequestId,
       status: ['Pending']
     },
-    (err, leaveRequest) => {
+    (err, count) => {
       if(err) { res.send(err); }
-      res.json({ message: 'Leave Request successfully deleted.' });
+      if(count) {
+        LeaveRequest.remove(
+          {
+            _id: req.params.leaveRequestId,
+            status: ['Pending']
+          },
+          (err, leaveRequest) => {
+            if(err) { res.send(err); }
+            res.json({ message: 'Leave Request successfully deleted.' });
+          }
+        );
+      } else {
+        res
+        .status(400)
+        .json({
+          statusCode: 400,
+          error: true,
+          msg: "Leave request cannot be deleted."
+        });
+        return;
+      }
     }
   );
+  
 }
