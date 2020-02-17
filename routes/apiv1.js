@@ -10,6 +10,7 @@ var assetController = require('../controllers/assetController');
 var departmentController = require('../controllers/departmentController');
 var holidayController = require('../controllers/holidayController');
 var idpController = require('../controllers/idpController');
+var leaveMasterController = require('../controllers/leaveMasterController');
 var leaveRequestController = require('../controllers/leaveRequestController');
 var leaveTypeController = require('../controllers/leaveTypeController');
 var projectController = require('../controllers/projectController');
@@ -83,6 +84,14 @@ router.route('/idp/:idpId')
   .get(tokenCheck, idpController.read_a_idp)
   .put(tokenCheck, idpController.update_a_idp)
   .delete(tokenCheck, idpController.delete_a_idp);
+
+// LEAVE MASTER ROUTES //
+router.route('/leaveMaster')
+  .get(tokenCheck, leaveMasterController.list_all_leaveMaster)
+  .post(tokenCheck, leaveMasterController.create_a_leaveMaster);
+router.route('/leaveMaster/:leaveMasterId')
+  .get(tokenCheck, leaveMasterController.read_a_leaveMaster)
+  .put(tokenCheck, leaveMasterController.update_a_leaveMaster);
 
 // LEAVE REQUEST ROUTES //
 router.route('/leaveRequest')

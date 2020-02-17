@@ -128,6 +128,7 @@ exports.read_a_leaveRequest = (req, res) => {
 }
 
 exports.update_a_leaveRequest = (req, res) => {
+  //update leave count
   LeaveRequest.findOneAndUpdate(
     { _id: req.params.leaveRequestId },
     req.body,
@@ -178,5 +179,4 @@ exports.delete_a_leaveRequest = (req, res) => {
       }
     }
   );
-  
 }
