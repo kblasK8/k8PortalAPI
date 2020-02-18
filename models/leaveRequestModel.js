@@ -12,6 +12,12 @@ var LeaveRequestSchema = new Schema({
   total_count: {
     type: Number
   },
+  paid_count: {
+    type: Number
+  },
+  unpaid_count: {
+    type: Number
+  },
   start_date: {
     type: Date,
     required: "Kindly enter start date."

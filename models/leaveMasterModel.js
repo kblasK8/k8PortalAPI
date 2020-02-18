@@ -27,8 +27,7 @@ var LeaveMasterSchema = new Schema({
       default: 0
     },
     remaining: {
-      type: Number,
-      default: 0
+      type: Number
     },
     created_date: {
       type: Date,

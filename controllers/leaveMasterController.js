@@ -46,6 +46,15 @@ exports.list_all_leaveMaster = (req, res) => {
 }
 
 exports.create_a_leaveMaster = (req, res) => {
+  var leavesData = req.body.leaves;
+  if(leavesData.length) {
+    req.body.leaves = leavesData.map(
+      (item) => {
+        item.remaining = item.total_count
+        return item;
+      }
+    );
+  }
   var new_leaveMaster = new LeaveMaster(req.body);
   new_leaveMaster.save(
     (err, leaveMaster) => {

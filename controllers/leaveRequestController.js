@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
-const moment = require('moment');
-const momentbd = require('moment-business-days');
+const moment = require('moment-business-days');
 const jwt = require('jsonwebtoken');
+const LeaveMaster = require('../models/leaveMasterModel');
 const LeaveRequest = require('../models/leaveRequestModel');
 const Holiday = require('../models/holidayModel');
 const Account = require('../models/accountModel');
@@ -57,15 +57,36 @@ var removeDayOffsAndHolidays = (start_date, end_date, dayOffs, res) => {
         var workingDays = [0, 1, 2, 3, 4, 5, 6].filter(
           x => !dayOffs.includes(x)
         );
-        momentbd.updateLocale('ph', {
+        moment.updateLocale('ph', {
           workingWeekdays: workingDays,
           holidays: holidayDates,
           holidayFormat: 'YYYY-MM-DD'
         });
-        var daysLength = momentbd(start_date, "YYYY-MM-DD").businessDiff(momentbd(end_date, "YYYY-MM-DD"));
-        resolve(daysLength);
+        var count = moment(end_date, 'YYYY-MM-DD').add(1, 'd').businessDiff(moment(start_date, 'YYYY-MM-DD'));
+        resolve(count);
       }
     );
+  });
+}
+var getLeaveCountsData = (req, res) => {
+  return new Promise((resolve, reject) => {
+    const tokenHeader = req.headers['authorization'];
+    const bearer = tokenHeader.split(' ');
+    const bearerToken = bearer[1];
+    jwt.verify(bearerToken, secretKey, (err, authData) => {
+      LeaveMaster.findOne(
+        { account_id : authData._id },
+        {
+          "_id" : 0,
+          "account_id" : 0,
+          "__v" : 0
+        },
+        (err, account) => {
+          if(err) { res.send(err); }
+          resolve(account.leaves);
+        }
+      );
+    });
   });
 }
 
@@ -87,30 +108,47 @@ exports.list_all_leaveRequests = (req, res) => {
 }
 
 exports.create_a_leaveRequest = (req, res) => {
-  //if remaining leaves based on type is less than or equal
-  //to the remaining then save the request
-
   (async () => {
-    var dayOffs = await getDayOffs(req, res);
-    req.body.total_count = await removeDayOffsAndHolidays(
-      req.body.start_date,
-      req.body.end_date,
-      dayOffs.shift_id.day_offs,
-      res
+    var leaveCountsData = await getLeaveCountsData(req, res);
+    var countByLeaveType = leaveCountsData.filter(
+      item => item.leave_type_id == req.body.leave_type_id
     );
-    var new_leaveRequest = new LeaveRequest(req.body);
-    new_leaveRequest.save(
-      (err, leaveRequest) => {
-        if(err) { res.send(err); }
-        var obj = leaveRequest.toObject();
-        delete obj.__v;
-        res.json(obj);
+    if(countByLeaveType.length) {
+      var dayOffs = await getDayOffs(req, res);
+      req.body.total_count = await removeDayOffsAndHolidays(
+        req.body.start_date,
+        req.body.end_date,
+        dayOffs.shift_id.day_offs,
+        res
+      );
+      var diffCount = countByLeaveType[0].remaining - req.body.total_count;
+      if(diffCount >= 0) {
+        req.body.paid_count = req.body.total_count;
+        req.body.unpaid_count = 0;
+      } else {
+        req.body.paid_count = countByLeaveType[0].remaining;
+        req.body.unpaid_count = Math.abs(diffCount);
       }
-    );
+      var new_leaveRequest = new LeaveRequest(req.body);
+      new_leaveRequest.save(
+        (err, leaveRequest) => {
+          if(err) { res.send(err); }
+          var obj = leaveRequest.toObject();
+          delete obj.__v;
+          res.json(obj);
+        }
+      );
+    } else {
+      res
+      .status(400)
+      .json({
+        statusCode: 400,
+        error: true,
+        msg: "Account don't have this kind of leave."
+      });
+      return;
+    }
   })();
-
-  //else return an error that request leaves total count
-  //is more than the remaining
 }
 
 exports.read_a_leaveRequest = (req, res) => {
